@@ -1,4 +1,5 @@
 ''' MyPiModule for MyPIDrone '''
+''' Version 1.0              '''
 
 import time
 from pymavlink import mavutil
