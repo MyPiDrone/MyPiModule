@@ -51,6 +51,12 @@ class MyPiModule(mp_module.MPModule):
         # to send statustext
         self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common")
 
+    def my_write_log(self,msg):
+        #OUTPUT FILE
+        fo = open("/var/log/mavproxy_MyPiModule.log", "a")
+        fo.write("%s\n" % msg)
+        fo.close()
+	
     def my_battery_check(self):
        date = datetime.now().strftime(self.FORMAT)
        date2 = datetime.now().strftime(self.FORMAT2)
@@ -171,11 +177,9 @@ class MyPiModule(mp_module.MPModule):
         date2 = datetime.now().strftime(self.FORMAT2)
         #OUTPUT FILE
         print("cmd_mybat %s" % self)
-        fo = open("/var/log/mavproxy_MyPiModule.log", "a")
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.throttle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
         print("%s" % msg)
-        fo.write("%s\n" % msg)
-        fo.close()
+        self.my_write_log(msg)
         self.my_rc_check()
 
     def mavlink_packet(self, m):
