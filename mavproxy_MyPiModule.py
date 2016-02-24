@@ -37,16 +37,16 @@ class MyPiModule(mp_module.MPModule):
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         self.FORMAT2 = '%Hh%Mm%Ss'
         # default to servo range of 1000 to 1700
-        #self.RC1_MIN  = self.get_mav_param('RC1_MIN', 0)
-        #self.RC1_MAX  = self.get_mav_param('RC1_MAX', 0)
-        self.RC1_MIN  = 1200 ; self.RC1_MAX  = 1700
-        self.RC2_MIN  = 1200 ; self.RC2_MAX  = 1700
-        self.RC3_MIN  = 1200 ; self.RC3_MAX  = 1700
-        self.RC4_MIN  = 1200 ; self.RC4_MAX  = 1700
-        self.RC5_MIN  = 1200 ; self.RC5_MAX  = 1700
-        self.RC6_MIN  = 1200 ; self.RC6_MAX  = 1700
-        self.RC7_MIN  = 1200 ; self.RC7_MAX  = 1700
-        self.RC8_MIN  = 1200 ; self.RC8_MAX  = 1700
+        #self.RC1_low_mark  = self.get_mav_param('RC1_low_mark', 0)
+        #self.RC1_high_mark  = self.get_mav_param('RC1_high_mark', 0)
+        self.RC1_low_mark  = 1200 ; self.RC1_high_mark  = 1700
+        self.RC2_low_mark  = 1200 ; self.RC2_high_mark  = 1700
+        self.RC3_low_mark  = 1200 ; self.RC3_high_mark  = 1700
+        self.RC4_low_mark  = 1200 ; self.RC4_high_mark  = 1700
+        self.RC5_low_mark  = 1200 ; self.RC5_high_mark  = 1700
+        self.RC6_low_mark  = 1200 ; self.RC6_high_mark  = 1700
+        self.RC7_low_mark  = 1200 ; self.RC7_high_mark  = 1700
+        self.RC8_low_mark  = 1200 ; self.RC8_high_mark  = 1700
         self.myseverity = 0
         self.mytext = "nulltext"
         # to send statustext
@@ -100,16 +100,16 @@ class MyPiModule(mp_module.MPModule):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
            # default to servo range of 1000 to 1700
-           #self.RC1_MIN  = self.get_mav_param('RC1_MIN', 0)
-           #self.RC1_MAX  = self.get_mav_param('RC1_MAX', 0)
+           #self.RC1_low_mark  = self.get_mav_param('RC1_low_mark', 0)
+           #self.RC1_high_mark  = self.get_mav_param('RC1_high_mark', 0)
            date = datetime.now().strftime(self.FORMAT)
            date2 = datetime.now().strftime(self.FORMAT2)
-           msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (date,self.armed,self.myrc1raw,self.RC1_MIN,self.RC1_MAX,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
+           msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
            fo = open("/var/log/mavproxy_MyPiModule.log", "a")
            print("%s" % msg)
            fo.write("%s\n" % msg)
            ######## MANAGE WLAN0 UP DOWN
-           if self.myrc8raw > 0 and self.myrc8raw < self.RC8_MIN:
+           if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
                if self.wlan0_up == True:
                    self.say("ifdown wlan0")
                    p = subprocess.Popen(["ifdown", "wlan0"], stdout=subprocess.PIPE)
@@ -119,7 +119,7 @@ class MyPiModule(mp_module.MPModule):
                    strutf8 = unicode("ifdown wlan0 RPI2 at %s" % date2, "utf-8")
                    self.master2.mav.statustext_send(1, str(strutf8))
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : DOWN 1200" % (date,self.armed,self.mystate,self.throttle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
-           elif self.myrc8raw > self.RC8_MIN and self.myrc8raw < self.RC8_MAX:
+           elif self.myrc8raw > self.RC8_low_mark and self.myrc8raw < self.RC8_high_mark:
                if self.wlan0_up == True:
                    self.say("ifdown wlan0")
                    p = subprocess.Popen(["ifdown", "wlan0"], stdout=subprocess.PIPE)
@@ -129,7 +129,7 @@ class MyPiModule(mp_module.MPModule):
                    strutf8 = unicode("ifdown wlan0 RPI2 at %s" % date2, "utf-8")
                    self.master2.mav.statustext_send(1, str(strutf8))
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : MIDDLE 1200-1700" % (date,self.armed,self.mystate,self.throttle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
-           elif self.myrc8raw > self.RC8_MAX:
+           elif self.myrc8raw > self.RC8_high_mark:
                if self.wlan0_up == False:
                    self.say("ifup wlan0")
                    p = subprocess.Popen(["ifup", "wlan0"], stdout=subprocess.PIPE)
@@ -149,7 +149,7 @@ class MyPiModule(mp_module.MPModule):
            # RC3 TROTTLE
            # RC4 YAW
            ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
-           if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_MAX and self.myrc3raw > self.RC3_MAX:
+           if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (date,self.armed,self.mystate,self.throttle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
                print("%s" % msg)
                fo = open("/var/log/mavproxy_MyPiModule.log", "a")
