@@ -39,6 +39,8 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mytimebat', int, 10, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 10, 'RC Interval Time sec'))
         self.settings.append(MPSetting('mydebug', bool, True, 'Debug'))
+        self.settings.append(MPSetting('myminvolt', init, 10000, 'Minimum battery voltagei before shutdown'))
+        self.settings.append(MPSetting('myminremain', init, 10, 'Minimum battery remaining before shutdown'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         self.FORMAT2 = '%Hh%Mm%Ss'
@@ -131,7 +133,7 @@ class MyPiModule(mp_module.MPModule):
                 self.last_battery_check_time = time.time()
                 date = datetime.now().strftime(self.FORMAT)
                 # System Status STANDBY = 3
-                if self.armed == False and self.mystate == 3 and (self.myvolt <= 10000 or self.myremaining <= 10):
+                if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
                     msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Shutdown in progress..." % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
                     self.my_write_log(msg)
                     if self.shutdown_requested == False:
@@ -139,7 +141,7 @@ class MyPiModule(mp_module.MPModule):
                         self.my_write_log("Shutdown after 60 second")
                         self.shutdown_requested = True
                         self.shutdown_requested_time = time.time()
-                elif self.myvolt <= 10000 or self.myremaining <= 10:
+                elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
                     msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Shutdown needed" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
                     self.my_write_log(msg)
                     self.my_statustext_send("Warning voltage shutdown needed")
