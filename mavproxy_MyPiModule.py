@@ -76,7 +76,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_write_log(msg)
 #        if rc != 0:
 #            msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s stderr %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stderrData)
-        self.my_write_log(msg)
+#        self.my_write_log(msg)
 
     def cmd_mybat(self, args):
         date = datetime.now().strftime(self.FORMAT)
