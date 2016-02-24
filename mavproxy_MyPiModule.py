@@ -78,7 +78,7 @@ class MyPiModule(mp_module.MPModule):
            print("cmd_mybat %s" % self)
            msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
            self.my_write_log(msg)
-           self.my_subprocess(["uname", "-a"])
+           self.my_subprocess(["uptime"])
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
         self.my_write_log(msg)
         self.my_rc_check()
@@ -97,10 +97,7 @@ class MyPiModule(mp_module.MPModule):
                     self.my_write_log(msg)
                     self.my_statustext_send("Shutdown after 60 second")
                     time.sleep(60)
-                    p = subprocess.Popen(["init", "0"], stdout=subprocess.PIPE)
-                    #p = subprocess.Popen(["uptime"], stdout=subprocess.PIPE)
-                    output, err = p.communicate()
-                    print("Shutdown RPI2 output %s" % output)
+                    self.my_subprocess(["init","0"])
                 elif self.myvolt <= 10000 or self.myremaining <= 10:
                     msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Shutdown needed" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
                     self.my_write_log(msg)
@@ -119,25 +116,19 @@ class MyPiModule(mp_module.MPModule):
            ######## MANAGE WLAN0 UP DOWN
            if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
                if self.wlan0_up == True:
-                   p = subprocess.Popen(["ifdown", "wlan0"], stdout=subprocess.PIPE)
-                   output, err = p.communicate()
-                   print("ifdown wlan0 RPI2 output %s" % output)
+                   self.my_subprocess(["ifdown","wlan0"])
                    self.wlan0_up = False
                    self.my_statustext_send("ifdown wlan0 RPI2")
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : DOWN 1200" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            elif self.myrc8raw > self.RC8_low_mark and self.myrc8raw < self.RC8_high_mark:
                if self.wlan0_up == True:
-                   p = subprocess.Popen(["ifdown", "wlan0"], stdout=subprocess.PIPE)
-                   output, err = p.communicate()
-                   print("ifdown wlan0 RPI2 output %s" % output)
+                   self.my_subprocess(["ifdown","wlan0"])
                    self.wlan0_up = False
                    self.my_statustext_send("ifdown wlan0 RPI2")
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : MIDDLE 1200-1700" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            elif self.myrc8raw > self.RC8_high_mark:
                if self.wlan0_up == False:
-                   p = subprocess.Popen(["ifup", "wlan0"], stdout=subprocess.PIPE)
-                   output, err = p.communicate()
-                   print("ifup wlan0 RPI2 output %s" % output)
+                   self.my_subprocess(["ifup","wlan0"])
                    self.wlan0_up = True
                    self.my_statustext_send("ifup wlan0 RPI2")
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : UP 1700" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
@@ -154,10 +145,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log(msg)
                self.my_statustext_send("Shutdown in progress")
                #time.sleep(60)
-               p = subprocess.Popen(["init","0"], stdout=subprocess.PIPE)
-               #p = subprocess.Popen(["uptime"], stdout=subprocess.PIPE)
-               output, err = p.communicate()
-               print("Shutdown RPI2 output %s" % output)
+               self.my_subprocess(["init","0"])
 
     def mavlink_packet(self, m):
         '''  handle a mavlink packet      '''
