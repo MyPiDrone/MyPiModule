@@ -184,7 +184,8 @@ class MyPiModule(mp_module.MPModule):
         self.my_rc_check()
 
     def mavlink_packet(self, m):
-        '''handle a mavlink packet'''
+        '''  handle a mavlink packet      '''
+        '''  HEARTBEAT system_status      '''
         '''  0: System Status UNINIT      '''
         '''  1: System Status BOOT        '''
         '''  2: System Status CALIBRATING '''
