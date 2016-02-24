@@ -20,9 +20,12 @@ class MyPiModule(mp_module.MPModule):
         super(MyPiModule, self).__init__(mpstate, "MyPiModule", "my commands")
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
+        self.add_command('myreboot', self.cmd_myreboot, "to reboot")
         self.armed = False
         self.shutdown_requested = False
         self.shutdown_requested_time = 0
+        self.reboot_requested = False
+        self.reboot_requested_time = 0
         self.mystate = 0
         self.myvolt = 0
         self.mythrottle = 0
@@ -104,6 +107,21 @@ class MyPiModule(mp_module.MPModule):
                 self.shutdown_requested = False
                 self.shutdown_requested_time = 0
 
+    def cmd_myreboot(self, args):
+        if self.armed == False and self.mystate == 3:
+            if self.reboot_requested == False:
+                date = datetime.now().strftime(self.FORMAT)
+                self.my_statustext_send("Reboot after 60 second")
+                self.my_write_log("Reboot after 60 second")
+                self.reboot_requested = True
+                self.reboot_requested_time = time.time()
+            # annulation reboot
+            else:
+                self.my_statustext_send("Reboot canceled")
+                self.my_write_log("Reboot canceled")
+                self.reboot_requested = False
+                self.reboot_requested_time = 0
+
     def my_statustext_check(self):
             msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
             self.my_write_log(msg)
@@ -134,8 +152,12 @@ class MyPiModule(mp_module.MPModule):
                 if self.shutdown_requested == True:
                     delta = int(time.time() - self.shutdown_requested_time)
                     self.my_write_log("Shutdown at %s = 60" % delta)
+                if self.reboot_requested == True and self.reboot_requested_time != 0 and time.time() > self.reboot_requested_time + 60:
+                    self.my_subprocess(["init","6"])
+                if self.reboot_requested == True:
+                    delta = int(time.time() - self.reboot_requested_time)
+                    self.my_write_log("Reboot at %s = 60" % delta)
                     
-
     def my_rc_check(self):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
@@ -178,12 +200,25 @@ class MyPiModule(mp_module.MPModule):
                    self.my_write_log("Shutdown after 60 second")
                    self.shutdown_requested = True
                    self.shutdown_requested_time = time.time()
+           ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
+           elif self.armed == False and self.mystate == 3 and self.myrc2raw < self.RC2_low_mark and self.myrc3raw > self.RC3_high_mark:
+               if self.reboot_requested == False:
+                   self.my_statustext_send("Reboot after 60 second")
+                   self.my_write_log("Reboot after 60 second")
+                   self.reboot_requested = True
+                   self.reboot_requested_time = time.time()
            # annulation shutdown
-           if self.armed == False and self.mystate == 3 and self.myrc3raw < self.RC3_high_mark and self.shutdown_requested == True:
+           elif self.myrc3raw < self.RC3_high_mark and self.shutdown_requested == True:
                self.my_statustext_send("Shutdown canceled")
                self.my_write_log("Shutdown canceled")
                self.shutdown_requested = False
                self.shutdown_requested_time = 0
+           # annulation reboot
+           elif self.myrc3raw < self.RC3_high_mark and self.reboot_requested == True:
+               self.my_statustext_send("Reboot canceled")
+               self.my_write_log("Reboot canceled")
+               self.reboot_requested = False
+               self.reboot_requested_time = 0
 
     def mavlink_packet(self, m):
         '''  handle a mavlink packet      '''
