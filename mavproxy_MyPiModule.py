@@ -74,8 +74,8 @@ class MyPiModule(mp_module.MPModule):
         rc = p.returncode
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s sdtout %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stdoutData)
         self.my_write_log(msg)
-        if rc != 0:
-            msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s stderr %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stderrData)
+#        if rc != 0:
+#            msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s stderr %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stderrData)
         self.my_write_log(msg)
 
     def cmd_mybat(self, args):
@@ -88,10 +88,11 @@ class MyPiModule(mp_module.MPModule):
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
         self.my_write_log(msg)
         self.my_rc_check()
-        self.my_statustext_send("Shutdown after 60 second")
-#        if self.shutdown_requested == False:
-#            self.shutdown_requested = True
-#            self.shutdown_requested_time = time.time()
+        if self.shutdown_requested == False:
+            self.my_statustext_send("Shutdown after 60 second")
+            self.my_write_log("Shutdown after 60 second")
+            self.shutdown_requested = True
+            self.shutdown_requested_time = time.time()
 
     def my_statustext_check(self):
             msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
