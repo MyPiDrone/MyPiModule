@@ -36,6 +36,7 @@ class MyPiModule(mp_module.MPModule):
         self.myrc1raw = 0 ; self.myrc2raw = 0 ; self.myrc3raw = 0 ; self.myrc4raw = 0
         self.myrc5raw = 0 ; self.myrc6raw = 0 ; self.myrc7raw = 0 ; self.myrc8raw = 0
         self.wlan0_up = False
+        self.video_on = True
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.settings.append(MPSetting('mytimebat', int, 10, 'Battery Interval Time sec', tab='my'))
@@ -199,6 +200,20 @@ class MyPiModule(mp_module.MPModule):
            # RC2 PITCH
            # RC3 TROTTLE
            # RC4 YAW
+           ######## MANAGE VIDEO OFF TROTTLE MAX RC3 > 1700 and YAW MAX RC4 > 1700
+           if self.armed == False and self.mystate == 3 and self.myrc4raw > self.RC4_high_mark and self.myrc3raw > self.RC3_high_mark:
+               if self.video_on == True:
+                   self.my_statustext_send("Video off")
+                   self.my_write_log("Video off")
+                   self.my_subprocess(["video","off"])
+                   self.video_on = False
+           ######## MANAGE VIDEO ON TROTTLE MAX RC3 > 1700 and YAW MAX RC4 < 1200
+           if self.armed == False and self.mystate == 3 and self.myrc4raw < self.RC4_low_mark and self.myrc3raw > self.RC3_high_mark:
+               if self.video_on == False:
+                   self.my_statustext_send("Video on")
+                   self.my_write_log("Video on")
+                   self.my_subprocess(["video","on"])
+                   self.video_on = True
            ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
            if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
@@ -208,7 +223,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_write_log("Shutdown after 60 second")
                    self.shutdown_requested = True
                    self.shutdown_requested_time = time.time()
-           ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
+           ######## MANAGE REBOOT TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 < 1200
            if self.armed == False and self.mystate == 3 and self.myrc2raw < self.RC2_low_mark and self.myrc3raw > self.RC3_high_mark:
                if self.reboot_requested == False:
                    self.my_statustext_send("Reboot after 60 second")
