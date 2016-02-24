@@ -71,6 +71,7 @@ class MyPiModule(mp_module.MPModule):
         (stdoutData, stderrData) = p.communicate()
         rc = p.returncode
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s sdtout %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stdoutData)
+        self.my_write_log(msg)
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s stderr %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stderrData)
         self.my_write_log(msg)
 
