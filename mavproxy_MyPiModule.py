@@ -20,14 +20,8 @@ class MyPiModule(mp_module.MPModule):
         self.throttle = 0
         self.mycurrent = 0
         self.myremaining = 0
-        self.myrc1raw = 0
-        self.myrc2raw = 0
-        self.myrc3raw = 0
-        self.myrc4raw = 0
-        self.myrc5raw = 0
-        self.myrc6raw = 0
-        self.myrc7raw = 0
-        self.myrc8raw = 0
+        self.myrc1raw = 0 ; self.myrc2raw = 0 ; self.myrc3raw = 0 ; self.myrc4raw = 0
+        self.myrc5raw = 0 ; self.myrc6raw = 0 ; self.myrc7raw = 0 ; self.myrc8raw = 0
         self.wlan0_up = False
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
