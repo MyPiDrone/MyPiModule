@@ -89,8 +89,8 @@ class MyPiModule(mp_module.MPModule):
         self.my_rc_check()
         self.my_statustext_send("Shutdown after 60 second")
         if self.shutdown_requested = False:
-           self.shutdown_requested = True
-           self.shutdown_requested_time = time.time()
+            self.shutdown_requested = True
+            self.shutdown_requested_time = time.time()
 
     def my_statustext_check(self):
             msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
@@ -117,7 +117,7 @@ class MyPiModule(mp_module.MPModule):
                     self.my_write_log(msg)
 
                 if self.shutdown_requested == True and self.shutdown_requested_time != 0 and time.time() > self.shutdown_requested_time + 60:
-                       self.my_subprocess(["init","0"])
+                    self.my_subprocess(["init","0"])
 
     def my_rc_check(self):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
