@@ -74,7 +74,7 @@ class MyPiModule(mp_module.MPModule):
 	   cmd = ["uptime"]
            p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
            output, err = p.communicate()
-           print("cmd % output %s" % (cmd,output))
+           print("cmd %s output %s" % (cmd,output))
            msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s output %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,output)
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
         self.my_write_log(msg)
