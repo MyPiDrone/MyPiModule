@@ -121,7 +121,8 @@ class MyPiModule(mp_module.MPModule):
                 if self.shutdown_requested == True and self.shutdown_requested_time != 0 and time.time() > self.shutdown_requested_time + 60:
                     self.my_subprocess(["init","0"])
                 if self.shutdown_requested == True:
-                    self.my_write_log("Shutdown at %s + 60" % self.shutdown_requested_time)
+                    delta = int(time.time() - self.shutdown_requested_time)
+                    self.my_write_log("Shutdown at %s = 60" % delta)
                     
 
     def my_rc_check(self):
@@ -162,8 +163,9 @@ class MyPiModule(mp_module.MPModule):
                msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
                self.my_write_log(msg)
                self.my_statustext_send("Shutdown in progress")
-               #time.sleep(60)
-               self.my_subprocess(["init","0"])
+               if self.shutdown_requested == False:
+                   self.shutdown_requested = True
+                   self.shutdown_requested_time = time.time()
 
     def mavlink_packet(self, m):
         '''  handle a mavlink packet      '''
