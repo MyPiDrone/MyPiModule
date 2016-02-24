@@ -27,7 +27,7 @@ class MyPiModule(mp_module.MPModule):
         self.last_rc_check_time = time.time()
         self.settings.append(MPSetting('mytimebat', int, 10, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 10, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('mydebug', bool, 1, 'RC Interval Time sec'))
+        self.settings.append(MPSetting('mydebug', bool, True, 'RC Interval Time sec'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         self.FORMAT2 = '%Hh%Mm%Ss'
