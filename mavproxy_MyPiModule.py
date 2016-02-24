@@ -1,4 +1,5 @@
 ''' MyPiModule for MyPIDrone '''
+''' www.MyPiDrone.com        '''
 ''' Version 1.0              '''
 
 import time
