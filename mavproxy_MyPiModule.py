@@ -65,17 +65,20 @@ class MyPiModule(mp_module.MPModule):
         self.master2.mav.statustext_send(1, str(strutf8))
         self.say(text)
 
+    def my_subprocess(self,cmd)
+        date = datetime.now().strftime(self.FORMAT)
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        output, err = p.communicate()
+        msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s output %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,output)
+        self.my_write_log(msg)
+
     def cmd_mybat(self, args):
         date = datetime.now().strftime(self.FORMAT)
         if self.settings.mydebug:
            print("cmd_mybat %s" % self)
            msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
            self.my_write_log(msg)
-	   cmd = ["uname", "-a"]
-           p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-           output, err = p.communicate()
-           msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s output %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,output)
-           self.my_write_log(msg)
+           my_subprocess(["uname", "-a"])
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
         self.my_write_log(msg)
         self.my_rc_check()
