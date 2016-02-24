@@ -1,6 +1,7 @@
-''' MyPiModule for MyPIDrone '''
-''' www.MyPiDrone.com        '''
-''' Version 1.0              '''
+''' MyPiModule for MyPIDrone                    '''
+''' www.MyPiDrone.com                           '''
+''' https://github.com/MyPiDrone/MyPiModule     '''
+''' Version 1.0                                 '''
 
 import time
 from pymavlink import mavutil
