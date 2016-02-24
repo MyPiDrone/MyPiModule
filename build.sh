@@ -12,5 +12,6 @@ git config --global user.email "philippelecoq"
 git add build.sh mavproxy_MyPiModule.py
 git commit mavproxy_MyPiModule.py -m "$date"
 git commit build.sh -m "$date"
+git commit README.md -m "$date"
 git push
 cd /root/MAVProxy
