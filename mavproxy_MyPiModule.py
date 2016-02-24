@@ -210,20 +210,20 @@ class MyPiModule(mp_module.MPModule):
                    self.shutdown_requested = True
                    self.shutdown_requested_time = time.time()
            ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
-           elif self.armed == False and self.mystate == 3 and self.myrc2raw < self.RC2_low_mark and self.myrc3raw > self.RC3_high_mark:
+           if self.armed == False and self.mystate == 3 and self.myrc2raw < self.RC2_low_mark and self.myrc3raw > self.RC3_high_mark:
                if self.reboot_requested == False:
                    self.my_statustext_send("Reboot after 60 second")
                    self.my_write_log("Reboot after 60 second")
                    self.reboot_requested = True
                    self.reboot_requested_time = time.time()
            # annulation shutdown
-           elif self.myrc3raw < self.RC3_high_mark and self.shutdown_requested == True:
+           if self.myrc3raw < self.RC3_high_mark and self.shutdown_requested == True:
                self.my_statustext_send("Shutdown canceled")
                self.my_write_log("Shutdown canceled")
                self.shutdown_requested = False
                self.shutdown_requested_time = 0
            # annulation reboot
-           elif self.myrc3raw < self.RC3_high_mark and self.reboot_requested == True:
+           if self.myrc3raw < self.RC3_high_mark and self.reboot_requested == True:
                self.my_statustext_send("Reboot canceled")
                self.my_write_log("Reboot canceled")
                self.reboot_requested = False
