@@ -1,7 +1,10 @@
+''' ------------------------------------------  '''
 ''' MyPiModule for MyPIDrone                    '''
 ''' www.MyPiDrone.com                           '''
 ''' https://github.com/MyPiDrone/MyPiModule     '''
-''' Version 1.0                                 '''
+''' ------------------------------------------  '''
+''' Version 1.0 : Wed Feb 24 10:20:12 CET 2016  '''
+''' ------------------------------------------  '''
 
 import time
 from pymavlink import mavutil
@@ -61,6 +64,25 @@ class MyPiModule(mp_module.MPModule):
         strutf8 = unicode("text at %s" % (text,date2))
         self.master2.mav.statustext_send(1, str(strutf8))
         self.say(text)
+
+    def cmd_mybat(self, args):
+        date = datetime.now().strftime(self.FORMAT)
+        if self.settings.mydebug:
+           print("cmd_mybat %s" % self)
+           msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
+           self.my_write_log(msg)
+	   cmd = ["uptime"]
+           p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+           output, err = p.communicate()
+           print("cmd % output %s" % (cmd,output))
+           msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s output %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,output)
+        msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
+        self.my_write_log(msg)
+        self.my_rc_check()
+
+    def my_statustext_check(self):
+            msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
+            self.my_write_log(msg)
 
     def my_battery_check(self):
        if time.time() > self.last_battery_check_time + self.settings.mytimebat:
@@ -134,20 +156,6 @@ class MyPiModule(mp_module.MPModule):
                output, err = p.communicate()
                print("Shutdown RPI2 output %s" % output)
 
-    def my_statustext_check(self):
-            msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
-            self.my_write_log(msg)
-
-    def cmd_mybat(self, args):
-        date = datetime.now().strftime(self.FORMAT)
-        if self.settings.mydebug:
-           print("cmd_mybat %s" % self)
-           msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
-           self.my_write_log(msg)
-        msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
-        self.my_write_log(msg)
-        self.my_rc_check()
-
     def mavlink_packet(self, m):
         '''  handle a mavlink packet      '''
         '''  HEARTBEAT system_status      '''
@@ -172,14 +180,8 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.mystate = m.system_status
         if mtype == "RC_CHANNELS_RAW":
-            self.myrc1raw = m.chan1_raw
-            self.myrc2raw = m.chan2_raw
-            self.myrc3raw = m.chan3_raw
-            self.myrc4raw = m.chan4_raw
-            self.myrc5raw = m.chan5_raw
-            self.myrc6raw = m.chan6_raw
-            self.myrc7raw = m.chan7_raw
-            self.myrc8raw = m.chan8_raw
+            self.myrc1raw = m.chan1_raw ; self.myrc2raw = m.chan2_raw ; self.myrc3raw = m.chan3_raw ; self.myrc4raw = m.chan4_raw
+            self.myrc5raw = m.chan5_raw ; self.myrc6raw = m.chan6_raw ; self.myrc7raw = m.chan7_raw ; self.myrc8raw = m.chan8_raw
             self.my_rc_check()
         if mtype == "STATUSTEXT":
             self.myseverity = m.severity
