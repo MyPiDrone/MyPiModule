@@ -65,7 +65,7 @@ class MyPiModule(mp_module.MPModule):
         self.master2.mav.statustext_send(1, str(strutf8))
         self.say(text)
 
-    def my_subprocess(self,cmd)
+    def my_subprocess(self,cmd):
         date = datetime.now().strftime(self.FORMAT)
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         output, err = p.communicate()
