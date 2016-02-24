@@ -62,6 +62,8 @@ class MyPiModule(mp_module.MPModule):
     def my_battery_check(self):
        if time.time() > self.last_battery_check_time + self.settings.mytimebat:
                 self.last_battery_check_time = time.time()
+                date = datetime.now().strftime(self.FORMAT)
+                date2 = datetime.now().strftime(self.FORMAT2)
                 # System Status STANDBY = 3
                 if self.armed == False and self.mystate == 3 and (self.myvolt <= 10000 or self.myremaining <= 10):
                     msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Shutdown in progress..." % (date,self.armed,self.mystate,self.throttle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
@@ -86,13 +88,13 @@ class MyPiModule(mp_module.MPModule):
     def my_rc_check(self):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
+           date = datetime.now().strftime(self.FORMAT)
+           date2 = datetime.now().strftime(self.FORMAT2)
            # default to servo range of 1000 to 1700
            #self.RC1_low_mark  = self.get_mav_param('RC1_low_mark', 0)
            #self.RC1_high_mark  = self.get_mav_param('RC1_high_mark', 0)
            msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
-           fo = open("/var/log/mavproxy_MyPiModule.log", "a")
-           print("%s" % msg)
-           fo.write("%s\n" % msg)
+           self.my_write_log(msg)
            ######## MANAGE WLAN0 UP DOWN
            if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
                if self.wlan0_up == True:
@@ -165,8 +167,6 @@ class MyPiModule(mp_module.MPModule):
         '''  5: System Status CRITICAL    '''
         '''  6: System Status EMERGENCY   '''
         '''  7: System Status POWEROFF    '''
-        date = datetime.now().strftime(self.FORMAT)
-        date2 = datetime.now().strftime(self.FORMAT2)
         mtype = m.get_type()
         #print("System Status %s" % mtype)
         if mtype == "VFR_HUD":
