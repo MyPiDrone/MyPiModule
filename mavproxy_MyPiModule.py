@@ -96,6 +96,12 @@ class MyPiModule(mp_module.MPModule):
             self.my_write_log("Shutdown after 60 second")
             self.shutdown_requested = True
             self.shutdown_requested_time = time.time()
+        # annulation shutdown
+        if self.armed == False and self.mystate == 3 and self.shutdown_requested == True:
+            self.my_statustext_send("Shutdown canceled")
+            self.my_write_log("Shutdown canceled")
+            self.shutdown_requested = False
+            self.shutdown_requested_time = 0
 
     def my_statustext_check(self):
             msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
@@ -171,6 +177,12 @@ class MyPiModule(mp_module.MPModule):
                    self.my_write_log("Shutdown after 60 second")
                    self.shutdown_requested = True
                    self.shutdown_requested_time = time.time()
+           # annulation shutdown
+           if self.armed == False and self.mystate == 3 and self.myrc3raw < self.RC3_high_mark and self.shutdown_requested == True:
+               self.my_statustext_send("Shutdown canceled")
+               self.my_write_log("Shutdown canceled")
+               self.shutdown_requested = False
+               self.shutdown_requested_time = 0
 
     def mavlink_packet(self, m):
         '''  handle a mavlink packet      '''
