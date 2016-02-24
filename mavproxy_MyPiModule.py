@@ -22,6 +22,8 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
         self.armed = False
+        self.shutdown_auto_requested = False
+        self.shutdown_auto_requested_time = 0
         self.shutdown_requested = False
         self.shutdown_requested_time = 0
         self.reboot_requested = False
@@ -136,11 +138,11 @@ class MyPiModule(mp_module.MPModule):
                 if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
                     msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Shutdown in progress..." % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
                     self.my_write_log(msg)
-                    if self.shutdown_requested == False:
-                        self.my_statustext_send("Shutdown after 60 second")
-                        self.my_write_log("Shutdown after 60 second")
-                        self.shutdown_requested = True
-                        self.shutdown_requested_time = time.time()
+                    if self.shutdown_auto_requested == False:
+                        self.my_statustext_send("Shutdown auto after 60 second")
+                        self.my_write_log("Shutdown auto after 60 second")
+                        self.shutdown_auto_requested = True
+                        self.shutdown_auto_requested_time = time.time()
                 elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
                     msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Shutdown needed" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
                     self.my_write_log(msg)
@@ -149,6 +151,11 @@ class MyPiModule(mp_module.MPModule):
                     msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Good Status" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
                     self.my_write_log(msg)
 
+                if self.shutdown_auto_requested == True and self.shutdown_auto_requested_time != 0 and time.time() > self.shutdown_auto_requested_time + 60:
+                    self.my_subprocess(["init","0"])
+                if self.shutdown_auto_requested == True:
+                    delta = int(time.time() - self.shutdown_auto_requested_time)
+                    self.my_write_log("Shutdown auto at %s = 60" % delta)
                 if self.shutdown_requested == True and self.shutdown_requested_time != 0 and time.time() > self.shutdown_requested_time + 60:
                     self.my_subprocess(["init","0"])
                 if self.shutdown_requested == True:
