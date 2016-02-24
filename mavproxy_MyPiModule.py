@@ -41,8 +41,8 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mytimebat', int, 10, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 10, 'RC Interval Time sec'))
         self.settings.append(MPSetting('mydebug', bool, True, 'Debug'))
-        self.settings.append(MPSetting('myminvolt', init, 10000, 'Minimum battery voltagei before shutdown'))
-        self.settings.append(MPSetting('myminremain', init, 10, 'Minimum battery remaining before shutdown'))
+        self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltagei before shutdown'))
+        self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         self.FORMAT2 = '%Hh%Mm%Ss'
