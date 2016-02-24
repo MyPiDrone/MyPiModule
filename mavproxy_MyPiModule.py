@@ -67,8 +67,11 @@ class MyPiModule(mp_module.MPModule):
 
     def my_subprocess(self,cmd):
         date = datetime.now().strftime(self.FORMAT)
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, err = p.communicate()
+	print stdout
+	print stderr
+	print popen.returncode
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s output %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,output)
         self.my_write_log(msg)
 
