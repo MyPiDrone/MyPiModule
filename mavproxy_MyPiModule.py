@@ -88,7 +88,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_write_log(msg)
         self.my_rc_check()
         self.my_statustext_send("Shutdown after 60 second")
-        if self.shutdown_requested = False:
+        if self.shutdown_requested == False:
             self.shutdown_requested = True
             self.shutdown_requested_time = time.time()
 
@@ -105,7 +105,7 @@ class MyPiModule(mp_module.MPModule):
                     msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s : Shutdown in progress..." % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
                     self.my_write_log(msg)
                     self.my_statustext_send("Shutdown after 60 second")
-                    if self.shutdown_requested = False:
+                    if self.shutdown_requested == False:
                         self.shutdown_requested = True
                         self.shutdown_requested_time = time.time()
                 elif self.myvolt <= 10000 or self.myremaining <= 10:
