@@ -151,6 +151,8 @@ class MyPiModule(mp_module.MPModule):
             self.my_write_log(msg)
 
     def cmd_mybat(self, args):
+        date = datetime.now().strftime(self.FORMAT)
+        date2 = datetime.now().strftime(self.FORMAT2)
         print("cmd_mybat %s" % self)
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.throttle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
         self.my_write_log(msg)
