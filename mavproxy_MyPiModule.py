@@ -89,7 +89,7 @@ class MyPiModule(mp_module.MPModule):
         msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw)
         self.my_write_log(msg)
 
-    def cmd_shutdown(self, args):
+    def cmd_myshutdown(self, args):
         if self.shutdown_requested == False:
             date = datetime.now().strftime(self.FORMAT)
             self.my_statustext_send("Shutdown after 60 second")
