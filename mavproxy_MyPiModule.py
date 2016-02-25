@@ -155,6 +155,7 @@ class MyPiModule(mp_module.MPModule):
                     self.my_subprocess(["init","0"])
                 if self.shutdown_auto_requested == True:
                     delta = 60 - int(time.time() - self.shutdown_auto_requested_time)
+                    self.my_statustext_send("Shutdown left %ssec" % delta)
                     self.my_write_log("Shutdown left %ssec" % delta)
                 if self.shutdown_requested == True and self.shutdown_requested_time != 0 and time.time() > self.shutdown_requested_time + 60:
                     self.my_statustext_send("Shutdown now")
@@ -162,6 +163,7 @@ class MyPiModule(mp_module.MPModule):
                     self.my_subprocess(["init","0"])
                 if self.shutdown_requested == True:
                     delta = 60 - int(time.time() - self.shutdown_requested_time)
+                    self.my_statustext_send("Shutdown left %ssec" % delta)
                     self.my_write_log("Shutdown left %ssec" % delta)
                 if self.reboot_requested == True and self.reboot_requested_time != 0 and time.time() > self.reboot_requested_time + 60:
                     self.my_statustext_send("Reboot now")
@@ -169,6 +171,7 @@ class MyPiModule(mp_module.MPModule):
                     self.my_subprocess(["init","6"])
                 if self.reboot_requested == True:
                     delta = 60 - int(time.time() - self.reboot_requested_time)
+                    self.my_statustext_send("Reboot left %ssec" % delta)
                     self.my_write_log("Reboot left %ssec" % delta)
                     
     def my_rc_check(self):
