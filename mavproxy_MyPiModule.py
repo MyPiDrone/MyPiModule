@@ -65,7 +65,8 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,msg):
         #OUTPUT FILE
-        print("%s" % msg)
+        date = datetime.now().strftime(self.FORMAT)
+        print("%s %s" % (date,msg))
         fo = open("/var/log/mavproxy_MyPiModule.log", "a")
         fo.write("%s\n" % msg)
         fo.close()
@@ -77,30 +78,27 @@ class MyPiModule(mp_module.MPModule):
         self.say(text)
 
     def my_subprocess(self,cmd):
-        date = datetime.now().strftime(self.FORMAT)
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (stdoutData, stderrData) = p.communicate()
         rc = p.returncode
-        msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s sdtout %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stdoutData)
+        msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s sdtout %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stdoutData)
         self.my_write_log(msg)
-        msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s stderr %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stderrData)
+        msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s cmd %s stderr %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,cmd,stderrData)
         self.my_write_log(msg)
 
     def cmd_mybat(self, args):
-        date = datetime.now().strftime(self.FORMAT)
         self.my_rc_check()
         if self.settings.mydebug:
            print("cmd_mybat %s" % self)
-           msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
+           msg = "INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
            self.my_write_log(msg)
            self.my_subprocess(["uptime"])
-        msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s low %s MyCurrent %s MyRemaining %s low %s MyRC8Raw %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain,self.myrc8raw)
+        msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s low %s MyCurrent %s MyRemaining %s low %s MyRC8Raw %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain,self.myrc8raw)
         self.my_write_log(msg)
 
     def cmd_myshutdown(self, args):
         if self.armed == False and self.mystate == 3:
             if self.shutdown_requested == False:
-                date = datetime.now().strftime(self.FORMAT)
                 self.my_statustext_send("Shutdown after 60 second")
                 self.my_write_log("Shutdown after 60 second")
                 self.shutdown_requested = True
@@ -115,7 +113,6 @@ class MyPiModule(mp_module.MPModule):
     def cmd_myreboot(self, args):
         if self.armed == False and self.mystate == 3:
             if self.reboot_requested == False:
-                date = datetime.now().strftime(self.FORMAT)
                 self.my_statustext_send("Reboot after 60 second")
                 self.my_write_log("Reboot after 60 second")
                 self.reboot_requested = True
@@ -128,16 +125,15 @@ class MyPiModule(mp_module.MPModule):
                 self.reboot_requested_time = 0
 
     def my_statustext_check(self):
-            msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
+            msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
             self.my_write_log(msg)
 
     def my_battery_check(self):
        if time.time() > self.last_battery_check_time + self.settings.mytimebat:
                 self.last_battery_check_time = time.time()
-                date = datetime.now().strftime(self.FORMAT)
                 # System Status STANDBY = 3
                 if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
-                    msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown in progress..." % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
+                    msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown in progress..." % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
                     self.my_write_log(msg)
                     if self.shutdown_auto_requested == False:
                         self.my_statustext_send("Shutdown auto after 60 second")
@@ -145,23 +141,29 @@ class MyPiModule(mp_module.MPModule):
                         self.shutdown_auto_requested = True
                         self.shutdown_auto_requested_time = time.time()
                 elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
-                    msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown needed" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
+                    msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown needed" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
                     self.my_write_log(msg)
                     self.my_statustext_send("Warning voltage shutdown needed")
                 else:
-                    msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s>%s MyCurrent %s MyRemaining %s>%s : Good status" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
+                    msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s>%s MyCurrent %s MyRemaining %s>%s : Good status" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
                     self.my_write_log(msg)
                 if self.shutdown_auto_requested == True and self.shutdown_auto_requested_time != 0 and time.time() > self.shutdown_auto_requested_time + 60:
+                    self.my_statustext_send("Shutdown auto now")
+                    self.my_write_log("Shutdown auto now")
                     self.my_subprocess(["init","0"])
                 if self.shutdown_auto_requested == True:
                     delta = int(time.time() - self.shutdown_auto_requested_time)
                     self.my_write_log("Shutdown auto at %s = 60" % delta)
                 if self.shutdown_requested == True and self.shutdown_requested_time != 0 and time.time() > self.shutdown_requested_time + 60:
+                    self.my_statustext_send("Shutdown now")
+                    self.my_write_log("Shutdown now")
                     self.my_subprocess(["init","0"])
                 if self.shutdown_requested == True:
                     delta = int(time.time() - self.shutdown_requested_time)
                     self.my_write_log("Shutdown at %s = 60" % delta)
                 if self.reboot_requested == True and self.reboot_requested_time != 0 and time.time() > self.reboot_requested_time + 60:
+                    self.my_statustext_send("Reboot now")
+                    self.my_write_log("Reboot now")
                     self.my_subprocess(["init","6"])
                 if self.reboot_requested == True:
                     delta = int(time.time() - self.reboot_requested_time)
@@ -170,9 +172,8 @@ class MyPiModule(mp_module.MPModule):
     def my_rc_check(self):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
-           date = datetime.now().strftime(self.FORMAT)
            if self.settings.mydebug:
-               msg = "%s INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (date,self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
+               msg = "INFO Armed: %s RC1:%s %s-%s RC2:%s %s-%s RC3:%s %s-%s RC4:%s %s-%s RC5:%s %s-%s RC6:%s %s-%s RC7:%s %s-%s RC8:%s %s-%s" % (self.armed,self.myrc1raw,self.RC1_low_mark,self.RC1_high_mark,self.myrc2raw,self.RC2_low_mark,self.RC2_high_mark,self.myrc3raw,self.RC3_low_mark,self.RC3_high_mark,self.myrc4raw,self.RC4_low_mark,self.RC4_high_mark,self.myrc5raw,self.RC5_low_mark,self.RC5_high_mark,self.myrc6raw,self.RC6_low_mark,self.RC6_high_mark,self.myrc7raw,self.RC7_low_mark,self.RC7_high_mark,self.myrc8raw,self.RC8_low_mark,self.RC8_high_mark)
                self.my_write_log(msg)
            ######## MANAGE WLAN0 UP DOWN
            if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
@@ -180,21 +181,21 @@ class MyPiModule(mp_module.MPModule):
                    self.my_statustext_send("ifdown wlan0 RPI2")
                    self.my_subprocess(["ifdown","wlan0"])
                    self.wlan0_up = False
-               msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : DOWN 1200" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
+               msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            elif self.myrc8raw > self.RC8_low_mark and self.myrc8raw < self.RC8_high_mark:
                if self.wlan0_up == True:
                    self.my_statustext_send("ifdown wlan0 RPI2")
                    self.my_subprocess(["ifdown","wlan0"])
                    self.wlan0_up = False
-               msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : MIDDLE 1200-1700" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
+               msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            elif self.myrc8raw > self.RC8_high_mark:
                if self.wlan0_up == False:
                    self.my_statustext_send("ifup wlan0 RPI2")
                    self.my_subprocess(["ifup","wlan0"])
                    self.wlan0_up = True
-               msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : UP 1700" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
+               msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : RC8 UP" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            else:
-               msg = "%s WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : unknown RC value" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
+               msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : unknown RC8 value" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            self.my_write_log(msg)
            # RC1 ROLL
            # RC2 PITCH
@@ -216,7 +217,7 @@ class MyPiModule(mp_module.MPModule):
                    self.video_on = True
            ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
            if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
-               msg = "%s INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (date,self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
+               msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
                self.my_write_log(msg)
                if self.shutdown_requested == False:
                    self.my_statustext_send("Shutdown after 60 second")
