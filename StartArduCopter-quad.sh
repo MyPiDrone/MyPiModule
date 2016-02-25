@@ -1,9 +1,16 @@
 #!/bin/sh 
+#####################################################################################################
+#### www.MyPiDrone.com
+#### Started by /etc/rc.local
+#### sh -x /usr/local/bin/StartArduCopter-quad.sh --vbr >> /var/log/StartArduCopter-quad.log 2>&1
 #### $1 options
 #### --vb  : video with wifibroadcast
 #### --vbr : video with wifibroadcast and recording
 #### --vr  : video recording
 #### --vrt : video retransmission
+#### $2 option
+#### --ap : video with wifibroadcast and recording over Wifi AP
+#####################################################################################################
 
 OPT1=`echo $1|tr '[:upper:]' '[:lower:]'`
 OPT2=`echo $2|tr '[:upper:]' '[:lower:]'`
