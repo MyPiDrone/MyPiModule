@@ -204,6 +204,7 @@ class MyPiModule(mp_module.MPModule):
            ######## MANAGE VIDEO OFF TROTTLE MAX RC3 > 1700 and YAW MAX RC4 > 1700
            if self.armed == False and self.mystate == 3 and self.myrc4raw > self.RC4_high_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
+               self.my_write_log(msg)
                if self.video_on == True:
                    self.my_statustext_send("Video off")
                    self.my_write_log("Video off")
@@ -212,6 +213,7 @@ class MyPiModule(mp_module.MPModule):
            ######## MANAGE VIDEO ON TROTTLE MAX RC3 > 1700 and YAW MAX RC4 < 1200
            if self.armed == False and self.mystate == 3 and self.myrc4raw < self.RC4_low_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
+               self.my_write_log(msg)
                if self.video_on == False:
                    self.my_statustext_send("Video on")
                    self.my_write_log("Video on")
