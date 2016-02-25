@@ -17,6 +17,8 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
+##############################################################
+#### www.MyPiDrone.com
 #### $1 options
 #### --vb  : video with wifibroadcast
 #### --vbr : video with wifibroadcast and recording
@@ -24,6 +26,7 @@ fi
 #### --vrt : video retransmission
 #### $2 options
 #### --ap  : video over Acces Point
+##############################################################
 
 sh -x /usr/local/bin/StartArduCopter-quad.sh --vbr >> /var/log/StartArduCopter-quad.log 2>&1
 
