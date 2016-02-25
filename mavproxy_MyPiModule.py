@@ -178,21 +178,21 @@ class MyPiModule(mp_module.MPModule):
            ######## MANAGE WLAN0 UP DOWN
            if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
                if self.wlan0_up == True:
+                   self.wlan0_up = False
                    self.my_statustext_send("ifdown wlan0 RPI2")
                    self.my_subprocess(["ifdown","wlan0"])
-                   self.wlan0_up = False
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            elif self.myrc8raw > self.RC8_low_mark and self.myrc8raw < self.RC8_high_mark:
                if self.wlan0_up == True:
+                   self.wlan0_up = False
                    self.my_statustext_send("ifdown wlan0 RPI2")
                    self.my_subprocess(["ifdown","wlan0"])
-                   self.wlan0_up = False
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            elif self.myrc8raw > self.RC8_high_mark:
                if self.wlan0_up == False:
+                   self.wlan0_up = True
                    self.my_statustext_send("ifup wlan0 RPI2")
                    self.my_subprocess(["ifup","wlan0"])
-                   self.wlan0_up = True
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : RC8 UP" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
            else:
                msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC8Raw %s wlan0 is up : %s : unknown RC8 value" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc8raw,self.wlan0_up)
@@ -206,19 +206,19 @@ class MyPiModule(mp_module.MPModule):
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
                self.my_write_log(msg)
                if self.video_on == True:
+                   self.video_on = False
                    self.my_statustext_send("Video off")
                    self.my_write_log("Video off")
                    self.my_subprocess(["video","off"])
-                   self.video_on = False
            ######## MANAGE VIDEO ON TROTTLE MAX RC3 > 1700 and YAW MAX RC4 < 1200
            if self.armed == False and self.mystate == 3 and self.myrc4raw < self.RC4_low_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
                self.my_write_log(msg)
                if self.video_on == False:
+                   self.video_on = True
                    self.my_statustext_send("Video on")
                    self.my_write_log("Video on")
                    self.my_subprocess(["video","on"])
-                   self.video_on = True
            ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
            if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
