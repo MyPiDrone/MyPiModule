@@ -5,13 +5,17 @@ cd $MYDIR
 vi MAVProxy/modules/mavproxy_MyPiModule.py
 python setup.py build install
 [ $? -ne 0 ] && exit 1
-cp MAVProxy/modules/mavproxy_MyPiModule.py MyPiModule/mavproxy_MyPiModule.py
-cp /usr/local/bin/StartArduCopter-quad.sh MyPiModule/StartArduCopter-quad.sh
-cp /etc/rc.local MyPiModule/rc.local
+cp MAVProxy/modules/mavproxy_MyPiModule.py MyPiModule/
+cp /usr/local/bin/StartArduCopter-quad.sh MyPiModule/
+cp /home/kevin/fpv/TESTS/start_tx_with_video_recording_broadcast_over_ap.sh MyPiModule/
+cp /home/kevin/fpv/start_tx_with_video_recording.sh MyPiModule/
+cp /etc/rc.local MyPiModule/
 cd MyPiModule
-git add build.sh mavproxy_MyPiModule.py StartArduCopter-quad.sh rc.local README.md
+git add build.sh mavproxy_MyPiModule.py StartArduCopter-quad.sh start_tx_with_video_recording.sh start_tx_with_video_recording_broadcast_over_ap.sh rc.local README.md
 git commit mavproxy_MyPiModule.py -m "$date"
 git commit StartArduCopter-quad.sh -m "$date"
+git commit start_tx_with_video_recording.sh -m "$date"
+git commit start_tx_with_video_recording_broadcast_over_ap.sh -m "$date"
 git commit rc.local -m "$date"
 git commit build.sh -m "$date"
 git commit README.md -m "$date"
