@@ -3,7 +3,7 @@
 ''' www.MyPiDrone.com                           '''
 ''' https://github.com/MyPiDrone/MyPiModule     '''
 ''' ------------------------------------------  '''
-''' Version 1.0 : Wed Feb 24 10:20:12 CET 2016  '''
+''' Version 1.1 : Wed Feb 25 10:20:12 CET 2016  '''
 ''' ------------------------------------------  '''
 
 import time
