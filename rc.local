@@ -19,12 +19,14 @@ fi
 
 ##############################################################
 #### www.MyPiDrone.com
+#### ---------------------------------------------------------
 #### $1 options
 #### --vb  : video with wifibroadcast
 #### --vbr : video with wifibroadcast and recording
 #### --vr  : video recording
 #### --vrt : video retransmission
-#### $2 options
+#### ---------------------------------------------------------
+#### $2 options (beta test)
 #### --ap  : video over Acces Point
 ##############################################################
 
