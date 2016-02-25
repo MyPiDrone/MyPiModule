@@ -209,6 +209,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_write_log(msg)
                    self.my_statustext_send("Video off")
                    self.my_subprocess(["killall","raspivid"])
+                   self.my_subprocess(["killall","tx"])
            ######## MANAGE VIDEO ON TROTTLE MAX RC3 > 1700 and YAW MAX RC4 < 1200
            if self.armed == False and self.mystate == 3 and self.myrc4raw < self.RC4_low_mark and self.myrc3raw > self.RC3_high_mark:
                if self.video_on == False:
@@ -216,7 +217,7 @@ class MyPiModule(mp_module.MPModule):
                    msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
                    self.my_write_log(msg)
                    self.my_statustext_send("Video on")
-                   self.my_subprocess(["uname","-a"])
+                   self.my_subprocess(["nohup", "/home/kevin/fpv/start_tx_with_video_recording.sh", "wlan1", "-13", "--vbr"])
            ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
            if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
