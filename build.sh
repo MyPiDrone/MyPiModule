@@ -23,7 +23,7 @@ git commit start_tx_with_video_recording_broadcast_over_ap.sh -m "$date"
 git commit rc.local -m "$date"
 git commit build.sh -m "$date"
 git commit README.md -m "$date"
-git pull
+#git pull
 git push
 cd $MYDIR
 C=`ps -ef |grep -v grep |grep -c /usr/local/bin/mavproxy.py`
