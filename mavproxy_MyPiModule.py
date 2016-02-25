@@ -39,10 +39,10 @@ class MyPiModule(mp_module.MPModule):
         self.video_on = True
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
-        self.settings.append(MPSetting('mytimebat', int, 10, 'Battery Interval Time sec', tab='my'))
-        self.settings.append(MPSetting('mytimerc', int, 10, 'RC Interval Time sec'))
+        self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
+        self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
         self.settings.append(MPSetting('mydebug', bool, True, 'Debug'))
-        self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltagei before shutdown'))
+        self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -203,6 +203,7 @@ class MyPiModule(mp_module.MPModule):
            # RC4 YAW
            ######## MANAGE VIDEO OFF TROTTLE MAX RC3 > 1700 and YAW MAX RC4 > 1700
            if self.armed == False and self.mystate == 3 and self.myrc4raw > self.RC4_high_mark and self.myrc3raw > self.RC3_high_mark:
+               msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
                if self.video_on == True:
                    self.my_statustext_send("Video off")
                    self.my_write_log("Video off")
@@ -210,6 +211,7 @@ class MyPiModule(mp_module.MPModule):
                    self.video_on = False
            ######## MANAGE VIDEO ON TROTTLE MAX RC3 > 1700 and YAW MAX RC4 < 1200
            if self.armed == False and self.mystate == 3 and self.myrc4raw < self.RC4_low_mark and self.myrc3raw > self.RC3_high_mark:
+               msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
                if self.video_on == False:
                    self.my_statustext_send("Video on")
                    self.my_write_log("Video on")
