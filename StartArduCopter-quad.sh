@@ -1,15 +1,21 @@
 #!/bin/sh 
 #####################################################################################################
 #### www.MyPiDrone.com
+####-------------------------------------------------------------------------------------------------
+#### manage ArduCopter-quad and Video Wifibroadcast (CH 13 = 2.4.Ghz , CH -13 = 2.3Ghz)
+####-------------------------------------------------------------------------------------------------
 #### Started by /etc/rc.local
 #### sh -x /usr/local/bin/StartArduCopter-quad.sh --vbr >> /var/log/StartArduCopter-quad.log 2>&1
+####-------------------------------------------------------------------------------------------------
 #### $1 options
 #### --vb  : video with wifibroadcast
 #### --vbr : video with wifibroadcast and recording
 #### --vr  : video recording
 #### --vrt : video retransmission
+####-------------------------------------------------------------------------------------------------
+#### Beta test :
 #### $2 option
-#### --ap : video with wifibroadcast and recording over Wifi AP
+#### --ap : video Broadcast and recording over Wifi AP
 #####################################################################################################
 
 OPT1=`echo $1|tr '[:upper:]' '[:lower:]'`
