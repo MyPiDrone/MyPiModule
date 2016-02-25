@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################
 #### www.MyPiDrone.com
-#### Video over Wifibroadcast
+#### Video over Wifibroadcast 2.4Ghz (CH 13) or 2.3Ghz (CH -13)
 ################################################################
 
 clear
