@@ -222,7 +222,7 @@ class MyPiModule(mp_module.MPModule):
                    msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc4raw,self.myrc3raw,self.video_on)
                    self.my_write_log(msg)
                    self.my_statustext_send("Video on")
-                   subprocess.Popen(["cd","/home/kevin/fpv/","nohup","/home/kevin/fpv/start_tx_with_video_recording.sh","wlan1","-13","--vbr","1>/dev/null","2>&1","&"])
+                   subprocess.Popen(["cd","/home/kevin/fpv/",";","nohup","./start_tx_with_video_recording.sh","wlan1","-13","--vbr","1>/dev/null","2>&1","&"])
            ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
            if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
