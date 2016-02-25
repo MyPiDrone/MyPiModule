@@ -148,27 +148,28 @@ class MyPiModule(mp_module.MPModule):
                 else:
                     msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s>%s MyCurrent %s MyRemaining %s>%s : Good status" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
                     self.my_write_log(msg)
+                ######### manage : shutdown auto requested / shutdown requested / reboot requested
                 if self.shutdown_auto_requested == True and self.shutdown_auto_requested_time != 0 and time.time() > self.shutdown_auto_requested_time + 60:
                     self.my_statustext_send("Shutdown auto now")
                     self.my_write_log("Shutdown auto now")
                     self.my_subprocess(["init","0"])
                 if self.shutdown_auto_requested == True:
-                    delta = int(time.time() - self.shutdown_auto_requested_time)
-                    self.my_write_log("Shutdown auto at %s = 60" % delta)
+                    delta = 60 - int(time.time() - self.shutdown_auto_requested_time)
+                    self.my_write_log("Shutdown left %ssec" % delta)
                 if self.shutdown_requested == True and self.shutdown_requested_time != 0 and time.time() > self.shutdown_requested_time + 60:
                     self.my_statustext_send("Shutdown now")
                     self.my_write_log("Shutdown now")
                     self.my_subprocess(["init","0"])
                 if self.shutdown_requested == True:
-                    delta = int(time.time() - self.shutdown_requested_time)
-                    self.my_write_log("Shutdown at %s = 60" % delta)
+                    delta = 60 - int(time.time() - self.shutdown_requested_time)
+                    self.my_write_log("Shutdown left %ssec" % delta)
                 if self.reboot_requested == True and self.reboot_requested_time != 0 and time.time() > self.reboot_requested_time + 60:
                     self.my_statustext_send("Reboot now")
                     self.my_write_log("Reboot now")
                     self.my_subprocess(["init","6"])
                 if self.reboot_requested == True:
-                    delta = int(time.time() - self.reboot_requested_time)
-                    self.my_write_log("Reboot at %s = 60" % delta)
+                    delta = 60 - int(time.time() - self.reboot_requested_time)
+                    self.my_write_log("Reboot left %ssec" % delta)
                     
     def my_rc_check(self):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
