@@ -6,9 +6,13 @@ vi MAVProxy/modules/mavproxy_MyPiModule.py
 python setup.py build install
 [ $? -ne 0 ] && exit 1
 cp MAVProxy/modules/mavproxy_MyPiModule.py MyPiModule/mavproxy_MyPiModule.py
+cp /usr/local/bin/StartArduCopter-quad.sh MyPiModule/StartArduCopter-quad.sh
+cp /etc/rc.local MyPiModule/rc.local
 cd MyPiModule
 git add build.sh mavproxy_MyPiModule.py
 git commit mavproxy_MyPiModule.py -m "$date"
+git commit StartArduCopter-quad.sh -m "$date"
+git commit rc.local -m "$date"
 git commit build.sh -m "$date"
 git commit README.md -m "$date"
 git push
