@@ -23,8 +23,8 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
         self.armed = False
         ### battery low :
-        self.shutdown_by_batlow = False
-        self.shutdown_by_batlow_time = 0
+        self.shutdown_by_lowbat = False
+        self.shutdown_by_lowbat_time = 0
         ### ByRadio resquested
         self.shutdown_by_radio = False
         self.shutdown_by_radio_time = 0
@@ -113,7 +113,7 @@ class MyPiModule(mp_module.MPModule):
                 self.my_statustext_send("Shutdown ByCmd left %ssec" % self.settings.mydelayinit)
                 self.shutdown_by_cmd = True
                 self.shutdown_by_cmd_time = time.time()
-            # annulation shutdown cmd
+            ''' shutdwon cmd cancel '''
             else:
                 self.my_statustext_send("Shutdown ByCmd canceled")
                 self.shutdown_by_cmd = False
@@ -125,40 +125,42 @@ class MyPiModule(mp_module.MPModule):
                 self.my_statustext_send("Reboot ByCmd left %ssec" % self.settings.mydelayinit)
                 self.reboot_by_cmd = True
                 self.reboot_by_cmd_time = time.time()
-            # annulation reboot cmd
+            ''' reboot cmd cancel '''
             else:
                 self.my_statustext_send("Reboot ByCmd canceled")
                 self.reboot_by_cmd = False
                 self.reboot_by_cmd_time = 0
 
     def my_manage_init(self):
-        ######### manage : shutdown ByBatLow  requested
-        if self.shutdown_by_batlow == True and self.shutdown_by_batlow_time != 0 and time.time() > self.shutdown_by_batlow_time + self.settings.mydelayinit:
-            self.my_statustext_send("Shutdown ByBatLow now")
+        ''' manage : shutdown ByLowBat requested '''
+        if self.shutdown_by_lowbat == True and self.shutdown_by_lowbat_time != 0 and time.time() > self.shutdown_by_lowbat_time + self.settings.mydelayinit:
+            self.my_statustext_send("Shutdown ByLowBat now")
             self.my_subprocess(["init","0"])
-        if self.shutdown_by_batlow == True:
-            delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_batlow_time)
-            self.my_statustext_send("Shutdown ByBatLow left %ssec" % delta)
-        ######### manage : shutdown ByRadio requested / reboot ByRadio requested
+        if self.shutdown_by_lowbat == True:
+            delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_lowbat_time)
+            self.my_statustext_send("Shutdown ByLowBat left %ssec" % delta)
+        ''' manage : shutdown ByRadio requested '''
         if self.shutdown_by_radio == True and self.shutdown_by_radio_time != 0 and time.time() > self.shutdown_by_radio_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown ByRadio now")
             self.my_subprocess(["init","0"])
         if self.shutdown_by_radio == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_radio_time)
             self.my_statustext_send("Shutdown ByRadio left %ssec" % delta)
+        ''' manage : reboot ByRadio requested '''
         if self.reboot_by_radio == True and self.reboot_by_radio_time != 0 and time.time() > self.reboot_by_radio_time + self.settings.mydelayinit:
             self.my_statustext_send("Reboot ByRadio now")
             self.my_subprocess(["init","6"])
         if self.reboot_by_radio == True:
             delta = self.settings.mydelayinit - int(time.time() - self.reboot_by_radio_time)
             self.my_statustext_send("Reboot ByRadio left %ssec" % delta)
-        ######### manage : shutdown ByCmd requested / reboot ByCmd requested
+        ''' manage : shutdown ByCmd requested '''
         if self.shutdown_by_cmd == True and self.shutdown_by_cmd_time != 0 and time.time() > self.shutdown_by_cmd_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown ByCmd now")
             self.my_subprocess(["init","0"])
         if self.shutdown_by_cmd == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_cmd_time)
             self.my_statustext_send("Shutdown ByCmd left %ssec" % delta)
+        ''' manage : reboot ByCmd requested '''
         if self.reboot_by_cmd == True and self.reboot_by_cmd_time != 0 and time.time() > self.reboot_by_cmd_time + self.settings.mydelayinit:
             self.my_statustext_send("Reboot ByCmd now")
             self.my_subprocess(["init","6"])
@@ -175,19 +177,20 @@ class MyPiModule(mp_module.MPModule):
                 self.last_battery_check_time = time.time()
                 # System Status STANDBY = 3
                 if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
-                    msg = "LowVolt <=%s or LowRemain <=%s : Shutdown in progress..." % (self.settings.myminvolt,self.settings.myminremain)
+                    msg = "LowVolt <=%s or LowRemain <=%s : Shutdown ByLowBat in progress..." % (self.settings.myminvolt,self.settings.myminremain)
                     self.my_write_log("WARNING",msg)
-                    if self.shutdown_by_batlow == False:
-                        self.my_statustext_send("Shutdown ByBatLow after %ssec" % self.settings.mydelayinit)
-                        self.shutdown_by_batlow = True
-                        self.shutdown_by_batlow_time = time.time()
+                    if self.shutdown_by_lowbat == False:
+                        self.my_statustext_send("Shutdown ByLowBat after %ssec" % self.settings.mydelayinit)
+                        self.shutdown_by_lowbat = True
+                        self.shutdown_by_lowbat_time = time.time()
                 elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
-                    msg = "LowVolt <=%s or LowRemain <=%s : Shutdown needed" % (self.settings.myminvolt,self.settings.myminremain)
+                    msg = "LowVolt <=%s or LowRemain <=%s : Shutdown ByLowBat needed" % (self.settings.myminvolt,self.settings.myminremain)
                     self.my_write_log("WARNING",msg)
                     self.my_statustext_send("Warning voltage shutdown needed")
                 else:
                     msg = "LowVolt >%s or LowRemain >%s : Good status" % (self.settings.myminvolt,self.settings.myminremain)
                     self.my_write_log("INFO",msg)
+                # check init 0 or 6
                 self.my_manage_init()
 
     def my_rc_check(self):
@@ -197,7 +200,7 @@ class MyPiModule(mp_module.MPModule):
                print("cmd_mybat %s" % self)
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
                self.my_write_log("INFO",msg)
-           ######## MANAGE WLAN0 UP DOWN
+           ''' MANAGE WLAN0 UP DOWN : RC8 DOWN '''
            if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
                if self.wlan0_up == True:
                    self.wlan0_up = False
@@ -205,6 +208,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("INFO",msg)
+           ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
            elif self.myrc8raw > self.RC8_low_mark and self.myrc8raw < self.RC8_high_mark:
                if self.wlan0_up == True:
                    self.wlan0_up = False
@@ -212,6 +216,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("INFO",msg)
+           ''' MANAGE WLAN0 UP DOWN : RC8 UP '''
            elif self.myrc8raw > self.RC8_high_mark:
                if self.wlan0_up == False:
                    self.wlan0_up = True
@@ -222,51 +227,74 @@ class MyPiModule(mp_module.MPModule):
            else:
                msg = "MyRC8Raw %s wlan0 is up : %s : unknown RC8 value" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("WARNING",msg)
-           # RC1 ROLL
-           # RC2 PITCH
-           # RC3 TROTTLE
-           # RC4 YAW
-           ######## MANAGE VIDEO OFF TROTTLE MAX RC3 > 1700 and YAW MAX RC4 > 1700
-           if self.armed == False and self.mystate == 3 and self.myrc4raw > self.RC4_high_mark and self.myrc3raw > self.RC3_high_mark:
+           ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
+           ''' MANAGE VIDEO OFF : RC7 UP '''
+           if self.myrc7raw > self.RC7_high_mark:
                if self.video_on == True:
                    self.video_on = False
-                   msg = "MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.myrc4raw,self.myrc3raw,self.video_on)
+                   msg = "MyRC7raw %s MyVideo on %s : RC7 UP" % (self.myrc7raw,self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
                    self.my_subprocess(["killall","raspivid"])
                    self.my_subprocess(["killall","tx"])
-           ######## MANAGE VIDEO ON TROTTLE MAX RC3 > 1700 and YAW MAX RC4 < 1200
-           if self.armed == False and self.mystate == 3 and self.myrc4raw < self.RC4_low_mark and self.myrc3raw > self.RC3_high_mark:
+           ''' MANAGE VIDEO ON : RC7 DOWN '''
+           if self.myrc7raw < self.RC7_low_mark:
                if self.video_on == False:
                    self.video_on = True
-                   msg = "MyRC4raw %s MyRC3Raw %s MyVideo on %s" % (self.myrc4raw,self.myrc3raw,self.video_on)
+                   msg = "MyRC7raw %s MyVideo on %s : RC7 DOWN" % (self.myrc7raw,self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video on")
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
-           ######## MANAGE SHUTDOWN TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 > 1700
-           if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
-               msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown" % (self.myrc2raw,self.myrc3raw)
-               self.my_write_log("INFO",msg)
-               if self.shutdown_by_radio == False:
-                   self.my_statustext_send("Shutdown after %ssec" % self.settings.mydelayinit)
-                   self.shutdown_by_radio = True
-                   self.shutdown_by_radio_time = time.time()
-           ######## MANAGE REBOOT TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 < 1200
-           if self.armed == False and self.mystate == 3 and self.myrc2raw < self.RC2_low_mark and self.myrc3raw > self.RC3_high_mark:
-               if self.reboot_by_radio == False:
-                   self.my_statustext_send("Reboot ByRadio after %ssec" % self.settings.mydelayinit)
-                   self.reboot_by_radio = True
-                   self.reboot_by_radio_time = time.time()
-           # annulation shutdown radio
-           if self.myrc3raw < self.RC3_high_mark and self.shutdown_by_radio == True:
-               self.my_statustext_send("Shutdown ByRadio canceled")
-               self.shutdown_by_radio = False
-               self.shutdown_by_radio_time = 0
-           # annulation reboot radio
-           if self.myrc3raw < self.RC3_high_mark and self.reboot_by_radio == True:
-               self.my_statustext_send("Reboot ByRadio canceled")
-               self.reboot_by_radio = False
-               self.reboot_by_radio_time = 0
+           if self.armed == False and self.mystate == 3:
+               ''' MANAGE REBOOT YAM RC4 LOW and ROLL MAX RC1 '''
+               if self.myrc4raw < self.RC4_low_mark and self.myrc1raw > self.RC1_high_mark:
+                   if self.shutdown_by_radio == False:
+                       msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown ByRadio" % (self.myrc2raw,self.myrc3raw)
+                       self.my_write_log("INFO",msg)
+                       self.my_statustext_send("Shutdown ByRadio after %ssec" % self.settings.mydelayinit)
+                       self.shutdown_by_radio = True
+                       self.shutdown_by_radio_time = time.time()
+                   ''' shutdown radio cancel '''
+                   else:
+                       self.my_statustext_send("Shutdown ByRadio canceled")
+                       self.shutdown_by_radio = False
+                       self.shutdown_by_radio_time = 0
+               ''' MANAGE REBOOT YAM RC4 LOW and ROLL MIN RC1 '''
+               if self.myrc4raw < self.RC4_low_mark and self.myrc1raw < self.RC1_low_mark:
+                   if self.reboot_by_radio == False:
+                       msg = "MyRC2Raw %s MyRC3Raw %s : Reboot ByRadio" % (self.myrc2raw,self.myrc3raw)
+                       self.my_write_log("INFO",msg)
+                       self.my_statustext_send("Reboot ByRadio after %ssec" % self.settings.mydelayinit)
+                       self.reboot_by_radio = True
+                       self.reboot_by_radio_time = time.time()
+                   ''' rebootradio cancel '''
+                   else:
+                       self.my_statustext_send("Reboot ByRadio canceled")
+                       self.reboot_by_radio = False
+                       self.reboot_by_radio_time = 0
+           ''' shutdown and reboot cancel if Armed '''
+           if self.armed == True:
+               if self.shutdown_by_radio == True:
+                   self.my_statustext_send("Shutdown ByRadio canceled")
+                   self.shutdown_by_radio = False
+                   self.shutdown_by_radio_time = 0
+               if self.reboot_by_radio == True:
+                   self.my_statustext_send("Reboot ByRadio canceled")
+                   self.reboot_by_radio = False
+                   self.reboot_by_radio_time = 0
+               if self.shutdown_by_lowbat == True:
+                   self.my_statustext_send("Shutdown ByLowBat canceled")
+                   self.shutdown_by_lowbat = False
+                   self.shutdown_by_lowbat_time = 0
+               if self.shutdown_by_cmd == True:
+                   self.my_statustext_send("Shutdown ByCmd canceled")
+                   self.shutdown_by_cmd = False
+                   self.shutdown_by_cmd_time = 0
+               if self.reboot_by_cmd == True:
+                   self.my_statustext_send("Reboot ByCmd canceled")
+                   self.reboot_by_cmd = False
+                   self.reboot_by_cmd_time = 0
+           # check init 0 or 6
            self.my_manage_init()
 
     def mavlink_packet(self, m):
