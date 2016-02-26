@@ -76,7 +76,7 @@ class MyPiModule(mp_module.MPModule):
         prefix = "Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
         if self.settings.mydebug:
-            print("%s %s %s" % (date,level,prefix,msg))
+            print("%s %s %s %s" % (date,level,prefix,msg))
         fo = open("/var/log/mavproxy_MyPiModule.log", "a")
         fo.write("%s\n" % msg)
         fo.close()
