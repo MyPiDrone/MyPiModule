@@ -125,29 +125,7 @@ class MyPiModule(mp_module.MPModule):
                 self.reboot_requested = False
                 self.reboot_requested_time = 0
 
-    def my_statustext_check(self):
-            msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
-            self.my_write_log(msg)
-
-    def my_battery_check(self):
-       if time.time() > self.last_battery_check_time + self.settings.mytimebat:
-                self.last_battery_check_time = time.time()
-                # System Status STANDBY = 3
-                if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
-                    msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown in progress..." % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
-                    self.my_write_log(msg)
-                    if self.shutdown_auto_requested == False:
-                        self.my_statustext_send("Shutdown auto after 60 second")
-                        self.my_write_log("Shutdown auto after 60 second")
-                        self.shutdown_auto_requested = True
-                        self.shutdown_auto_requested_time = time.time()
-                elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
-                    msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown needed" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
-                    self.my_write_log(msg)
-                    self.my_statustext_send("Warning voltage shutdown needed")
-                else:
-                    msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s>%s MyCurrent %s MyRemaining %s>%s : Good status" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
-                    self.my_write_log(msg)
+    def my_manage_init(self):
                 ######### manage : shutdown auto requested / shutdown requested / reboot requested
                 if self.shutdown_auto_requested == True and self.shutdown_auto_requested_time != 0 and time.time() > self.shutdown_auto_requested_time + 60:
                     self.my_statustext_send("Shutdown auto now")
@@ -173,7 +151,32 @@ class MyPiModule(mp_module.MPModule):
                     delta = 60 - int(time.time() - self.reboot_requested_time)
                     self.my_statustext_send("Reboot left %ssec" % delta)
                     self.my_write_log("Reboot left %ssec" % delta)
-                    
+
+    def my_statustext_check(self):
+            msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
+            self.my_write_log(msg)
+
+    def my_battery_check(self):
+       if time.time() > self.last_battery_check_time + self.settings.mytimebat:
+                self.last_battery_check_time = time.time()
+                # System Status STANDBY = 3
+                if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
+                    msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown in progress..." % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
+                    self.my_write_log(msg)
+                    if self.shutdown_auto_requested == False:
+                        self.my_statustext_send("Shutdown auto after 60 second")
+                        self.my_write_log("Shutdown auto after 60 second")
+                        self.shutdown_auto_requested = True
+                        self.shutdown_auto_requested_time = time.time()
+                elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
+                    msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown needed" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
+                    self.my_write_log(msg)
+                    self.my_statustext_send("Warning voltage shutdown needed")
+                else:
+                    msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s>%s MyCurrent %s MyRemaining %s>%s : Good status" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
+                    self.my_write_log(msg)
+                self.my_manage_init()
+
     def my_rc_check(self):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
@@ -251,6 +254,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("Reboot canceled")
                self.reboot_requested = False
                self.reboot_requested_time = 0
+           self.my_manage_init()
 
     def mavlink_packet(self, m):
         '''  handle a mavlink packet      '''
