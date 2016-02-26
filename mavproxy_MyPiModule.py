@@ -78,7 +78,7 @@ class MyPiModule(mp_module.MPModule):
         if self.settings.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
         fo = open("/var/log/mavproxy_MyPiModule.log", "a")
-        fo.write("%s\n" % msg)
+        fo.write("%s %s %s %s\n" % i(date,level,prefix,msg)
         fo.close()
 
     def my_statustext_send(self,text):
