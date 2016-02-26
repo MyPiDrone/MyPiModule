@@ -131,13 +131,13 @@ class MyPiModule(mp_module.MPModule):
                 self.reboot_by_cmd_time = 0
 
     def my_manage_init(self):
-        ######### manage : shutdown BatLow  requested
+        ######### manage : shutdown ByBatLow  requested
         if self.shutdown_by_batlow == True and self.shutdown_by_batlow_time != 0 and time.time() > self.shutdown_by_batlow_time + self.settings.mydelayinit:
-            self.my_statustext_send("Shutdown BatLow now")
+            self.my_statustext_send("Shutdown ByBatLow now")
             self.my_subprocess(["init","0"])
         if self.shutdown_by_batlow == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_batlow_time)
-            self.my_statustext_send("Shutdown BatLow left %ssec" % delta)
+            self.my_statustext_send("Shutdown ByBatLow left %ssec" % delta)
         ######### manage : shutdown ByRadio requested / reboot ByRadio requested
         if self.shutdown_by_radio == True and self.shutdown_by_radio_time != 0 and time.time() > self.shutdown_by_radio_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown ByRadio now")
@@ -177,7 +177,7 @@ class MyPiModule(mp_module.MPModule):
                     msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown in progress..." % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
                     self.my_write_log(msg)
                     if self.shutdown_by_batlow == False:
-                        self.my_statustext_send("Shutdown BatLow after %ssec" % self.settings.mydelayinit)
+                        self.my_statustext_send("Shutdown ByBatLow after %ssec" % self.settings.mydelayinit)
                         self.shutdown_by_batlow = True
                         self.shutdown_by_batlow_time = time.time()
                 elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
