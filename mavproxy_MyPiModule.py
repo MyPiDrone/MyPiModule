@@ -107,6 +107,8 @@ class MyPiModule(mp_module.MPModule):
            self.my_subprocess(["uptime"])
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
+        if ! self.settings.mydebug:
+            print ("INFO %s" % msg)
 
     def cmd_myshutdown(self, args):
         if self.armed == False and self.mystate == 3:
