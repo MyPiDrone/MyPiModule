@@ -108,7 +108,8 @@ class MyPiModule(mp_module.MPModule):
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            print ("INFO %s" % msg)
+            prefix = "Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+            print ("INFO %s" % (prefix,msg))
 
     def cmd_myshutdown(self, args):
         if self.armed == False and self.mystate == 3:
