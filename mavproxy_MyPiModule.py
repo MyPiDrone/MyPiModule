@@ -109,7 +109,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
             prefix = "Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
-            print ("INFO %s" % (prefix,msg))
+            print ("INFO %s %s" % (prefix,msg))
 
     def cmd_myshutdown(self, args):
         if self.armed == False and self.mystate == 3:
