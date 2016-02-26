@@ -113,8 +113,8 @@ class MyPiModule(mp_module.MPModule):
                 self.my_statustext_send("Shutdown ByCmd left %ssec" % self.settings.mydelayinit)
                 self.shutdown_by_cmd = True
                 self.shutdown_by_cmd_time = time.time()
-            ''' shutdown cmd cancel '''
             else:
+                ''' shutdown cmd cancel '''
                 self.my_statustext_send("Shutdown ByCmd canceled")
                 self.shutdown_by_cmd = False
                 self.shutdown_by_cmd_time = 0
@@ -125,8 +125,8 @@ class MyPiModule(mp_module.MPModule):
                 self.my_statustext_send("Reboot ByCmd left %ssec" % self.settings.mydelayinit)
                 self.reboot_by_cmd = True
                 self.reboot_by_cmd_time = time.time()
-            ''' reboot cmd cancel '''
             else:
+                ''' reboot cmd cancel '''
                 self.my_statustext_send("Reboot ByCmd canceled")
                 self.reboot_by_cmd = False
                 self.reboot_by_cmd_time = 0
