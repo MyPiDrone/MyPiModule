@@ -96,11 +96,11 @@ class MyPiModule(mp_module.MPModule):
         msg = "cmd %s sdtout %s" % (cmd,stdoutData)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            print("%s" % msg)
+            print("INFO %s" % msg)
         msg = "cmd %s stderr %s" % (cmd,stderrData)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            print("%s" % msg)
+            print("INFO %s" % msg)
 
     def cmd_mybat(self, args):
         self.my_rc_check()
@@ -108,7 +108,7 @@ class MyPiModule(mp_module.MPModule):
            print("cmd_mybat %s" % self)
            msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
            self.my_write_log("INFO",msg)
-           self.my_subprocess(["uptime"])
+        self.my_subprocess(["uptime"])
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
