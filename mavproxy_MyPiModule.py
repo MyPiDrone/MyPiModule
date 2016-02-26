@@ -146,35 +146,40 @@ class MyPiModule(mp_module.MPModule):
             self.my_subprocess(["init","0"])
         if self.shutdown_by_lowbat == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_lowbat_time)
-            self.my_statustext_send("Shutdown ByLowBat left %ssec" % delta)
+            if delta <= 10:
+                self.my_statustext_send("Shutdown ByLowBat left %ssec" % delta)
         ''' manage : shutdown ByRadio requested '''
         if self.shutdown_by_radio == True and self.shutdown_by_radio_time != 0 and time.time() > self.shutdown_by_radio_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown ByRadio now")
             self.my_subprocess(["init","0"])
         if self.shutdown_by_radio == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_radio_time)
-            self.my_statustext_send("Shutdown ByRadio left %ssec" % delta)
+            if delta <= 10:
+                self.my_statustext_send("Shutdown ByRadio left %ssec" % delta)
         ''' manage : reboot ByRadio requested '''
         if self.reboot_by_radio == True and self.reboot_by_radio_time != 0 and time.time() > self.reboot_by_radio_time + self.settings.mydelayinit:
             self.my_statustext_send("Reboot ByRadio now")
             self.my_subprocess(["init","6"])
         if self.reboot_by_radio == True:
             delta = self.settings.mydelayinit - int(time.time() - self.reboot_by_radio_time)
-            self.my_statustext_send("Reboot ByRadio left %ssec" % delta)
+            if delta <= 10:
+                self.my_statustext_send("Reboot ByRadio left %ssec" % delta)
         ''' manage : shutdown ByCmd requested '''
         if self.shutdown_by_cmd == True and self.shutdown_by_cmd_time != 0 and time.time() > self.shutdown_by_cmd_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown ByCmd now")
             self.my_subprocess(["init","0"])
         if self.shutdown_by_cmd == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_cmd_time)
-            self.my_statustext_send("Shutdown ByCmd left %ssec" % delta)
+            if delta <= 10:
+                self.my_statustext_send("Shutdown ByCmd left %ssec" % delta)
         ''' manage : reboot ByCmd requested '''
         if self.reboot_by_cmd == True and self.reboot_by_cmd_time != 0 and time.time() > self.reboot_by_cmd_time + self.settings.mydelayinit:
             self.my_statustext_send("Reboot ByCmd now")
             self.my_subprocess(["init","6"])
         if self.reboot_by_cmd == True:
             delta = self.settings.mydelayinit - int(time.time() - self.reboot_by_cmd_time)
-            self.my_statustext_send("Reboot ByCmd left %ssec" % delta)
+            if delta <= 10:
+                self.my_statustext_send("Reboot ByCmd left %ssec" % delta)
 
     def my_statustext_check(self):
             msg = "MySeverity %s MyStatusText %s" % (self.myseverity,self.mytext)
