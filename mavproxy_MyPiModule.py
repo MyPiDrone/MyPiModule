@@ -208,16 +208,16 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("INFO",msg)
-           ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
            elif self.myrc8raw > self.RC8_low_mark and self.myrc8raw < self.RC8_high_mark:
+               ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("ifdown wlan0 RPI2")
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("INFO",msg)
-           ''' MANAGE WLAN0 UP DOWN : RC8 UP '''
            elif self.myrc8raw > self.RC8_high_mark:
+               ''' MANAGE WLAN0 UP DOWN : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
                    self.my_statustext_send("ifup wlan0 RPI2")
@@ -254,8 +254,8 @@ class MyPiModule(mp_module.MPModule):
                        self.my_statustext_send("Shutdown ByRadio after %ssec" % self.settings.mydelayinit)
                        self.shutdown_by_radio = True
                        self.shutdown_by_radio_time = time.time()
-                   ''' shutdown radio cancel '''
                    else:
+                       ''' shutdown radio cancel '''
                        self.my_statustext_send("Shutdown ByRadio canceled")
                        self.shutdown_by_radio = False
                        self.shutdown_by_radio_time = 0
@@ -267,8 +267,8 @@ class MyPiModule(mp_module.MPModule):
                        self.my_statustext_send("Reboot ByRadio after %ssec" % self.settings.mydelayinit)
                        self.reboot_by_radio = True
                        self.reboot_by_radio_time = time.time()
-                   ''' rebootradio cancel '''
                    else:
+                       ''' rebootradio cancel '''
                        self.my_statustext_send("Reboot ByRadio canceled")
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
