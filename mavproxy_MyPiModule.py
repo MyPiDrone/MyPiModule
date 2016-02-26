@@ -96,11 +96,11 @@ class MyPiModule(mp_module.MPModule):
         msg = "cmd %s sdtout %s" % (cmd,stdoutData)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            print(msg)
+            print("%s" % msg)
         msg = "cmd %s stderr %s" % (cmd,stderrData)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            print(msg)
+            print("%s" % msg)
 
     def cmd_mybat(self, args):
         self.my_rc_check()
