@@ -48,7 +48,7 @@ class MyPiModule(mp_module.MPModule):
         self.last_rc_check_time = time.time()
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('mydebug', bool, True, 'Debug'))
+        self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
@@ -87,6 +87,7 @@ class MyPiModule(mp_module.MPModule):
         self.master2.mav.statustext_send(1, str(strutf8))
         self.say(text)
         self.my_write_log("INFO",text)
+	print ("INFO %s" % text)
 
     def my_subprocess(self,cmd):
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
