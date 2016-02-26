@@ -22,12 +22,19 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
         self.armed = False
-        self.shutdown_auto_requested = False
-        self.shutdown_auto_requested_time = 0
-        self.shutdown_requested = False
-        self.shutdown_requested_time = 0
-        self.reboot_requested = False
-        self.reboot_requested_time = 0
+        ### battery low :
+        self.shutdown_auto = False
+        self.shutdown_auto_time = 0
+        ### radio resquested
+        self.shutdown_by_radio = False
+        self.shutdown_by_radio_time = 0
+        self.reboot_by_radio = False
+        self.reboot_by_radio_time = 0
+        ### cmd resquested
+        self.shutdown_by_cmd = False
+        self.shutdown_by_cmd_time = 0
+        self.reboot_by_cmd = False
+        self.reboot_by_cmd_time = 0
         self.mystate = 0
         self.myvolt = 0
         self.mythrottle = 0
@@ -101,48 +108,62 @@ class MyPiModule(mp_module.MPModule):
 
     def cmd_myshutdown(self, args):
         if self.armed == False and self.mystate == 3:
-            if self.shutdown_requested == False:
-                self.my_statustext_send("Shutdown after %s second" % self.settings.mydelayinit)
-                self.shutdown_requested = True
-                self.shutdown_requested_time = time.time()
-            # annulation shutdown
+            if self.shutdown_by_radio == False:
+                self.my_statustext_send("Shutdown radio left %ssec" % self.settings.mydelayinit)
+                self.shutdown_by_radio = True
+                self.shutdown_by_radio_time = time.time()
+            # annulation shutdown radio
             else:
-                self.my_statustext_send("Shutdown canceled")
-                self.shutdown_requested = False
-                self.shutdown_requested_time = 0
+                self.my_statustext_send("Shutdown radio canceled")
+                self.shutdown_by_radio = False
+                self.shutdown_by_radio_time = 0
 
     def cmd_myreboot(self, args):
         if self.armed == False and self.mystate == 3:
-            if self.reboot_requested == False:
-                self.my_statustext_send("Reboot after %s second" % self.settings.mydelayinit)
-                self.reboot_requested = True
-                self.reboot_requested_time = time.time()
-            # annulation reboot
+            if self.reboot_by_cmd == False:
+                self.my_statustext_send("Reboot cmd left %ssec" % self.settings.mydelayinit)
+                self.reboot_by_cmd = True
+                self.reboot_by_cmd_time = time.time()
+            # annulation reboot cmd
             else:
-                self.my_statustext_send("Reboot canceled")
-                self.reboot_requested = False
-                self.reboot_requested_time = 0
+                self.my_statustext_send("Reboot cmd canceled")
+                self.reboot_by_cmd = False
+                self.reboot_by_cmd_time = 0
 
     def my_manage_init(self):
-        ######### manage : shutdown auto requested / shutdown requested / reboot requested
-        if self.shutdown_auto_requested == True and self.shutdown_auto_requested_time != 0 and time.time() > self.shutdown_auto_requested_time + self.settings.mydelayinit:
+        ######### manage : shutdown auto  requested
+        if self.shutdown_auto == True and self.shutdown_auto_time != 0 and time.time() > self.shutdown_auto_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown auto now")
             self.my_subprocess(["init","0"])
-        if self.shutdown_auto_requested == True:
-            delta = self.settings.mydelayinit - int(time.time() - self.shutdown_auto_requested_time)
-            self.my_statustext_send("Shutdown left %ssec" % delta)
-        if self.shutdown_requested == True and self.shutdown_requested_time != 0 and time.time() > self.shutdown_requested_time + self.settings.mydelayinit:
-            self.my_statustext_send("Shutdown now")
+        if self.shutdown_auto == True:
+            delta = self.settings.mydelayinit - int(time.time() - self.shutdown_auto_time)
+            self.my_statustext_send("Shutdown auto left %ssec" % delta)
+        ######### manage : shutdown radio requested / reboot radio requested
+        if self.shutdown_by_radio == True and self.shutdown_by_radio_time != 0 and time.time() > self.shutdown_by_radio_time + self.settings.mydelayinit:
+            self.my_statustext_send("Shutdown radio now")
             self.my_subprocess(["init","0"])
-        if self.shutdown_requested == True:
-            delta = self.settings.mydelayinit - int(time.time() - self.shutdown_requested_time)
-            self.my_statustext_send("Shutdown left %ssec" % delta)
-        if self.reboot_requested == True and self.reboot_requested_time != 0 and time.time() > self.reboot_requested_time + self.settings.mydelayinit:
-            self.my_statustext_send("Reboot now")
+        if self.shutdown_by_radio == True:
+            delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_radio_time)
+            self.my_statustext_send("Shutdown radio left %ssec" % delta)
+        if self.reboot_by_radio == True and self.reboot_by_radio_time != 0 and time.time() > self.reboot_by_radio_time + self.settings.mydelayinit:
+            self.my_statustext_send("Reboot radio now")
             self.my_subprocess(["init","6"])
-        if self.reboot_requested == True:
-            delta = self.settings.mydelayinit - int(time.time() - self.reboot_requested_time)
-            self.my_statustext_send("Reboot left %ssec" % delta)
+        if self.reboot_by_radio == True:
+            delta = self.settings.mydelayinit - int(time.time() - self.reboot_by_radio_time)
+            self.my_statustext_send("Reboot radio left %ssec" % delta)
+        ######### manage : shutdown cmd   requested / reboot cmd   requested
+        if self.shutdown_by_cmd == True and self.shutdown_by_cmd_time != 0 and time.time() > self.shutdown_by_cmd_time + self.settings.mydelayinit:
+            self.my_statustext_send("Shutdown cmd now")
+            self.my_subprocess(["init","0"])
+        if self.shutdown_by_cmd == True:
+            delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_cmd_time)
+            self.my_statustext_send("Shutdown cmd left %ssec" % delta)
+        if self.reboot_by_cmd == True and self.reboot_by_cmd_time != 0 and time.time() > self.reboot_by_cmd_time + self.settings.mydelayinit:
+            self.my_statustext_send("Reboot cmd now")
+            self.my_subprocess(["init","6"])
+        if self.reboot_by_cmd == True:
+            delta = self.settings.mydelayinit - int(time.time() - self.reboot_by_cmd_time)
+            self.my_statustext_send("Reboot cmd left %ssec" % delta)
 
     def my_statustext_check(self):
             msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MySeverity %s MyStatusText %s" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myseverity,self.mytext)
@@ -155,10 +176,10 @@ class MyPiModule(mp_module.MPModule):
                 if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
                     msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown in progress..." % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
                     self.my_write_log(msg)
-                    if self.shutdown_auto_requested == False:
+                    if self.shutdown_auto == False:
                         self.my_statustext_send("Shutdown auto after %ssec" % self.settings.mydelayinit)
-                        self.shutdown_auto_requested = True
-                        self.shutdown_auto_requested_time = time.time()
+                        self.shutdown_auto = True
+                        self.shutdown_auto_time = time.time()
                 elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
                     msg = "WARNING Armed: %s MyState: %s Mythrottle %s MyVolt %s<=%s MyCurrent %s MyRemaining %s<=%s : Shutdown needed" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.settings.myminvolt,self.mycurrent,self.myremaining,self.settings.myminremain)
                     self.my_write_log(msg)
@@ -221,26 +242,26 @@ class MyPiModule(mp_module.MPModule):
            if self.armed == False and self.mystate == 3 and self.myrc2raw > self.RC2_high_mark and self.myrc3raw > self.RC3_high_mark:
                msg = "INFO Armed: %s MyState: %s Mythrottle %s MyVolt %s MyCurrent %s MyRemaining %s MyRC2Raw %s MyRC3Raw %s : Shutdown" % (self.armed,self.mystate,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.myrc2raw,self.myrc3raw)
                self.my_write_log(msg)
-               if self.shutdown_requested == False:
+               if self.shutdown_by_radio == False:
                    self.my_statustext_send("Shutdown after %ssec" % self.settings.mydelayinit)
-                   self.shutdown_requested = True
-                   self.shutdown_requested_time = time.time()
+                   self.shutdown_by_radio = True
+                   self.shutdown_by_radio_time = time.time()
            ######## MANAGE REBOOT TROTTLE MAX RC3 > 1700 and PITCH MAX RC2 < 1200
            if self.armed == False and self.mystate == 3 and self.myrc2raw < self.RC2_low_mark and self.myrc3raw > self.RC3_high_mark:
-               if self.reboot_requested == False:
+               if self.reboot_by_radio == False:
                    self.my_statustext_send("Reboot after %ssec" % self.settings.mydelayinit)
-                   self.reboot_requested = True
-                   self.reboot_requested_time = time.time()
-           # annulation shutdown
-           if self.myrc3raw < self.RC3_high_mark and self.shutdown_requested == True:
-               self.my_statustext_send("Shutdown canceled")
-               self.shutdown_requested = False
-               self.shutdown_requested_time = 0
-           # annulation reboot
-           if self.myrc3raw < self.RC3_high_mark and self.reboot_requested == True:
-               self.my_statustext_send("Reboot canceled")
-               self.reboot_requested = False
-               self.reboot_requested_time = 0
+                   self.reboot_by_radio = True
+                   self.reboot_by_radio_time = time.time()
+           # annulation shutdown auto
+           if self.myrc3raw < self.RC3_high_mark and self.shutdown_by_radio == True:
+               self.my_statustext_send("Shutdown auto canceled")
+               self.shutdown_by_radio = False
+               self.shutdown_by_radio_time = 0
+           # annulation reboot auto
+           if self.myrc3raw < self.RC3_high_mark and self.reboot_by_radio == True:
+               self.my_statustext_send("Reboot auto canceled")
+               self.reboot_by_radio = False
+               self.reboot_by_radio_time = 0
            self.my_manage_init()
 
     def mavlink_packet(self, m):
