@@ -1,8 +1,8 @@
 # MyPiModule
 
-MAVProxy MyPiModule for MyPiDrone
-
 http://www.MyPiDrone.com
+
+MAVProxy MyPiModule for MyPiDrone
 
 ########################################################################################################
 - build.sh                                            : to install MyPiModule
@@ -11,4 +11,6 @@ http://www.MyPiDrone.com
 - StartArduCopter-quad.sh                             : manage ArduCopter-quad and Video Wifibroadcast
 - start_tx_with_video_recording.sh                    : start Video Wifibroadcast
 - start_tx_with_video_recording_broadcast_over_ap.sh  : start Video Broadcast over Wifi AP : Beta test
+- start_ap.sh                                         : start Wifi AP on GCS
+- start_tx.sh                                         : view Video on GCS
 ########################################################################################################
