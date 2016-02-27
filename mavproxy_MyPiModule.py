@@ -251,7 +251,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["killall","raspivid"])
                    self.my_subprocess(["killall","tx"])
            ''' MANAGE VIDEO ON : RC6 DOWN '''
-           if self.myrc6raw < self.RC6_low_mark:
+           if self.myrc6raw > 0 and self.myrc6raw < self.RC6_low_mark:
                if self.video_on == False:
                    self.video_on = True
                    msg = "MyRC6raw %s MyVideo on %s : RC6 DOWN" % (self.myrc6raw,self.video_on)
@@ -260,7 +260,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
-               if self.myrc4raw < self.RC4_low_mark and self.myrc1raw > self.RC1_high_mark:
+               if self.myrc4raw > 0 and self.myrc4raw < self.RC4_low_mark and self.myrc1raw > self.RC1_high_mark:
                    if self.shutdown_by_radio == False:
                        msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown ByRadio" % (self.myrc2raw,self.myrc3raw)
                        self.my_write_log("INFO",msg)
@@ -273,7 +273,7 @@ class MyPiModule(mp_module.MPModule):
                        self.shutdown_by_radio = False
                        self.shutdown_by_radio_time = 0
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MIN RC1 '''
-               if self.myrc4raw < self.RC4_low_mark and self.myrc1raw < self.RC1_low_mark:
+               if self.myrc4raw > 0 and self.myrc4raw < self.RC4_low_mark and self.myrc1raw > 0 and self.myrc1raw < self.RC1_low_mark:
                    if self.reboot_by_radio == False:
                        msg = "MyRC2Raw %s MyRC3Raw %s : Reboot ByRadio" % (self.myrc2raw,self.myrc3raw)
                        self.my_write_log("INFO",msg)
