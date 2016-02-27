@@ -16,12 +16,12 @@ cp /home/kevin/fpv/TESTS/start_tx_with_video_recording_broadcast_over_ap.sh MyPi
 cp /home/kevin/fpv/start_tx_with_video_recording.sh MyPiModule/
 cp /etc/rc.local MyPiModule/
 cd MyPiModule
-git add build.sh mavproxy_MyPiModule.py StartArduCopter-quad.sh start_tx_with_video_recording.sh start_tx_with_video_recording_broadcast_over_ap.sh start_tx.sh start_ap.sh rc.local README.md
+git add build.sh mavproxy_MyPiModule.py StartArduCopter-quad.sh start_tx_with_video_recording.sh start_tx_with_video_recording_broadcast_over_ap.sh start_rx.sh start_ap.sh rc.local README.md
 git commit mavproxy_MyPiModule.py -m "$VERSION $date"
 git commit StartArduCopter-quad.sh -m "$date"
 git commit start_tx_with_video_recording.sh -m "$date"
 git commit start_tx_with_video_recording_broadcast_over_ap.sh -m "$date"
-git commit start_tx.sh -m "$date"
+git commit start_rx.sh -m "$date"
 git commit start_ap.sh -m "$date"
 git commit rc.local -m "$date"
 git commit build.sh -m "$date"
