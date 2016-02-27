@@ -68,6 +68,7 @@ class MyPiModule(mp_module.MPModule):
         self.RC8_low_mark  = 1200 ; self.RC8_high_mark  = 1700
         self.myseverity = 0
         self.mytext = "nulltext"
+        self.myip = "0.0.0.0"
         # to send statustext
         self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common")
 
@@ -108,7 +109,7 @@ class MyPiModule(mp_module.MPModule):
            print("cmd_mybat %s" % self)
            msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
            self.my_write_log("INFO",msg)
-        self.my_subprocess(["uptime"])
+        self.my_subprocess(["hostname","-I"])
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
@@ -235,6 +236,11 @@ class MyPiModule(mp_module.MPModule):
                    self.wlan0_up = True
                    self.my_statustext_send("ifup wlan0 RPI2")
                    self.my_subprocess(["ifup","wlan0"])
+                   p = subprocess.Popen(["hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                   (stdoutData, stderrData) = p.communicate()
+                   rc = p.returncode
+                   self.myip = stdoutData
+                   self.my_statustext_send("IP %s" % self.myip)
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 UP" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("INFO",msg)
            else:
