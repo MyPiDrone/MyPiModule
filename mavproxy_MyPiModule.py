@@ -83,7 +83,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         date2 = datetime.now().strftime(self.FORMAT2)
-        strutf8 = unicode("%s at %s" % (text,date2))
+        strutf8 = unicode("%s %s" % (date2,text))
         self.master2.mav.statustext_send(1, str(strutf8))
         self.say(text)
         self.my_write_log("INFO",text)
@@ -118,7 +118,7 @@ class MyPiModule(mp_module.MPModule):
     def cmd_myshutdown(self, args):
         if self.armed == False and self.mystate == 3:
             if self.shutdown_by_cmd == False:
-                self.my_statustext_send("Shutdown ByCmd left %ssec" % self.settings.mydelayinit)
+                self.my_statustext_send("Shutdown ByCmd %ssec" % self.settings.mydelayinit)
                 self.shutdown_by_cmd = True
                 self.shutdown_by_cmd_time = time.time()
             else:
@@ -130,7 +130,7 @@ class MyPiModule(mp_module.MPModule):
     def cmd_myreboot(self, args):
         if self.armed == False and self.mystate == 3:
             if self.reboot_by_cmd == False:
-                self.my_statustext_send("Reboot ByCmd left %ssec" % self.settings.mydelayinit)
+                self.my_statustext_send("Reboot ByCmd %ssec" % self.settings.mydelayinit)
                 self.reboot_by_cmd = True
                 self.reboot_by_cmd_time = time.time()
             else:
@@ -147,7 +147,7 @@ class MyPiModule(mp_module.MPModule):
         if self.shutdown_by_lowbat == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_lowbat_time)
             if delta <= 10:
-                self.my_statustext_send("Shutdown ByLowBat left %ssec" % delta)
+                self.my_statustext_send("Shutdown ByLowBat %ssec" % delta)
         ''' manage : shutdown ByRadio requested '''
         if self.shutdown_by_radio == True and self.shutdown_by_radio_time != 0 and time.time() > self.shutdown_by_radio_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown ByRadio now")
@@ -155,7 +155,7 @@ class MyPiModule(mp_module.MPModule):
         if self.shutdown_by_radio == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_radio_time)
             if delta <= 10:
-                self.my_statustext_send("Shutdown ByRadio left %ssec" % delta)
+                self.my_statustext_send("Shutdown ByRadio %ssec" % delta)
         ''' manage : reboot ByRadio requested '''
         if self.reboot_by_radio == True and self.reboot_by_radio_time != 0 and time.time() > self.reboot_by_radio_time + self.settings.mydelayinit:
             self.my_statustext_send("Reboot ByRadio now")
@@ -163,7 +163,7 @@ class MyPiModule(mp_module.MPModule):
         if self.reboot_by_radio == True:
             delta = self.settings.mydelayinit - int(time.time() - self.reboot_by_radio_time)
             if delta <= 10:
-                self.my_statustext_send("Reboot ByRadio left %ssec" % delta)
+                self.my_statustext_send("Reboot ByRadio %ssec" % delta)
         ''' manage : shutdown ByCmd requested '''
         if self.shutdown_by_cmd == True and self.shutdown_by_cmd_time != 0 and time.time() > self.shutdown_by_cmd_time + self.settings.mydelayinit:
             self.my_statustext_send("Shutdown ByCmd now")
@@ -171,7 +171,7 @@ class MyPiModule(mp_module.MPModule):
         if self.shutdown_by_cmd == True:
             delta = self.settings.mydelayinit - int(time.time() - self.shutdown_by_cmd_time)
             if delta <= 10:
-                self.my_statustext_send("Shutdown ByCmd left %ssec" % delta)
+                self.my_statustext_send("Shutdown ByCmd %ssec" % delta)
         ''' manage : reboot ByCmd requested '''
         if self.reboot_by_cmd == True and self.reboot_by_cmd_time != 0 and time.time() > self.reboot_by_cmd_time + self.settings.mydelayinit:
             self.my_statustext_send("Reboot ByCmd now")
@@ -179,7 +179,7 @@ class MyPiModule(mp_module.MPModule):
         if self.reboot_by_cmd == True:
             delta = self.settings.mydelayinit - int(time.time() - self.reboot_by_cmd_time)
             if delta <= 10:
-                self.my_statustext_send("Reboot ByCmd left %ssec" % delta)
+                self.my_statustext_send("Reboot ByCmd %ssec" % delta)
 
     def my_statustext_check(self):
             msg = "MySeverity %s MyStatusText %s" % (self.myseverity,self.mytext)
@@ -193,13 +193,13 @@ class MyPiModule(mp_module.MPModule):
                     msg = "LowVolt <=%s or LowRemain <=%s : Shutdown ByLowBat in progress..." % (self.settings.myminvolt,self.settings.myminremain)
                     self.my_write_log("WARNING",msg)
                     if self.shutdown_by_lowbat == False:
-                        self.my_statustext_send("Shutdown ByLowBat after %ssec" % self.settings.mydelayinit)
+                        self.my_statustext_send("Shutdown ByLowBat %ssec" % self.settings.mydelayinit)
                         self.shutdown_by_lowbat = True
                         self.shutdown_by_lowbat_time = time.time()
                 elif self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain:
                     msg = "LowVolt <=%s or LowRemain <=%s : Shutdown ByLowBat needed" % (self.settings.myminvolt,self.settings.myminremain)
                     self.my_write_log("WARNING",msg)
-                    self.my_statustext_send("Warning voltage shutdown needed")
+                    self.my_statustext_send("Battery low shutdown needed")
                 else:
                     msg = "LowVolt >%s or LowRemain >%s : Good status" % (self.settings.myminvolt,self.settings.myminremain)
                     self.my_write_log("INFO",msg)
@@ -241,20 +241,20 @@ class MyPiModule(mp_module.MPModule):
                msg = "MyRC8Raw %s wlan0 is up : %s : unknown RC8 value" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
-           ''' MANAGE VIDEO OFF : RC7 UP '''
-           if self.myrc7raw > self.RC7_high_mark:
+           ''' MANAGE VIDEO OFF : RC6 UP '''
+           if self.myrc6raw > self.RC6_high_mark:
                if self.video_on == True:
                    self.video_on = False
-                   msg = "MyRC7raw %s MyVideo on %s : RC7 UP" % (self.myrc7raw,self.video_on)
+                   msg = "MyRC6raw %s MyVideo on %s : RC6 UP" % (self.myrc6raw,self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
                    self.my_subprocess(["killall","raspivid"])
                    self.my_subprocess(["killall","tx"])
-           ''' MANAGE VIDEO ON : RC7 DOWN '''
-           if self.myrc7raw < self.RC7_low_mark:
+           ''' MANAGE VIDEO ON : RC6 DOWN '''
+           if self.myrc6raw < self.RC6_low_mark:
                if self.video_on == False:
                    self.video_on = True
-                   msg = "MyRC7raw %s MyVideo on %s : RC7 DOWN" % (self.myrc7raw,self.video_on)
+                   msg = "MyRC6raw %s MyVideo on %s : RC6 DOWN" % (self.myrc6raw,self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video on")
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
@@ -264,7 +264,7 @@ class MyPiModule(mp_module.MPModule):
                    if self.shutdown_by_radio == False:
                        msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown ByRadio" % (self.myrc2raw,self.myrc3raw)
                        self.my_write_log("INFO",msg)
-                       self.my_statustext_send("Shutdown ByRadio after %ssec" % self.settings.mydelayinit)
+                       self.my_statustext_send("Shutdown ByRadio %ssec" % self.settings.mydelayinit)
                        self.shutdown_by_radio = True
                        self.shutdown_by_radio_time = time.time()
                    else:
@@ -277,7 +277,7 @@ class MyPiModule(mp_module.MPModule):
                    if self.reboot_by_radio == False:
                        msg = "MyRC2Raw %s MyRC3Raw %s : Reboot ByRadio" % (self.myrc2raw,self.myrc3raw)
                        self.my_write_log("INFO",msg)
-                       self.my_statustext_send("Reboot ByRadio after %ssec" % self.settings.mydelayinit)
+                       self.my_statustext_send("Reboot ByRadio %ssec" % self.settings.mydelayinit)
                        self.reboot_by_radio = True
                        self.reboot_by_radio_time = time.time()
                    else:
