@@ -53,7 +53,9 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
         self.settings.append(MPSetting('myrcvideo', int, 6, 'Radio channel to change video on/off'))
-        self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change video on/off'))
+        self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
+        self.settings.append(MPSetting('myyaw', int, 4, 'Radio channel to reboot/shutdown'))
+        self.settings.append(MPSetting('myroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         #self.FORMAT2 = '%Hh%Mm%Ss'
@@ -273,9 +275,9 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
-               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC_low_mark[4] and self.myrcraw[1] > self.RC_high_mark[1]:
+               if self.myrcraw[self.settings.myyaw] > 0 and self.myrcraw[self.settings.myyaw] < self.RC_low_mark[self.settings.myyaw] and self.myrcraw[self.settings.myroll] > self.RC_high_mark[self.settings.myroll]:
                    if self.shutdown_by_radio == False:
-                       msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown ByRadio" % (self.myrcraw[2],self.myrcraw[3])
+                       msg = "MyRC%sRaw %s MyRC%sRaw %s : Shutdown ByRadio" % (self.settings.myyaw,self.myrcraw[self.settings.myyaw],self.settings.myroll,self.myrcroll[self.settings.myroll])
                        self.my_write_log("INFO",msg)
                        self.my_statustext_send("Shutdown ByRadio %ssec" % self.settings.mydelayinit)
                        self.shutdown_by_radio = True
@@ -286,9 +288,9 @@ class MyPiModule(mp_module.MPModule):
                        self.shutdown_by_radio = False
                        self.shutdown_by_radio_time = 0
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MIN RC1 '''
-               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC_low_mark[4] and self.myrcraw[1] > 0 and self.myrcraw[1] < self.RC_low_mark[1]:
+               if self.myrcraw[self.settings.myyaw] > 0 and self.myrcraw[self.settings.myyaw] < self.RC_low_mark[self.settings.myyaw] and self.myrcraw[self.settings.myroll] > 0 and self.myrcraw[self.settings.myroll] < self.RC_low_mark[self.settings.myroll]:
                    if self.reboot_by_radio == False:
-                       msg = "MyRC2Raw %s MyRC3Raw %s : Reboot ByRadio" % (self.myrcraw[2],self.myrcraw[3])
+                       msg = "MyRC%sRaw %s MyRC%sRaw %s : Reboot ByRadio" % (self.settings.myyaw,self.myrcraw[self.settings.myyaw],self.settings.myroll,self.myrcroll[self.settings.myroll])
                        self.my_write_log("INFO",msg)
                        self.my_statustext_send("Reboot ByRadio %ssec" % self.settings.mydelayinit)
                        self.reboot_by_radio = True
