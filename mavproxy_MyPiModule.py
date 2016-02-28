@@ -60,15 +60,8 @@ class MyPiModule(mp_module.MPModule):
         # default to servo range of 1000 to 1700
         #self.RC1_MIN  = self.get_mav_param('RC1_MIN', 0)
         #self.RC1_MAX  = self.get_mav_param('RC1_MAX', 0)
-        self.RC_low_mark = [0,0,0,0,0,0,0,0,0] ; self.RC_high_mark = [0,0,0,0,0,0,0,0,0]
-        self.RC1_low_mark  = 1200 ; self.RC1_high_mark  = 1700
-        self.RC2_low_mark  = 1200 ; self.RC2_high_mark  = 1700
-        self.RC3_low_mark  = 1200 ; self.RC3_high_mark  = 1700
-        self.RC4_low_mark  = 1200 ; self.RC4_high_mark  = 1700
-        self.RC5_low_mark  = 1200 ; self.RC5_high_mark  = 1700
-        self.RC_low_mark[6]  = 1200 ; self.RC_high_mark[6]  = 1700
-        self.RC7_low_mark  = 1200 ; self.RC7_high_mark  = 1700
-        self.RC8_low_mark  = 1200 ; self.RC8_high_mark  = 1700
+        self.RC_low_mark = [1200,1200,1200,1200,1200,1200,1200,1200,1200] 
+        self.RC_high_mark = [1700,1700,1700,1700,1700,1700,1700,1700,1700]
         self.myseverity = 0
         self.mytext = "nulltext"
         self.myip = "0.0.0.0"
@@ -229,14 +222,14 @@ class MyPiModule(mp_module.MPModule):
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
            ''' MANAGE WLAN0 UP DOWN : RC8 DOWN '''
-           if self.myrcraw[8] > 0 and self.myrcraw[8] < self.RC8_low_mark:
+           if self.myrcraw[8] > 0 and self.myrcraw[8] < self.RC_low_mark[8]:
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("wlan0 down")
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.myrcraw[8],self.wlan0_up)
                self.my_write_log("INFO",msg)
-           elif self.myrcraw[8] > self.RC8_low_mark and self.myrcraw[8] < self.RC8_high_mark:
+           elif self.myrcraw[8] > self.RC_low_mark[8] and self.myrcraw[8] < self.RC_high_mark[8]:
                ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
@@ -244,7 +237,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.myrcraw[8],self.wlan0_up)
                self.my_write_log("INFO",msg)
-           elif self.myrcraw[8] > self.RC8_high_mark:
+           elif self.myrcraw[8] > self.RC_high_mark[8]:
                ''' MANAGE WLAN0 UP DOWN : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
@@ -279,7 +272,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
-               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC4_low_mark and self.myrcraw[1] > self.RC1_high_mark:
+               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC_low_mark[4] and self.myrcraw[1] > self.RC_high_mark[1]:
                    if self.shutdown_by_radio == False:
                        msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown ByRadio" % (self.myrcraw[2],self.myrcraw[3])
                        self.my_write_log("INFO",msg)
@@ -292,7 +285,7 @@ class MyPiModule(mp_module.MPModule):
                        self.shutdown_by_radio = False
                        self.shutdown_by_radio_time = 0
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MIN RC1 '''
-               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC4_low_mark and self.myrcraw[1] > 0 and self.myrcraw[1] < self.RC1_low_mark:
+               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC_low_mark[4] and self.myrcraw[1] > 0 and self.myrcraw[1] < self.RC_low_mark[1]:
                    if self.reboot_by_radio == False:
                        msg = "MyRC2Raw %s MyRC3Raw %s : Reboot ByRadio" % (self.myrcraw[2],self.myrcraw[3])
                        self.my_write_log("INFO",msg)
