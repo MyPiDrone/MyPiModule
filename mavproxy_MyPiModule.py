@@ -42,7 +42,7 @@ class MyPiModule(mp_module.MPModule):
         self.mycurrent = 0
         self.myremaining = 0
         self.myrc1raw = 0 ; self.myrc2raw = 0 ; self.myrc3raw = 0 ; self.myrc4raw = 0
-        self.myrc5raw = 0 ; self.myrc6raw = 0 ; self.myrc7raw = 0 ; self.myrc8raw = 0
+        self.myrc5raw = 0 ; self.myrcraw[6] = 0 ; self.myrc7raw = 0 ; self.myrc8raw = 0
         self.wlan0_up = False
         self.video_on = True
         self.last_battery_check_time = time.time()
@@ -65,9 +65,10 @@ class MyPiModule(mp_module.MPModule):
         self.RC3_low_mark  = 1200 ; self.RC3_high_mark  = 1700
         self.RC4_low_mark  = 1200 ; self.RC4_high_mark  = 1700
         self.RC5_low_mark  = 1200 ; self.RC5_high_mark  = 1700
-        self.RC6_low_mark  = 1200 ; self.RC6_high_mark  = 1700
+        self.RC_low_mark[6]  = 1200 ; self.RC_high_mark[6]  = 1700
         self.RC7_low_mark  = 1200 ; self.RC7_high_mark  = 1700
         self.RC8_low_mark  = 1200 ; self.RC8_high_mark  = 1700
+        self.myrcvideo = 6 
         self.myseverity = 0
         self.mytext = "nulltext"
         self.myip = "0.0.0.0"
@@ -120,7 +121,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_rc_check()
         if self.settings.mydebug:
            print("cmd_mybat %s" % self)
-           msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
+           msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrcraw[6],self.myrc7raw,self.myrc8raw)
            self.my_write_log("INFO",msg)
         self.my_subprocess(["hostname","-I"])
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
@@ -225,7 +226,7 @@ class MyPiModule(mp_module.MPModule):
            self.last_rc_check_time = time.time()
            if self.settings.mydebug:
                print("cmd_mybat %s" % self)
-               msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrc6raw,self.myrc7raw,self.myrc8raw)
+               msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrcraw[6],self.myrc7raw,self.myrc8raw)
                self.my_write_log("INFO",msg)
            ''' MANAGE WLAN0 UP DOWN : RC8 DOWN '''
            if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
@@ -260,19 +261,19 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
-           if self.myrc6raw > self.RC6_high_mark:
+           if self.myrcraw[6] > self.RC_high_mark[6]:
                if self.video_on == True:
                    self.video_on = False
-                   msg = "MyRC6raw %s MyVideo on %s : RC6 UP" % (self.myrc6raw,self.video_on)
+                   msg = "MyRC6raw %s MyVideo on %s : RC6 UP" % (self.myrcraw[6],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
                    self.my_subprocess(["killall","raspivid"])
                    self.my_subprocess(["killall","tx"])
            ''' MANAGE VIDEO ON : RC6 DOWN '''
-           if self.myrc6raw > 0 and self.myrc6raw < self.RC6_low_mark:
+           if self.myrcraw[6] > 0 and self.myrcraw[6] < self.RC_low_mark[6]:
                if self.video_on == False:
                    self.video_on = True
-                   msg = "MyRC6raw %s MyVideo on %s : RC6 DOWN" % (self.myrc6raw,self.video_on)
+                   msg = "MyRC6raw %s MyVideo on %s : RC6 DOWN" % (self.myrcraw[6],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video on")
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
@@ -353,7 +354,7 @@ class MyPiModule(mp_module.MPModule):
             self.mystate = m.system_status
         if mtype == "RC_CHANNELS_RAW":
             self.myrc1raw = m.chan1_raw ; self.myrc2raw = m.chan2_raw ; self.myrc3raw = m.chan3_raw ; self.myrc4raw = m.chan4_raw
-            self.myrc5raw = m.chan5_raw ; self.myrc6raw = m.chan6_raw ; self.myrc7raw = m.chan7_raw ; self.myrc8raw = m.chan8_raw
+            self.myrc5raw = m.chan5_raw ; self.myrcraw[6] = m.chan6_raw ; self.myrc7raw = m.chan7_raw ; self.myrc8raw = m.chan8_raw
             self.my_rc_check()
         if mtype == "STATUSTEXT":
             self.myseverity = m.severity
