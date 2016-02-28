@@ -43,6 +43,7 @@ class MyPiModule(mp_module.MPModule):
         self.myremaining = 0
         self.myrc1raw = 0 ; self.myrc2raw = 0 ; self.myrc3raw = 0 ; self.myrc4raw = 0
         self.myrc5raw = 0 ; self.myrcraw[6] = 0 ; self.myrc7raw = 0 ; self.myrc8raw = 0
+        self.myrcraw = [0,0,0,0,0,0,0,0]
         self.myrcraw[6] = 0
         self.wlan0_up = False
         self.video_on = True
