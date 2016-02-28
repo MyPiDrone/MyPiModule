@@ -21,7 +21,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
-        self.myversion = "v1.3"
+        self.myversion = "1.3"
         self.armed = False
         ### battery low :
         self.shutdown_by_lowbat = False
@@ -86,7 +86,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         if self.mycountermessage == 0:
-            strutf8 = unicode("Version")
+            strutf8 = unicode("0 MyPiModule v%s" % (self.myversion))
             self.master2.mav.statustext_send(1, str(strutf8))
             #self.my_write_log("INFO","MyPiModule %s" % (self.mycountermessage,self.myversion))
             #print("INFO %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
