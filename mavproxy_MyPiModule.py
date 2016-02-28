@@ -85,11 +85,11 @@ class MyPiModule(mp_module.MPModule):
         fo.close()
 
     def my_statustext_send(self,text):
-        #if self.mycountermessage == 0:
-        #    strutf8 = unicode("%s MyPiModule %s" % (self.mycountermessage,self.myversion))
-        #    self.master2.mav.statustext_send(1, str(strutf8))
-        #    self.my_write_log("INFO","MyPiModule %s" % (self.mycountermessage,self.myversion))
-        #    print("INFO %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
+        if self.mycountermessage == 0:
+            strutf8 = unicode("%02d MyPiModule %s" % (self.mycountermessage,self.myversion))
+            self.master2.mav.statustext_send(1, str(strutf8))
+            self.my_write_log("INFO","MyPiModule %s" % (self.mycountermessage,self.myversion))
+            print("INFO %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
         self.mycountermessage += 1
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
