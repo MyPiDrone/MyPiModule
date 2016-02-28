@@ -41,8 +41,6 @@ class MyPiModule(mp_module.MPModule):
         self.mythrottle = 0
         self.mycurrent = 0
         self.myremaining = 0
-        self.myrcraw[1] = 0 ; self.myrcraw[2] = 0 ; self.myrcraw[3] = 0 ; self.myrcraw[4] = 0
-        self.myrcraw[5] = 0 ; self.myrcraw[7] = 0 ; self.myrcraw[8] = 0
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
         self.wlan0_up = False
         self.video_on = True
