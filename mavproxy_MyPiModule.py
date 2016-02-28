@@ -277,7 +277,7 @@ class MyPiModule(mp_module.MPModule):
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myyaw] > 0 and self.myrcraw[self.settings.myyaw] < self.RC_low_mark[self.settings.myyaw] and self.myrcraw[self.settings.myroll] > self.RC_high_mark[self.settings.myroll]:
                    if self.shutdown_by_radio == False:
-                       msg = "MyRC%sRaw %s MyRC%sRaw %s : Shutdown ByRadio" % (self.settings.myyaw,self.myrcraw[self.settings.myyaw],self.settings.myroll,self.myrcroll[self.settings.myroll])
+                       msg = "MyRC%sRaw %s MyRC%sRaw %s : Shutdown ByRadio" % (self.settings.myyaw,self.myrcraw[self.settings.myyaw],self.settings.myroll,self.myrcraw[self.settings.myroll])
                        self.my_write_log("INFO",msg)
                        self.my_statustext_send("Shutdown ByRadio %ssec" % self.settings.mydelayinit)
                        self.shutdown_by_radio = True
@@ -290,7 +290,7 @@ class MyPiModule(mp_module.MPModule):
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MIN RC1 '''
                if self.myrcraw[self.settings.myyaw] > 0 and self.myrcraw[self.settings.myyaw] < self.RC_low_mark[self.settings.myyaw] and self.myrcraw[self.settings.myroll] > 0 and self.myrcraw[self.settings.myroll] < self.RC_low_mark[self.settings.myroll]:
                    if self.reboot_by_radio == False:
-                       msg = "MyRC%sRaw %s MyRC%sRaw %s : Reboot ByRadio" % (self.settings.myyaw,self.myrcraw[self.settings.myyaw],self.settings.myroll,self.myrcroll[self.settings.myroll])
+                       msg = "MyRC%sRaw %s MyRC%sRaw %s : Reboot ByRadio" % (self.settings.myyaw,self.myrcraw[self.settings.myyaw],self.settings.myroll,self.myrcraw[self.settings.myroll])
                        self.my_write_log("INFO",msg)
                        self.my_statustext_send("Reboot ByRadio %ssec" % self.settings.mydelayinit)
                        self.reboot_by_radio = True
