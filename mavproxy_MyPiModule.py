@@ -89,7 +89,6 @@ class MyPiModule(mp_module.MPModule):
             strutf8 = unicode("00 MyPiModule %s" % self.myversion)
             self.master2.mav.statustext_send(1, str(strutf8))
             print("INFO %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
-            #self.my_write_log("INFO","MyPiModule %s" % (self.mycountermessage,self.myversion))
         self.mycountermessage += 1
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
@@ -231,7 +230,7 @@ class MyPiModule(mp_module.MPModule):
            if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
                if self.wlan0_up == True:
                    self.wlan0_up = False
-                   self.my_statustext_send("ifdown wlan0 RPI2")
+                   self.my_statustext_send("wlan0 down")
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("INFO",msg)
@@ -239,7 +238,7 @@ class MyPiModule(mp_module.MPModule):
                ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
-                   self.my_statustext_send("ifdown wlan0 RPI2")
+                   self.my_statustext_send("wlan0 down")
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.myrc8raw,self.wlan0_up)
                self.my_write_log("INFO",msg)
