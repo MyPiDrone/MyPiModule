@@ -43,8 +43,7 @@ class MyPiModule(mp_module.MPModule):
         self.myremaining = 0
         self.myrc1raw = 0 ; self.myrc2raw = 0 ; self.myrc3raw = 0 ; self.myrc4raw = 0
         self.myrc5raw = 0 ; self.myrc7raw = 0 ; self.myrc8raw = 0
-        self.myrcraw = [0,0,0,0,0,0,0,0]
-        self.myrcraw[6] = 0
+        self.myrcraw = [0,0,0,0,0,0,0,0,0]
         self.wlan0_up = False
         self.video_on = True
         self.last_battery_check_time = time.time()
@@ -62,6 +61,7 @@ class MyPiModule(mp_module.MPModule):
         # default to servo range of 1000 to 1700
         #self.RC1_MIN  = self.get_mav_param('RC1_MIN', 0)
         #self.RC1_MAX  = self.get_mav_param('RC1_MAX', 0)
+        self.RC_low_mark = [0,0,0,0,0,0,0,0,0] ; self.RC_high_mark = [0,0,0,0,0,0,0,0,0]
         self.RC1_low_mark  = 1200 ; self.RC1_high_mark  = 1700
         self.RC2_low_mark  = 1200 ; self.RC2_high_mark  = 1700
         self.RC3_low_mark  = 1200 ; self.RC3_high_mark  = 1700
