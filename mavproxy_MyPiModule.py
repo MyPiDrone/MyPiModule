@@ -97,7 +97,7 @@ class MyPiModule(mp_module.MPModule):
         #strutf8 = unicode("%02d %s" % (date2,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
         #---------------------------------------------------
-        strutf8 = unicode("%s %s" % (self.mycountermessage,text))
+        strutf8 = unicode("%02d %s" % (self.mycountermessage,text))
         self.master2.mav.statustext_send(1, str(strutf8))
         self.say(text)
         self.my_write_log("INFO",text)
