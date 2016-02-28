@@ -41,8 +41,8 @@ class MyPiModule(mp_module.MPModule):
         self.mythrottle = 0
         self.mycurrent = 0
         self.myremaining = 0
-        self.myrc1raw = 0 ; self.myrc2raw = 0 ; self.myrc3raw = 0 ; self.myrc4raw = 0
-        self.myrc5raw = 0 ; self.myrc7raw = 0 ; self.myrc8raw = 0
+        self.myrcraw[1] = 0 ; self.myrcraw[2] = 0 ; self.myrcraw[3] = 0 ; self.myrcraw[4] = 0
+        self.myrcraw[5] = 0 ; self.myrcraw[7] = 0 ; self.myrcraw[8] = 0
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
         self.wlan0_up = False
         self.video_on = True
@@ -123,7 +123,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_rc_check()
         if self.settings.mydebug:
            print("cmd_mybat %s" % self)
-           msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrcraw[6],self.myrc7raw,self.myrc8raw)
+           msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
            self.my_write_log("INFO",msg)
         self.my_subprocess(["hostname","-I"])
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
@@ -228,25 +228,25 @@ class MyPiModule(mp_module.MPModule):
            self.last_rc_check_time = time.time()
            if self.settings.mydebug:
                print("cmd_mybat %s" % self)
-               msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrc1raw,self.myrc2raw,self.myrc3raw,self.myrc4raw,self.myrc5raw,self.myrcraw[6],self.myrc7raw,self.myrc8raw)
+               msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
            ''' MANAGE WLAN0 UP DOWN : RC8 DOWN '''
-           if self.myrc8raw > 0 and self.myrc8raw < self.RC8_low_mark:
+           if self.myrcraw[8] > 0 and self.myrcraw[8] < self.RC8_low_mark:
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("wlan0 down")
                    self.my_subprocess(["ifdown","wlan0"])
-               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.myrc8raw,self.wlan0_up)
+               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.myrcraw[8],self.wlan0_up)
                self.my_write_log("INFO",msg)
-           elif self.myrc8raw > self.RC8_low_mark and self.myrc8raw < self.RC8_high_mark:
+           elif self.myrcraw[8] > self.RC8_low_mark and self.myrcraw[8] < self.RC8_high_mark:
                ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("wlan0 down")
                    self.my_subprocess(["ifdown","wlan0"])
-               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.myrc8raw,self.wlan0_up)
+               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.myrcraw[8],self.wlan0_up)
                self.my_write_log("INFO",msg)
-           elif self.myrc8raw > self.RC8_high_mark:
+           elif self.myrcraw[8] > self.RC8_high_mark:
                ''' MANAGE WLAN0 UP DOWN : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
@@ -256,10 +256,10 @@ class MyPiModule(mp_module.MPModule):
                    rc = p.returncode
                    self.myip = stdoutData
                    self.my_statustext_send("wlan0 up %s" % self.myip)
-               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 UP" % (self.myrc8raw,self.wlan0_up)
+               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 UP" % (self.myrcraw[8],self.wlan0_up)
                self.my_write_log("INFO",msg)
            else:
-               msg = "MyRC8Raw %s wlan0 is up : %s : unknown RC8 value" % (self.myrc8raw,self.wlan0_up)
+               msg = "MyRC8Raw %s wlan0 is up : %s : unknown RC8 value" % (self.myrcraw[8],self.wlan0_up)
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
@@ -281,9 +281,9 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
-               if self.myrc4raw > 0 and self.myrc4raw < self.RC4_low_mark and self.myrc1raw > self.RC1_high_mark:
+               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC4_low_mark and self.myrcraw[1] > self.RC1_high_mark:
                    if self.shutdown_by_radio == False:
-                       msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown ByRadio" % (self.myrc2raw,self.myrc3raw)
+                       msg = "MyRC2Raw %s MyRC3Raw %s : Shutdown ByRadio" % (self.myrcraw[2],self.myrcraw[3])
                        self.my_write_log("INFO",msg)
                        self.my_statustext_send("Shutdown ByRadio %ssec" % self.settings.mydelayinit)
                        self.shutdown_by_radio = True
@@ -294,9 +294,9 @@ class MyPiModule(mp_module.MPModule):
                        self.shutdown_by_radio = False
                        self.shutdown_by_radio_time = 0
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MIN RC1 '''
-               if self.myrc4raw > 0 and self.myrc4raw < self.RC4_low_mark and self.myrc1raw > 0 and self.myrc1raw < self.RC1_low_mark:
+               if self.myrcraw[4] > 0 and self.myrcraw[4] < self.RC4_low_mark and self.myrcraw[1] > 0 and self.myrcraw[1] < self.RC1_low_mark:
                    if self.reboot_by_radio == False:
-                       msg = "MyRC2Raw %s MyRC3Raw %s : Reboot ByRadio" % (self.myrc2raw,self.myrc3raw)
+                       msg = "MyRC2Raw %s MyRC3Raw %s : Reboot ByRadio" % (self.myrcraw[2],self.myrcraw[3])
                        self.my_write_log("INFO",msg)
                        self.my_statustext_send("Reboot ByRadio %ssec" % self.settings.mydelayinit)
                        self.reboot_by_radio = True
@@ -355,8 +355,8 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.mystate = m.system_status
         if mtype == "RC_CHANNELS_RAW":
-            self.myrc1raw = m.chan1_raw ; self.myrc2raw = m.chan2_raw ; self.myrc3raw = m.chan3_raw ; self.myrc4raw = m.chan4_raw
-            self.myrc5raw = m.chan5_raw ; self.myrcraw[6] = m.chan6_raw ; self.myrc7raw = m.chan7_raw ; self.myrc8raw = m.chan8_raw
+            self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
+            self.myrcraw[5] = m.chan5_raw ; self.myrcraw[6] = m.chan6_raw ; self.myrcraw[7] = m.chan7_raw ; self.myrcraw[8] = m.chan8_raw
             self.my_rc_check()
         if mtype == "STATUSTEXT":
             self.myseverity = m.severity
