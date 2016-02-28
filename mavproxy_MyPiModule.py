@@ -54,6 +54,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
+        self.settings.append(MPSetting('myrcvideo', int, 6, 'Radio channel to change video on/off'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         #self.FORMAT2 = '%Hh%Mm%Ss'
@@ -70,7 +71,6 @@ class MyPiModule(mp_module.MPModule):
         self.RC_low_mark[6]  = 1200 ; self.RC_high_mark[6]  = 1700
         self.RC7_low_mark  = 1200 ; self.RC7_high_mark  = 1700
         self.RC8_low_mark  = 1200 ; self.RC8_high_mark  = 1700
-        self.myrcvideo = 6 
         self.myseverity = 0
         self.mytext = "nulltext"
         self.myip = "0.0.0.0"
@@ -263,19 +263,19 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
-           if self.myrcraw[6] > self.RC_high_mark[6]:
+           if self.myrcraw[self.settings.myrcvideo] > self.RC_high_mark[self.settings.myrcvideo]:
                if self.video_on == True:
                    self.video_on = False
-                   msg = "MyRC6raw %s MyVideo on %s : RC6 UP" % (self.myrcraw[6],self.video_on)
+                   msg = "MyRC%sraw %s MyVideo on %s : UP" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
                    self.my_subprocess(["killall","raspivid"])
                    self.my_subprocess(["killall","tx"])
            ''' MANAGE VIDEO ON : RC6 DOWN '''
-           if self.myrcraw[6] > 0 and self.myrcraw[6] < self.RC_low_mark[6]:
+           if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                if self.video_on == False:
                    self.video_on = True
-                   msg = "MyRC6raw %s MyVideo on %s : RC6 DOWN" % (self.myrcraw[6],self.video_on)
+                   msg = "MyRC%sraw %s MyVideo on %s : DOWN" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video on")
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
