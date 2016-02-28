@@ -53,6 +53,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
         self.settings.append(MPSetting('myrcvideo', int, 6, 'Radio channel to change video on/off'))
+        self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change video on/off'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         #self.FORMAT2 = '%Hh%Mm%Ss'
@@ -222,22 +223,22 @@ class MyPiModule(mp_module.MPModule):
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
            ''' MANAGE WLAN0 UP DOWN : RC8 DOWN '''
-           if self.myrcraw[8] > 0 and self.myrcraw[8] < self.RC_low_mark[8]:
+           if self.myrcraw[self.settings.myrcwlan0] > 0 and self.myrcraw[8] < self.RC_low_mark[self.settings.myrcwlan0]:
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("wlan0 down")
                    self.my_subprocess(["ifdown","wlan0"])
-               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 DOWN" % (self.myrcraw[8],self.wlan0_up)
+               msg = "MyRC%sRaw %s wlan0 is up : %s : DOWN" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
-           elif self.myrcraw[8] > self.RC_low_mark[8] and self.myrcraw[8] < self.RC_high_mark[8]:
+           elif self.myrcraw[self.settings.myrcwlan0] > self.RC_low_mark[8] and self.myrcraw[self.settings.myrcwlan0] < self.RC_high_mark[self.settings.myrcwlan0]:
                ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("wlan0 down")
                    self.my_subprocess(["ifdown","wlan0"])
-               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 MIDDLE" % (self.myrcraw[8],self.wlan0_up)
+               msg = "MyRC%sRaw %s wlan0 is up : %s : MIDDLE" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
-           elif self.myrcraw[8] > self.RC_high_mark[8]:
+           elif self.myrcraw[self.settings.myrcwlan0] > self.RC_high_mark[self.settings.myrcwlan0]:
                ''' MANAGE WLAN0 UP DOWN : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
@@ -247,10 +248,10 @@ class MyPiModule(mp_module.MPModule):
                    rc = p.returncode
                    self.myip = stdoutData
                    self.my_statustext_send("wlan0 up %s" % self.myip)
-               msg = "MyRC8Raw %s wlan0 is up : %s : RC8 UP" % (self.myrcraw[8],self.wlan0_up)
+               msg = "MyRC%sRaw %s wlan0 is up : %s : DOWN" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            else:
-               msg = "MyRC8Raw %s wlan0 is up : %s : unknown RC8 value" % (self.myrcraw[8],self.wlan0_up)
+               msg = "MyRC%sRaw %s wlan0 is up : %s : unknown RC value" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
