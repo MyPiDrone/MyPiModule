@@ -15,7 +15,7 @@ cp /home/kevin/fpv/TESTS/start_tx_with_video_recording_broadcast_over_ap.sh MyPi
 cp /home/kevin/fpv/start_tx_with_video_recording.sh MyPiModule/
 cp /etc/rc.local MyPiModule/
 cd MyPiModule
-VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print $2}'`
+VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print "v"$2}'`
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
 LIST="build.sh mavproxy_MyPiModule.py StartArduCopter-quad.sh start_tx_with_video_recording.sh start_tx_with_video_recording_broadcast_over_ap.sh start_rx.sh start_ap.sh rc.local README.md"
 git add $LIST
