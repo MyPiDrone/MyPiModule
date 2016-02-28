@@ -86,7 +86,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         if self.mycountermessage == 0:
-            strutf8 = unicode("MyPiModule %s" % self.myversion)
+            strutf8 = unicode("Version %s" % self.myversion)
             self.master2.mav.statustext_send(1, str(strutf8))
             self.my_write_log("INFO","MyPiModule %s" % (self.mycountermessage,self.myversion))
             print("INFO %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
