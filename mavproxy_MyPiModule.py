@@ -1,10 +1,10 @@
-''' ------------------------------------------  '''
-''' MyPiModule for MyPIDrone                    '''
-''' www.MyPiDrone.com                           '''
-''' https://github.com/MyPiDrone/MyPiModule     '''
-''' ------------------------------------------  '''
-''' Version 1.2 : Wed Feb 26 10:35:30 CET 2016  '''
-''' ------------------------------------------  '''
+''' -------------------------------------------- '''
+''' MyPiModule for MyPIDrone                     '''
+''' www.MyPiDrone.com MyPiDrone kev&phil Project '''
+''' https://github.com/MyPiDrone/MyPiModule      '''
+''' -------------------------------------------- '''
+''' Version 1.3 : Feb 28 2016                    '''
+''' -------------------------------------------- '''
 
 import time
 from pymavlink import mavutil
@@ -21,6 +21,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
+        self.version = "v1.3"
         self.armed = False
         ### battery low :
         self.shutdown_by_lowbat = False
@@ -54,7 +55,8 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
-        self.FORMAT2 = '%Hh%Mm%Ss'
+        #self.FORMAT2 = '%Hh%Mm%Ss'
+        self.countermessage = 0
         # default to servo range of 1000 to 1700
         #self.RC1_MIN  = self.get_mav_param('RC1_MIN', 0)
         #self.RC1_MAX  = self.get_mav_param('RC1_MAX', 0)
@@ -83,9 +85,19 @@ class MyPiModule(mp_module.MPModule):
         fo.close()
 
     def my_statustext_send(self,text):
-        date2 = datetime.now().strftime(self.FORMAT2)
-        strutf8 = unicode("%s %s" % (date2,text))
-        self.master2.mav.statustext_send(1, str(strutf8))
+        if self.countermessage == 0:
+            strutf8 = unicode("'%02d' MyPiModule %s" % (self.mycountermessage,self.myversion))
+            self.master2.mav.statustext_send(1, str(strutf8))
+            self.my_write_log("INFO '%02d' MyPiModule %s" % (self.mycountermessage,self.myversion))
+            print("INFO '%02d' MyPiModule %s" % (self.mycountermessage,self.myversion))
+        self.mycountermessage += 1
+        #---------------------------------------------------
+        #date2 = datetime.now().strftime(self.FORMAT2)
+        #strutf8 = unicode("%s %s" % (date2,text))
+        #strutf8 = unicode("'%02d' %s" % (date2,text))
+        #self.master2.mav.statustext_send(1, str(strutf8))
+        #---------------------------------------------------
+        self.master2.mav.statustext_send(1, "'%02d' %s" % (self.mycountermessage,text))
         self.say(text)
         self.my_write_log("INFO",text)
 	print ("INFO %s" % text)
