@@ -44,11 +44,11 @@ ________________________________________
 Parameters for functions and telemetry:
 
 (Change in /.mavinit.scr or /root/.mavinit.scr if necessary).
-•	mydelayinit: : 30 seconds delay to reboot or shutdown to allow for cancellation (cancel).
+•	mydelayinit: : 30 seconds delay to reboot or shutdown to allow cancel.
 •	myminremain : 10% (low battery remaining mark).
 •	myminvolt : 10V (battery low voltage mark).
-•	mytimebat : 5sec interval data mesurement of the battery.
-•	mytimerc : 5sec interval data mesurement of the radio data.
+•	mytimebat : 5sec interval data mesurement of the battery voltage.
+•	mytimerc : 5sec interval data mesurement of the radio channels.
 •	myrcvideo : channel to control video on / off, default 6.
 •	myrcwlan0 : channel to control the AP wifi on / off, default 8.
 •	myrcyaw and myrcroll : the two channels to control the shutdown or reboot, default 4 and 1.
@@ -58,8 +58,8 @@ Console mode functions:
 •	mybat : battery status
 •	myshut : execute a shutdown (to cancel shutdown execute a new request in time delay of 30 secondes)
 •	myreboot : execute a reboot (to cancel reboot execute a new request in time delay of 30 secondes)
-Shutdown and reboot may be canceled : execute a new command n time delay of 30 secondesto do that . 
-The StatusText progress is displayed on the screen 2 on the telemetry radio.
+Shutdown and reboot may be canceled : execute a new command before delay (30sec) to do that . 
+The STATUSTEXT progress message is displayed on the screen 2 on the telemetry radio.
 A YAW MAX 3 seconds (ARMED) also cancels all requests for shutdown or reboot in progress.
 ________________________________________
 
@@ -83,7 +83,6 @@ example :
 2016-02-27 08:41:24 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11579 MyCurrent 147 MyRemaining 97 ifup wlan0 RPI2
 2016-02-27 08:41:24 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11579 MyCurrent 147 MyRemaining 97 cmd [‘ifup’, ‘wlan0’] sdtout
 2016-02-27 08:41:24 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11579 MyCurrent 147 MyRemaining 97 cmd [‘ifup’, ‘wlan0’] stderr ifup: interface wlan0 already configured
-
 
 *** the end ***
 
