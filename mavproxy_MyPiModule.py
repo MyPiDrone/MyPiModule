@@ -222,7 +222,6 @@ class MyPiModule(mp_module.MPModule):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
            if self.settings.mydebug:
-               print("cmd_mybat %s" % self)
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
            ''' MANAGE WLAN0 UP DOWN : RC8 DOWN '''
