@@ -83,8 +83,9 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         if self.mycountermessage == 0:
-            strutf8 = unicode("00 MyPiModule %s" % self.myversion)
-            self.master2.mav.statustext_send(1, str(strutf8))
+            #strutf8 = unicode("0 MyPiModule %s" % self.myversion)
+            #self.master2.mav.statustext_send(1, str(strutf8))
+            self.master2.mav.statustext_send(1, "0 MyPiModule %s" % self.myversion)
             print("INFO %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
         self.mycountermessage += 1
         #---------------------------------------------------
@@ -98,12 +99,12 @@ class MyPiModule(mp_module.MPModule):
         self.master2.mav.statustext_send(1, "%02d %s" % (self.mycountermessage,text))
         self.say(text)
         self.my_write_log("INFO",text)
-	print ("INFO %02d %s" % (self.mycountermessage,text))
+        print ("INFO %02d %s" % (self.mycountermessage,text))
 
     def my_subprocess(self,cmd):
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (stdoutData, stderrData) = p.communicate()
-        rc = p.returncode
+        #rc = p.returncode
         msg = "cmd %s sdtout %s" % (cmd,stdoutData)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
@@ -247,7 +248,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["ifup","wlan0"])
                    p = subprocess.Popen(["hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                    (stdoutData, stderrData) = p.communicate()
-                   rc = p.returncode
+                   #rc = p.returncode
                    self.myip = stdoutData
                    self.my_statustext_send("wlan0 up %s" % self.myip)
                msg = "MyRC%sRaw %s wlan0 is up : %s : DOWN" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
