@@ -82,17 +82,6 @@ MAVproxy load ten modules and --default-modules='MyPiModule' option allows load 
 
     Observe the behavior in the log file: tail -f /var/log/mavproxy_MyPiModule.log
 
-example :
-
-2016-02-27 08:41:19 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11617 MyCurrent 150 MyRemaining 97 MyRC2Raw 0 MyRC3Raw 0 : Reboot ByRadio
-2016-02-27 08:41:19 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11617 MyCurrent 150 MyRemaining 97 Reboot ByRadio after 30sec
-2016-02-27 08:41:19 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11617 MyCurrent 150 MyRemaining 97 MySeverity 1 MyStatusText Reboot ByRadio after 30sec at 08h41m19s
-2016-02-27 08:41:20 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11617 MyCurrent 150 MyRemaining 97 MySeverity 6 MyStatusText SIMPLE mode on
-2016-02-27 08:41:23 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11574 MyCurrent 164 MyRemaining 97 LowVolt >10000 or LowRemain >10 : Good status
-2016-02-27 08:41:24 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11579 MyCurrent 147 MyRemaining 97 ifup wlan0 RPI2
-2016-02-27 08:41:24 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11579 MyCurrent 147 MyRemaining 97 cmd ['ifup', 'wlan0'] sdtout
-2016-02-27 08:41:24 INFO Armed: False MyState: 3 Mythrottle 0 MyVolt 11579 MyCurrent 147 MyRemaining 97 cmd ['ifup', 'wlan0'] stderr ifup: interface wlan0 already configured
-
 
 *** the end ***
 
