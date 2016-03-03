@@ -3,7 +3,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project '''
 ''' https://github.com/MyPiDrone/MyPiModule      '''
 ''' -------------------------------------------- '''
-''' Version 1.3 : Feb 29 2016                    '''
+''' Version 1.3 : Mar 03 2016                    '''
 ''' -------------------------------------------- '''
 
 import time
@@ -145,7 +145,7 @@ class MyPiModule(mp_module.MPModule):
         rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
         rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
-        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUB,rate_VFR_HUD,self.SYS_STATUS,rate_SYS_STATUS,self.HEARBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
+        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.SYS_STATUS,rate_SYS_STATUS,self.HEARBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
        
