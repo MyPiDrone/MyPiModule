@@ -18,11 +18,29 @@ from MAVProxy.modules.lib.mp_settings import MPSetting
 class MyPiModule(mp_module.MPModule):
     def __init__(self, mpstate):
         super(MyPiModule, self).__init__(mpstate, "MyPiModule", "my commands")
+        # my cmd
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
+        # my settings
+        self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
+        self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
+        self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
+        self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
+        self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
+        self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
+        self.settings.append(MPSetting('myrcvideo', int, 6, 'Radio channel to change video on/off'))
+        self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
+        self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
+        self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.myversion = "1.3"
-        self.armed = False
+        # stats
+        self.VFR_HUD = 0
+        self.SYS_STATUS = 0
+        self.HEARTBEAT = 0
+        self.RC_CHANNELS_RAW = 0
+        self.battery_period_trigger = 0
+        self.start_time = time.time()
         ### battery low :
         self.shutdown_by_lowbat = False
         self.shutdown_by_lowbat_time = 0
@@ -36,6 +54,8 @@ class MyPiModule(mp_module.MPModule):
         self.shutdown_by_cmd_time = 0
         self.reboot_by_cmd = False
         self.reboot_by_cmd_time = 0
+        # default values
+        self.armed = False
         self.mystate = 0
         self.myvolt = 0
         self.mythrottle = 0
@@ -46,16 +66,6 @@ class MyPiModule(mp_module.MPModule):
         self.video_on = True
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
-        self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
-        self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
-        self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
-        self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
-        self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
-        self.settings.append(MPSetting('myrcvideo', int, 6, 'Radio channel to change video on/off'))
-        self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
-        self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
-        self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         #self.FORMAT2 = '%Hh%Mm%Ss'
@@ -127,7 +137,18 @@ class MyPiModule(mp_module.MPModule):
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
-
+        # stats
+        current_time = time.time()
+        elapse_time = int(current_time - self.start_time)
+        rate_VFR_HUD = int(self.VFR_HUD / elapse_time)
+        rate_SYS_STATUS = int(self.SYS_STATUS / elapse_time)
+        rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
+        rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
+        rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
+        msg = "INFO rate_VFR_HUD %s/sec rate_SYS_STATUS %s/sec rate_HEARTBEAT %s/sec rate_RC_CHANNELS_RAW %s/sec rate_battery_period_trigger %s/sec" % (rate_VFR_HUD,rate_SYS_STATUS,rate_HEARTBEAT,rate_RC_CHANNELS_RAW,rate_battery_period_trigger)
+        self.my_write_log("INFO",msg)
+        print ("INFO %s" % (msg))
+       
     def cmd_myshutdown(self, args):
         if self.armed == False and self.mystate == 3:
             if self.shutdown_by_cmd == False:
@@ -340,16 +361,20 @@ class MyPiModule(mp_module.MPModule):
         mtype = m.get_type()
         #print("System Status %s" % mtype)
         if mtype == "VFR_HUD":
+            self.VFR_HUD += 1
             self.armed = self.master.motors_armed()
             self.mythrottle = m.throttle
         if mtype == "SYS_STATUS":
+            self.SYS_STATUS += 1
             self.myvolt = m.voltage_battery
             self.mycurrent = m.current_battery
             self.myremaining = m.battery_remaining
             self.my_battery_check()
         if mtype == "HEARTBEAT":
+            self.HEARTBEAT += 1
             self.mystate = m.system_status
         if mtype == "RC_CHANNELS_RAW":
+            self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
             self.myrcraw[5] = m.chan5_raw ; self.myrcraw[6] = m.chan6_raw ; self.myrcraw[7] = m.chan7_raw ; self.myrcraw[8] = m.chan8_raw
             self.my_rc_check()
@@ -358,6 +383,7 @@ class MyPiModule(mp_module.MPModule):
             self.mytext = m.text
             self.my_statustext_check()
         if self.battery_period.trigger():
+            self.battery_period_trigger += 1
             self.my_battery_check()
 
 def init(mpstate):
