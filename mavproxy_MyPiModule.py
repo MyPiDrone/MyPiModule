@@ -139,13 +139,13 @@ class MyPiModule(mp_module.MPModule):
         print ("INFO %s" % (msg))
         # stats
         current_time = time.time()
-        elapse_time = int(current_time - self.start_time)
+        elapse_time = int(current_time - self.start_time) + 1
         rate_VFR_HUD = int(self.VFR_HUD / elapse_time)
         rate_SYS_STATUS = int(self.SYS_STATUS / elapse_time)
         rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
         rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
-        msg = "INFO elapse_time %ssecrate_VFR_HUD %s/sec rate_SYS_STATUS %s/sec rate_HEARTBEAT %s/sec rate_RC_CHANNELS_RAW %s/sec rate_battery_period_trigger %s/sec" % (elapse_time,rate_VFR_HUD,rate_SYS_STATUS,rate_HEARTBEAT,rate_RC_CHANNELS_RAW,rate_battery_period_trigger)
+        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUB,rate_VFR_HUD,self.SYS_STATUS,rate_SYS_STATUS,self.HEARBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
        
