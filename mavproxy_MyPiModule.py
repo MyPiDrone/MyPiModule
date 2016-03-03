@@ -382,9 +382,10 @@ class MyPiModule(mp_module.MPModule):
             self.myseverity = m.severity
             self.mytext = m.text
             self.my_statustext_check()
-        if self.battery_period.trigger():
-            self.battery_period_trigger += 1
-            self.my_battery_check()
+       # not used
+       #if self.battery_period.trigger():
+       #     self.battery_period_trigger += 1
+       #     self.my_battery_check()
 
 def init(mpstate):
     '''initialise module'''
