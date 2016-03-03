@@ -145,7 +145,7 @@ class MyPiModule(mp_module.MPModule):
         rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
         rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
-        msg = "INFO rate_VFR_HUD %s/sec rate_SYS_STATUS %s/sec rate_HEARTBEAT %s/sec rate_RC_CHANNELS_RAW %s/sec rate_battery_period_trigger %s/sec" % (rate_VFR_HUD,rate_SYS_STATUS,rate_HEARTBEAT,rate_RC_CHANNELS_RAW,rate_battery_period_trigger)
+        msg = "INFO elapse_time %ssecrate_VFR_HUD %s/sec rate_SYS_STATUS %s/sec rate_HEARTBEAT %s/sec rate_RC_CHANNELS_RAW %s/sec rate_battery_period_trigger %s/sec" % (elapse_time,rate_VFR_HUD,rate_SYS_STATUS,rate_HEARTBEAT,rate_RC_CHANNELS_RAW,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
        
