@@ -1,10 +1,12 @@
-''' -------------------------------------------- '''
-''' MyPiModule for MyPIDrone                     '''
-''' www.MyPiDrone.com MyPiDrone kev&phil Project '''
-''' https://github.com/MyPiDrone/MyPiModule      '''
-''' -------------------------------------------- '''
-''' Version 1.3 : Mar 03 2016                    '''
-''' -------------------------------------------- '''
+''' --------------------------------------------------------------------------- '''
+''' MyPiModule for MyPIDrone                                                    '''
+''' www.MyPiDrone.com MyPiDrone kev&phil Project                                '''
+''' https://github.com/MyPiDrone/MyPiModule                                     '''
+''' --------------------------------------------------------------------------- '''
+''' Version 1.3 : Mar 03 2016                                                   '''
+''' --------------------------------------------------------------------------- '''
+''' README here : https://github.com/MyPiDrone/MyPiModule/blob/master/README.md '''
+''' --------------------------------------------------------------------------- '''
 
 import time
 from pymavlink import mavutil
