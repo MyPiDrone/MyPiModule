@@ -1,6 +1,7 @@
 # MyPiModule
 
 http://www.MyPiDrone.com
+https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
 
 MAVProxy MyPiModule for MyPiDrone
 
