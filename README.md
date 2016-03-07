@@ -73,10 +73,14 @@ The main functions of MyPiModule (MAVProxy module):
 * Here the module test procedure:
 
     -1- Install MAVproxy with git clone https://github.com/Dronecode/MAVProxy.git
+    
     -2- Create your MAVProxy Module/modules/mavproxy_MyPiModule.py module available here: git clone https://github.com/MyPiDrone/MyPiModule
+    
     -3- Execute python setup.py build install
+    
     -4- Execute ArduPilot:
       /usr/bin/ArduCopter-quad -A /dev/ttyAMA0 -C udp:127.0.0.1:14550
+      
     -5- Execute MAVProxy (in console mode remove --deamon) /usr/local/bin/mavproxy.py –master=udp:127.0.0.1:14550 –quadcopter –out=/dev/ttyUSB0,57600 –default-modules=’MyPiModule’ –daemon
 
      You can also load the module when MAVProxy is already started with the command module load MyPiModule or module reload MyPiModule
