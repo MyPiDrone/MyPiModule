@@ -128,6 +128,9 @@ class MyPiModule(mp_module.MPModule):
             print("INFO %s" % msg)
 
     def cmd_myrtl(self, args):
+        myrtl()
+
+    def myrtl(self):
         print ("INFO before change mode to RTL : flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
         self.mpstate.functions.process_stdin("mode RTL")
 	if self.status.flightmode == "RTL":
@@ -308,7 +311,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video on")
                    self.my_subprocess(["/usr/local/bin/start_video.sh"])
-               cmd_myrtl()
+               myrtl()
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
