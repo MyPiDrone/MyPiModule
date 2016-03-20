@@ -134,14 +134,6 @@ class MyPiModule(mp_module.MPModule):
 	if self.status.flightmode != mode:
             print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
             rc = self.master.set_mode(modenum)
-            print ("rc = %s" % rc)
-            if rc == 0:
-                 self.my_statustext_send("mode %s" % self.status.flightmode)
-                 print ("ERROR after change mode to RTL modenum %s failed : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-            else:
-                self.my_statustext_send("mode RTL failed")
-                self.my_statustext_send("mode %s" % self.status.flightmode)
-                print ("INFO after change mode to RTL modenum %s : new current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
         else:
             print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
 
