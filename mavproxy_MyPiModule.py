@@ -67,6 +67,7 @@ class MyPiModule(mp_module.MPModule):
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
         self.wlan0_up = False
         self.video_on = True
+        self.rtl_on = False
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.battery_period = mavutil.periodic_event(5)
@@ -132,13 +133,16 @@ class MyPiModule(mp_module.MPModule):
         mode = "RTL"
         modenum = mode_mapping[mode]
 	if self.status.flightmode != mode:
+            self.rtl_on = False:
             print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
             rc = self.master.set_mode(modenum)
-            self.my_statustext_send("mode %s" % self.status.flightmode)
-            
+            print ("INFO after change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
         else:
-            print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-            self.my_statustext_send("mode %s" % self.status.flightmode)
+            if self.rtl_on == False:
+                print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+
+                self.my_statustext_send("mode %s" % self.status.flightmode)
+                self.rtl_on = True
 
     def cmd_myrtl(self, args):
         self.myrtl()
