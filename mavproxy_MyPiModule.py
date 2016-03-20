@@ -3,7 +3,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                '''
 ''' https://github.com/MyPiDrone/MyPiModule                                     '''
 ''' --------------------------------------------------------------------------- '''
-''' Version 1.3 : Mar 03 2016                                                   '''
+''' Version 1.4 : Mar 20 2016                                                   '''
 ''' --------------------------------------------------------------------------- '''
 ''' README here : https://github.com/MyPiDrone/MyPiModule/blob/master/README.md '''
 ''' --------------------------------------------------------------------------- '''
@@ -24,7 +24,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
-        self.add_command('myrtl', self.cmd_myrtl, "to RTL")
+        self.add_command('myrtl', self.cmd_myrtl, "to mode RTL")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
@@ -36,7 +36,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.myversion = "1.3"
+        self.myversion = "1.4"
         # stats
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
@@ -128,8 +128,13 @@ class MyPiModule(mp_module.MPModule):
             print("INFO %s" % msg)
 
     def cmd_myrtl(self, args):
-        print ("INFO flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
+        print ("INFO before change mode to RTL : flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
         self.mpstate.functions.process_stdin("mode RTL")
+	if self.status.flightmode == "RTL"
+            self.my_statustext_send("mode RTL")
+        else
+            self.my_statustext_send("mode RTL failed")
+        print ("INFO after change mode to RTL : flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
 
     def cmd_mybat(self, args):
         self.my_rc_check()
