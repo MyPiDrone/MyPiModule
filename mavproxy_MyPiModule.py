@@ -132,7 +132,7 @@ class MyPiModule(mp_module.MPModule):
         self.mpstate.functions.process_stdin("mode RTL")
 	if self.status.flightmode == "RTL":
             self.my_statustext_send("mode %s" % self.status.flightmode)
-        else
+        else:
             self.my_statustext_send("mode RTL failed")
             self.my_statustext_send("mode %s" % self.status.flightmode)
         print ("INFO after change mode to RTL : flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
