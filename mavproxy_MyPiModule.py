@@ -127,18 +127,19 @@ class MyPiModule(mp_module.MPModule):
         if self.settings.mydebug == False:
             print("INFO %s" % msg)
 
-    def cmd_myrtl(self, args):
-        self.myrtl()
-
     def myrtl(self):
         print ("INFO before change mode to RTL : flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
-        self.mpstate.functions.process_stdin("mode RTL")
+        #self.mpstate.functions.process_stdin("mode RTL")
+        self.master.set_mode(3)
 	if self.status.flightmode == "RTL":
             self.my_statustext_send("mode %s" % self.status.flightmode)
         else:
             self.my_statustext_send("mode RTL failed")
             self.my_statustext_send("mode %s" % self.status.flightmode)
         print ("INFO after change mode to RTL : flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
+
+    def cmd_myrtl(self, args):
+        self.myrtl()
 
     def cmd_mybat(self, args):
         self.my_rc_check()
