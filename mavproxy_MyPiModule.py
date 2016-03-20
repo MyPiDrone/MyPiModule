@@ -134,9 +134,11 @@ class MyPiModule(mp_module.MPModule):
 	if self.status.flightmode != mode:
             print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
             rc = self.master.set_mode(modenum)
-            print ("INFO request change mode to RTL modenum %s : new current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+            self.my_statustext_send("mode %s" % self.status.flightmode)
+            
         else:
             print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+            self.my_statustext_send("mode %s" % self.status.flightmode)
 
     def cmd_myrtl(self, args):
         self.myrtl()
