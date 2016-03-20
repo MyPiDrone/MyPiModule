@@ -99,20 +99,20 @@ class MyPiModule(mp_module.MPModule):
             #strutf8 = unicode("0 MyPiModule %s" % self.myversion)
             #self.master2.mav.statustext_send(1, str(strutf8))
             self.master2.mav.statustext_send(1, "0 MyPiModule %s" % self.myversion)
-            print("INFO %03d MyPiModule %s" % (self.mycountermessage,self.myversion))
+            print("INFO  %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
         self.mycountermessage += 1
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
         #strutf8 = unicode("%s %s" % (date2,text))
-        #strutf8 = unicode("%03d %s" % (date2,text))
+        #strutf8 = unicode(" %02d %s" % (date2,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
         #---------------------------------------------------
         #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
-        self.master2.mav.statustext_send(1, "%03d %s" % (self.mycountermessage,text))
+        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         self.say(text)
         self.my_write_log("INFO",text)
-        print ("INFO %03d %s" % (self.mycountermessage,text))
+        print ("INFO %02d %s" % (self.mycountermessage,text))
 
     def my_subprocess(self,cmd):
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
