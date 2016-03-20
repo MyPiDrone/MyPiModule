@@ -24,7 +24,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
-        self.add_command('myrtl', self.cmd_myrtl, "to mode RTL")
+        self.add_command('myrtl', self.cmd_myrtl, "change flight mode to RTL")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
@@ -134,6 +134,7 @@ class MyPiModule(mp_module.MPModule):
 	if self.status.flightmode != mode:
             print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
             self.master.set_mode(modenum)
+            time.sleep(3)
             if self.status.flightmode == mode:
                  self.my_statustext_send("mode %s" % self.status.flightmode)
                  print ("ERROR after change mode to RTL modenum %s failed : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
