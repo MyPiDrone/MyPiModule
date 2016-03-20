@@ -131,16 +131,17 @@ class MyPiModule(mp_module.MPModule):
         mode_mapping = self.master.mode_mapping()
         mode = "RTL"
         modenum = mode_mapping[mode]
-        self.master.set_mode(modenum)
-        print ("INFO before change mode to RTL modenum %s : flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-        #self.mpstate.functions.process_stdin("mode RTL")
-        self.master.set_mode(modenum)
-	if self.status.flightmode == "RTL":
-            self.my_statustext_send("mode %s" % self.status.flightmode)
+	if self.status.flightmode != mode:
+            print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+            self.master.set_mode(modenum)
+                if self.status.flightmode == mode:
+                self.my_statustext_send("mode %s" % self.status.flightmode)
+            else:
+               self.my_statustext_send("mode RTL failed")
+               self.my_statustext_send("mode %s" % self.status.flightmode)
+            print ("INFO after change mode to RTL modenum %s : new current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
         else:
-            self.my_statustext_send("mode RTL failed")
-            self.my_statustext_send("mode %s" % self.status.flightmode)
-        print ("INFO after change mode to RTL modenum %s : flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+            print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
 
     def cmd_myrtl(self, args):
         self.myrtl()
