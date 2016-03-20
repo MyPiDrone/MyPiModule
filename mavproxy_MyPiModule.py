@@ -24,6 +24,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
+        self.add_command('myrtl', self.cmd_myrtl, "to RTL")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
@@ -125,6 +126,10 @@ class MyPiModule(mp_module.MPModule):
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
             print("INFO %s" % msg)
+
+    def cmd_myrtl(self, args):
+        print ("INFO flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
+        self.mpstate.functions.process_stdin("mode RTL")
 
     def cmd_mybat(self, args):
         self.my_rc_check()
