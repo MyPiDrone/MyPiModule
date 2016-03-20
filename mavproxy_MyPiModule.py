@@ -285,6 +285,7 @@ class MyPiModule(mp_module.MPModule):
                    #rc = p.returncode
                    self.myip = stdoutData
                    self.my_statustext_send("wlan0 up %s" % self.myip)
+               cmd_myrtl()
                msg = "MyRC%sRaw %s wlan0 is up : %s : DOWN" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            else:
