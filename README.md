@@ -1,13 +1,21 @@
 
 ########################################################################################################
+
 MyPiDrone Project Kev&Phil : Copter QUAD with Raspberry PI2 & Navio+ controler
+
 MyPiModule :  MAVProxy MyPiModule for MyPiDrone http://www.MyPiDrone.com
+
 https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
+
 ########################################################################################################
+
  Changelog :
              version 1.4 :
-                - add myrtl function to set RTL mode
+
+                - add myrtl function to set RTL mode (Return To Launch)
+
                 - set RTL mode when VIDEO OFF on RC6 HIGH
+
 ########################################################################################################
 - build.sh                                            : to install MyPiModule
 - mavproxy_MyPiModule.py                              : module MAVProxy
@@ -67,7 +75,7 @@ The main functions of MyPiModule (MAVProxy module):
     - mybat    : battery status
     - myshut   : execute a shutdown (to cancel shutdown execute a new request in time delay of 30 secondes)
     - myreboot : execute a reboot (to cancel reboot execute a new request in time delay of 30 secondes)
-    - myrtl    : SET TRL mode *NEW*
+    - myrtl    : set RTL mode *NEW*
 
     Shutdown and reboot may be canceled : execute a new command before delay (30sec) to do that .
 
