@@ -1,10 +1,13 @@
-# MyPiModule
+# MyPiDrone Project Kev&Phil : Copter QUAD with Raspberry PI2 & Navio+ controler
+# MyPiModule :  MAVProxy MyPiModule for MyPiDrone http://www.MyPiDrone.com
+# https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
 
-http://www.MyPiDrone.com
-
-https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
-
-MAVProxy MyPiModule for MyPiDrone
+########################################################################################################
+# Changelog :
+#             version 1.4 :
+#                - add myrtl function to set RTL mode
+#                - set RTL mode when VIDEO OFF on RC6 HIGH
+########################################################################################################
 
 ########################################################################################################
 - build.sh                                            : to install MyPiModule
@@ -43,7 +46,7 @@ The main functions of MyPiModule (MAVProxy module):
         - RC8 HIGH: ifup wlan0
     - enable / disable the video on wifibroadcast wlan1 from the radio:
         - RC6 LOW (also used to tilt the camera left): Video wifibroadcast ON
-        - RC6 HIGH (also used to tilt the camera to right): Video wifibroadcast OFF
+        - RC6 HIGH (also used to tilt the camera to right): Video wifibroadcast OFF and set mode RTL *NEW*
 
 ==> Logs: /var/log/mavproxy_MyPiModule.log
 
@@ -62,9 +65,10 @@ The main functions of MyPiModule (MAVProxy module):
 
 * Console mode functions:
 
-    - mybat : battery status
-    - myshut : execute a shutdown (to cancel shutdown execute a new request in time delay of 30 secondes)
+    - mybat    : battery status
+    - myshut   : execute a shutdown (to cancel shutdown execute a new request in time delay of 30 secondes)
     - myreboot : execute a reboot (to cancel reboot execute a new request in time delay of 30 secondes)
+    - myrtl    : SET TRL mode *NEW*
 
     Shutdown and reboot may be canceled : execute a new command before delay (30sec) to do that .
 
