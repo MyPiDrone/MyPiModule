@@ -28,7 +28,7 @@ git commit $LIST -m "$VERSION $date"
 #git commit rc.local -m "$date"
 #git commit build.sh -m "$date"
 #git commit README.md -m "$date"
-git pull
+#git pull
 git push
 cd $MYDIR
 C=`ps -ef |grep -v grep |grep -c /usr/local/bin/mavproxy.py`
