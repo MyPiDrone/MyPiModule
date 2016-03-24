@@ -1,15 +1,13 @@
 
-# MyPiDrone Project Kev&Phil : Copter QUAD with Raspberry PI2 & Navio+ controler
-# MyPiModule :  MAVProxy MyPiModule for MyPiDrone http://www.MyPiDrone.com
-# https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
-
 ########################################################################################################
-# Changelog :
-#             version 1.4 :
-#                - add myrtl function to set RTL mode
-#                - set RTL mode when VIDEO OFF on RC6 HIGH
+MyPiDrone Project Kev&Phil : Copter QUAD with Raspberry PI2 & Navio+ controler
+MyPiModule :  MAVProxy MyPiModule for MyPiDrone http://www.MyPiDrone.com
+https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
 ########################################################################################################
-
+ Changelog :
+             version 1.4 :
+                - add myrtl function to set RTL mode
+                - set RTL mode when VIDEO OFF on RC6 HIGH
 ########################################################################################################
 - build.sh                                            : to install MyPiModule
 - mavproxy_MyPiModule.py                              : module MAVProxy
