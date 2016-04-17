@@ -131,6 +131,7 @@ class MyPiModule(mp_module.MPModule):
             print("INFO %s" % msg)
 
     def mymode(self,mode):
+        print ("INFO request mode %s : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude))
         if self.status.flightmode == "RTL": self.rtl_on = True
         else: self.rtl_on = False
         if self.status.flightmode == "STABILIZE": self.stabilize_on = True
@@ -146,8 +147,10 @@ class MyPiModule(mp_module.MPModule):
               self.master.set_mode(modenum)
 	      if self.status.flightmode != mode:
                 print ("INFO change mode to RTL modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                self.my_statustext_send("mode %s RTL no yet" % self.status.flightmode)
               else:
                 print ("INFO after change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                self.my_statustext_send("mode %s" % self.status.flightmode)
             else:
               if self.rtl_on == False:
                 print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -161,8 +164,10 @@ class MyPiModule(mp_module.MPModule):
               self.master.set_mode(modenum)
 	      if self.status.flightmode != mode:
                 print ("INFO change mode to STABILIZE modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                self.my_statustext_send("mode %s STABILIZE not yet" % self.status.flightmode)
               else:
                 print ("INFO after change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                self.my_statustext_send("mode %s" % self.status.flightmode)
             else:
               if self.stabilize_on == False:
                 print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
