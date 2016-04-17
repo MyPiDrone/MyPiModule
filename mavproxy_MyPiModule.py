@@ -346,7 +346,7 @@ class MyPiModule(mp_module.MPModule):
            ''' MANAGE VIDEO ON : RC6 DOWN '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                ''' MANAGE mode STABILIZE : RC6 DOWN '''
-               self.mymode("XXXX")
+               self.mymode("STABILIZE")
                if self.video_on == False:
                    self.video_on = True
                    msg = "MyRC%sraw %s MyVideo on %s : DOWN" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
