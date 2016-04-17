@@ -25,7 +25,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
         self.add_command('myrtl', self.cmd_myrtl, "change flight mode to RTL")
-        self.add_command('mystabilize', self.cmd_stabilize, "change flight mode to STABILIZE")
+        self.add_command('mystabilize', self.cmd_mystabilize, "change flight mode to STABILIZE")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
