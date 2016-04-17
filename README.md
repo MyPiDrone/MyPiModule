@@ -10,11 +10,12 @@ https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
 ########################################################################################################
 
  Changelog :
-             version 1.4 :
+             version 1.5 :
 
                 - add myrtl function to set RTL mode (Return To Launch)
-
-                - set RTL mode when VIDEO OFF on RC6 HIGH
+                - add mystabilize function to set STABILIZE mode
+                - set RTL mode when RC8 UP wlan0 up
+                - set STABILZE mode when RC8 DOWN wlan0 down
 
 ########################################################################################################
 - build.sh                                            : to install MyPiModule
@@ -48,12 +49,12 @@ The main functions of MyPiModule (MAVProxy module):
         - Conditions: STANDBY + DISARMED
         - On the radio: LOW YAW (RC4) and ROLL LOW (RC1)
     - enable / disable the wireless network from the radio wlan0:
-        - RC8 LOW (the low level is also used in flight for SINGLE MODE OFF)
+        - RC8 LOW (the low level is also used in flight for SINGLE MODE OFF) and set mode STABILIZE *NEW*
           or RC8 MIDDLE (the neutral is also used in flight for SINGLE MODE ON): ifdown wlan0
-        - RC8 HIGH: ifup wlan0
+        - RC8 HIGH: ifup wlan0 and set mode RTL *NEW*
     - enable / disable the video on wifibroadcast wlan1 from the radio:
         - RC6 LOW (also used to tilt the camera left): Video wifibroadcast ON
-        - RC6 HIGH (also used to tilt the camera to right): Video wifibroadcast OFF and set mode RTL *NEW*
+        - RC6 HIGH (also used to tilt the camera to right): Video wifibroadcast OFF
 
 ==> Logs: /var/log/mavproxy_MyPiModule.log
 
@@ -72,10 +73,11 @@ The main functions of MyPiModule (MAVProxy module):
 
 * Console mode functions:
 
-    - mybat    : battery status
-    - myshut   : execute a shutdown (to cancel shutdown execute a new request in time delay of 30 secondes)
-    - myreboot : execute a reboot (to cancel reboot execute a new request in time delay of 30 secondes)
-    - myrtl    : set RTL mode *NEW*
+    - mybat       : battery status
+    - myshut      : execute a shutdown (to cancel shutdown execute a new request in time delay of 30 secondes)
+    - myreboot    : execute a reboot (to cancel reboot execute a new request in time delay of 30 secondes)
+    - myrtl       : set RTL mode *NEW*
+    - mystabilize : set STABILIZE mode *NEW*
 
     Shutdown and reboot may be canceled : execute a new command before delay (30sec) to do that .
 
