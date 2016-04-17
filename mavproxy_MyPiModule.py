@@ -133,15 +133,11 @@ class MyPiModule(mp_module.MPModule):
     def mymode(self,mode):
         mode_mapping = self.master.mode_mapping()
         modenum = mode_mapping[mode]
-        if self.status.flightmode == "RTL":
-          self.rtl_on = True
-        else:
-          self.rtl_on = False
-        if self.status.flightmode == "STABILIZE":
-          self.stabilize_on = True
-        else:
-          self.stabilize_on = False
-        if mode = "RTL":
+        if self.status.flightmode == "RTL": self.rtl_on = True
+        else: self.rtl_on = False
+        if self.status.flightmode == "STABILIZE": self.stabilize_on = True
+        else: self.stabilize_on = False
+        if mode == "RTL":
 	  if self.status.flightmode != mode:
               self.rtl_on = False
               print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -156,7 +152,7 @@ class MyPiModule(mp_module.MPModule):
                   print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
                   self.my_statustext_send("mode %s" % self.status.flightmode)
                   self.rtl_on = True
-        elif mode = "STABILIZE":
+        elif mode == "STABILIZE":
 	  if self.status.flightmode != mode:
               self.stabilize_on = False
               print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
