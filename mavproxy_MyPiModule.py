@@ -3,7 +3,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                '''
 ''' https://github.com/MyPiDrone/MyPiModule                                     '''
 ''' --------------------------------------------------------------------------- '''
-''' Version 1.4 : Mar 20 2016                                                   '''
+''' Version 1.5 : Apr 17 2016                                                   '''
 ''' --------------------------------------------------------------------------- '''
 ''' README here : https://github.com/MyPiDrone/MyPiModule/blob/master/README.md '''
 ''' --------------------------------------------------------------------------- '''
@@ -133,8 +133,14 @@ class MyPiModule(mp_module.MPModule):
     def mymode(self,mode):
         mode_mapping = self.master.mode_mapping()
         modenum = mode_mapping[mode]
-        if self.status.flightmode = "RTL": self.rtl_on = True else: self.rtl_on = False
-        if self.status.flightmode = "STABILIZE": self.stabilize_on = True else: self.stabilize_on = False
+        if self.status.flightmode = "RTL":
+          self.rtl_on = True
+        else:
+          self.rtl_on = False
+        if self.status.flightmode = "STABILIZE":
+          self.stabilize_on = True
+        else:
+          self.stabilize_on = False
         if mode = "RTL":
 	  if self.status.flightmode != mode:
               self.rtl_on = False
