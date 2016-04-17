@@ -131,44 +131,45 @@ class MyPiModule(mp_module.MPModule):
             print("INFO %s" % msg)
 
     def mymode(self,mode):
-        mode_mapping = self.master.mode_mapping()
-        modenum = mode_mapping[mode]
         if self.status.flightmode == "RTL": self.rtl_on = True
         else: self.rtl_on = False
         if self.status.flightmode == "STABILIZE": self.stabilize_on = True
         else: self.stabilize_on = False
-        if mode == "RTL":
-	  if self.status.flightmode != mode:
+        if mode == "RTL" or mode == "STABILIZE":
+          mode_mapping = self.master.mode_mapping()
+          modenum = mode_mapping[mode]
+          if mode == "RTL":
+	    if self.status.flightmode != mode:
               self.rtl_on = False
               print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
               #self.mpstate.functions.process_stdin("mode RTL")
               self.master.set_mode(modenum)
 	      if self.status.flightmode != mode:
-                  print ("INFO change mode to RTL modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                print ("INFO change mode to RTL modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
               else:
-                  print ("INFO after change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-          else:
+                print ("INFO after change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+            else:
               if self.rtl_on == False:
-                  print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                  self.my_statustext_send("mode %s" % self.status.flightmode)
-                  self.rtl_on = True
-        elif mode == "STABILIZE":
-	  if self.status.flightmode != mode:
+                print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                self.my_statustext_send("mode %s" % self.status.flightmode)
+                self.rtl_on = True
+          if mode == "STABILIZE":
+	    if self.status.flightmode != mode:
               self.stabilize_on = False
               print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
               #self.mpstate.functions.process_stdin("mode STABILIZE")
               self.master.set_mode(modenum)
 	      if self.status.flightmode != mode:
-                  print ("INFO change mode to STABILIZE modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                print ("INFO change mode to STABILIZE modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
               else:
-                  print ("INFO after change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-          else:
+                print ("INFO after change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+            else:
               if self.stabilize_on == False:
-                  print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                  self.my_statustext_send("mode %s" % self.status.flightmode)
-                  self.stabilize_on = True
+                print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                self.my_statustext_send("mode %s" % self.status.flightmode)
+                self.stabilize_on = True
         else:
-          print ("WARNING mode %s modenum %s not supported : current flightmode %s altitude %s" % (mode,modenum,self.status.flightmode,self.status.altitude))
+          print ("WARNING mode %s not supported : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude))
           self.my_statustext_send("mode %s not supported" % mode)
 
     def cmd_myrtl(self, args):
