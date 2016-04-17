@@ -25,6 +25,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
         self.add_command('myrtl', self.cmd_myrtl, "change flight mode to RTL")
+        self.add_command('mystabilize', self.cmd_stabilize, "change flight mode to STABILIZE")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
@@ -36,7 +37,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.myversion = "1.4"
+        self.myversion = "1.5"
         # stats
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
@@ -68,6 +69,7 @@ class MyPiModule(mp_module.MPModule):
         self.wlan0_up = False
         self.video_on = True
         self.rtl_on = False
+        self.stabilize_on = False
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.battery_period = mavutil.periodic_event(5)
@@ -128,27 +130,50 @@ class MyPiModule(mp_module.MPModule):
         if self.settings.mydebug == False:
             print("INFO %s" % msg)
 
-    def myrtl(self):
+    def mymode(self,mode):
         mode_mapping = self.master.mode_mapping()
-        mode = "RTL"
         modenum = mode_mapping[mode]
-	if self.status.flightmode != mode:
-            self.rtl_on = False
-            print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-            #self.mpstate.functions.process_stdin("mode RTL")
-            self.master.set_mode(modenum)
-	    if self.status.flightmode != mode:
-                print ("INFO change mode to RTL modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-            else:
-                print ("INFO after change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+        if self.status.flightmode = "RTL": self.rtl_on = True else: self.rtl_on = False
+        if self.status.flightmode = "STABILIZE": self.stabilize_on = True else: self.stabilize_on = False
+        if mode = "RTL":
+	  if self.status.flightmode != mode:
+              self.rtl_on = False
+              print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+              #self.mpstate.functions.process_stdin("mode RTL")
+              self.master.set_mode(modenum)
+	      if self.status.flightmode != mode:
+                  print ("INFO change mode to RTL modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+              else:
+                  print ("INFO after change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+          else:
+              if self.rtl_on == False:
+                  print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                  self.my_statustext_send("mode %s" % self.status.flightmode)
+                  self.rtl_on = True
+        elif mode = "STABILIZE":
+	  if self.status.flightmode != mode:
+              self.stabilize_on = False
+              print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+              #self.mpstate.functions.process_stdin("mode STABILIZE")
+              self.master.set_mode(modenum)
+	      if self.status.flightmode != mode:
+                  print ("INFO change mode to STABILIZE modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+              else:
+                  print ("INFO after change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+          else:
+              if self.stabilize_on == False:
+                  print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+                  self.my_statustext_send("mode %s" % self.status.flightmode)
+                  self.stabilize_on = True
         else:
-            if self.rtl_on == False:
-                print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                self.my_statustext_send("mode %s" % self.status.flightmode)
-                self.rtl_on = True
+          print ("WARNING mode %s modenum %s not supported : current flightmode %s altitude %s" % (mode,modenum,self.status.flightmode,self.status.altitude))
+          self.my_statustext_send("mode %s not supported" % mode)
 
     def cmd_myrtl(self, args):
-        self.myrtl()
+        self.mymode("RTL")
+
+    def cmd_mystabilize(self, args):
+        self.mymode("STABILIZE")
 
     def cmd_mybat(self, args):
         self.my_rc_check()
@@ -307,7 +332,7 @@ class MyPiModule(mp_module.MPModule):
            ''' MANAGE VIDEO OFF : RC6 UP '''
            if self.myrcraw[self.settings.myrcvideo] > self.RC_high_mark[self.settings.myrcvideo]:
                ''' MANAGE mode RTL : RC8 UP '''
-               self.myrtl()
+               self.mymode("RTL")
                if self.video_on == True:
                    self.video_on = False
                    msg = "MyRC%sraw %s MyVideo on %s : UP" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
@@ -317,6 +342,8 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["killall","tx"])
            ''' MANAGE VIDEO ON : RC6 DOWN '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
+               ''' MANAGE mode STABILIZE : RC6 DOWN '''
+               self.mymode("XXXX")
                if self.video_on == False:
                    self.video_on = True
                    msg = "MyRC%sraw %s MyVideo on %s : DOWN" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
