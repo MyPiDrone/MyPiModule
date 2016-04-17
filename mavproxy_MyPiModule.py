@@ -305,8 +305,10 @@ class MyPiModule(mp_module.MPModule):
            if self.settings.mydebug:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
-           ''' MANAGE WLAN0 UP DOWN : RC8 DOWN '''
            if self.myrcraw[self.settings.myrcwlan0] > 0 and self.myrcraw[8] < self.RC_low_mark[self.settings.myrcwlan0]:
+               ''' MANAGE mode STABILIZE : RC8 DOWN '''
+               self.mymode("STABILIZE")
+               ''' MANAGE WLAN0 DOWN : RC8 DOWN '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("wlan0 down")
@@ -314,7 +316,7 @@ class MyPiModule(mp_module.MPModule):
                msg = "MyRC%sRaw %s wlan0 is up : %s : DOWN" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan0] > self.RC_low_mark[8] and self.myrcraw[self.settings.myrcwlan0] < self.RC_high_mark[self.settings.myrcwlan0]:
-               ''' MANAGE WLAN0 UP DOWN : RC8 MIDDLE '''
+               ''' MANAGE WLAN0 DOWN : RC8 MIDDLE '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
                    self.my_statustext_send("wlan0 down")
@@ -322,7 +324,9 @@ class MyPiModule(mp_module.MPModule):
                msg = "MyRC%sRaw %s wlan0 is up : %s : MIDDLE" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan0] > self.RC_high_mark[self.settings.myrcwlan0]:
-               ''' MANAGE WLAN0 UP DOWN : RC8 UP '''
+               ''' MANAGE mode RTL : RC8 UP '''
+               self.mymode("RTL")
+               ''' MANAGE WLAN0 UP : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
                    self.my_subprocess(["ifup","wlan0"])
@@ -339,8 +343,6 @@ class MyPiModule(mp_module.MPModule):
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
            if self.myrcraw[self.settings.myrcvideo] > self.RC_high_mark[self.settings.myrcvideo]:
-               ''' MANAGE mode RTL : RC8 UP '''
-               self.mymode("RTL")
                if self.video_on == True:
                    self.video_on = False
                    msg = "MyRC%sraw %s MyVideo on %s : UP" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
@@ -350,8 +352,6 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["killall","tx"])
            ''' MANAGE VIDEO ON : RC6 DOWN '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
-               ''' MANAGE mode STABILIZE : RC6 DOWN '''
-               self.mymode("STABILIZE")
                if self.video_on == False:
                    self.video_on = True
                    msg = "MyRC%sraw %s MyVideo on %s : DOWN" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
