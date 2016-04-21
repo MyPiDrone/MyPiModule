@@ -15,7 +15,7 @@ https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
                 - add myrtl function to set RTL mode (Return To Launch)
                 - add mystabilize function to set STABILIZE mode
                 - set RTL mode when RC8 UP wlan0 up
-                - set STABILZE mode when RC8 DOWN wlan0 down
+                - set STABILIZE mode when RC8 DOWN wlan0 down
 
 ########################################################################################################
 - build.sh                                            : to install MyPiModule
