@@ -6,7 +6,7 @@ MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 :
 - www.MyPiDrone.com MyPiDrone kev&phil Project
 - https://github.com/MyPiDrone/MyPiModule 
 - Version 2.0 : May 1 2016 
-- https://github.com/MyPiDrone2/MyPiModule2/blob/master/mavproxy_MyPiModule.py
+- https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
 - README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md
 ########################################################################################################
 
@@ -96,7 +96,7 @@ The main functions of MyPiModule (MAVProxy module):
 
     -1- Install MAVproxy with git clone https://github.com/Dronecode/MAVProxy.git
     
-    -2- Create your MAVProxy Module/modules/mavproxy_MyPiModule.py module available here: git clone https://github.com/MyPiDrone2/MyPiModule2
+    -2- Create your MAVProxy Module/modules/mavproxy_MyPiModule.py module available here: git clone https://github.com/MyPiDrone/MyPiModule
     
     -3- Execute python setup.py build install
     
