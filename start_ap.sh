@@ -1,6 +1,7 @@
 #!/bin/sh
 ################################################
 #### wwww.MyPiDrone.com
+#### TarotGroundStation Acces Point Wifi
 ################################################
 
 # dongle 1 atheros

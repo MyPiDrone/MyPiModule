@@ -13,6 +13,9 @@ echo "           2.4Ghz channel 1 to 13"
 echo "           2.3ghz channel -1 to -19"
 echo "           channel default -13"
 
+WifiBroadcast_RX="/root/wifibroadcast/rx"
+WifiBroadcast_RX="/root/WifiBroadcast/wifibroadcast/rx"
+
 BLOCK_SIZE=8
 FECS=4
 PACKET_LENGTH=1024
@@ -27,6 +30,7 @@ else
 fi
 if [ "_$2" = "_" ]; then
 	CHANNEL="-13"
+	#CHANNEL="13"
 else
 	CHANNEL=$2
 fi
@@ -52,12 +56,18 @@ then
 		sleep 1
 		iwconfig $WLAN
         	echo Starting HD Video reception...
-        	#./rx -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN
-        	#./rx -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH | mplayer -fps 15 -cache 1024 -
-        	./rx -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-1.0 -v fdsrc ! h264parse ! avdec_h264 ! xvimagesink sync=false
+        	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN
+        	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH | mplayer -fps 15 -cache 1024 -
+		echo "$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN"
+		#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN > /tmp/myvideo
+        	$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-1.0 -v fdsrc ! h264parse ! avdec_h264 ! xvimagesink sync=false
+        	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-0.10 -v fdsrc ! h264parse ! ffdec_h264 ! xvimagesink sync=false
+                # to Android appli QtGstreamerHUD emlid
+		#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=9000 host=10.0.0.12
 	fi
 
 else
         echo Please choose the interface of your TP-LINK 722N as the first argument 
         echo Then the wifi channel as the second argument
 fi
+
