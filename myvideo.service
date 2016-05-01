@@ -1,6 +1,6 @@
 [Unit]
 Description=myvideo
-After=multi-user.target wlan1monitor.service
+After=multi-user.target
 
 [Service]
 Type=forking
