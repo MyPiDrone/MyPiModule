@@ -1,0 +1,13 @@
+[Unit]
+Description=myvideo
+After=multi-user.target wlan1monitor.service
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/start_video.sh
+ExecStop=/usr/local/bin/stop_video.sh
+#KillMode=process
+#Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

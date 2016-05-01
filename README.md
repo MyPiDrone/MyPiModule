@@ -1,11 +1,11 @@
 
 ########################################################################################################
 
-MyPiDrone Project Kev&Phil : Copter QUAD with Raspberry PI2 & Navio+ controler
+MyPiDrone2 Project Kev&Phil : Copter QUAD with Raspberry PI3 & NAVIO2 controler
 
-MyPiModule :  MAVProxy MyPiModule for MyPiDrone http://www.MyPiDrone.com
+MyPiModule :  MAVProxy MyPiModule for MyPiDrone2 http://www.MyPiDrone.com
 
-https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
+https://github.com/MyPiDrone2/MyPiModule2/blob/master/mavproxy_MyPiModule.py
 
 ########################################################################################################
 
@@ -21,11 +21,16 @@ https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
 - build.sh                                            : to install MyPiModule
 - mavproxy_MyPiModule.py                              : module MAVProxy
 - rc.local                                            : exec StartArduCopter-quad.sh
-- StartArduCopter-quad.sh                             : manage ArduCopter-quad and Video Wifibroadcast
+- ArduCopter-quad.service                             : systemd call /usr/local/bin/start_ArduCopter-quad.sh
+- myvideo.service                                     : systemd call /usr/local/bin/start_video.sh /usr/local/bin/stop_video.sh
+- mavproxy.service                                    : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
+- start_video.sh                                      : fork /usr/local/bin/start_tx_with_video_recording.sh
+- stop_video.sh                                       : kill raspivid and tx
 - start_tx_with_video_recording.sh                    : start Video Wifibroadcast
 - start_tx_with_video_recording_broadcast_over_ap.sh  : start Video Broadcast over Wifi AP : Beta test
 - start_ap.sh                                         : start Wifi AP on GCS
 - start_tx.sh                                         : view Video on GCS
+- show_modules.sh                                     : tools show params modules
 ########################################################################################################
 
 
@@ -89,7 +94,7 @@ The main functions of MyPiModule (MAVProxy module):
 
     -1- Install MAVproxy with git clone https://github.com/Dronecode/MAVProxy.git
     
-    -2- Create your MAVProxy Module/modules/mavproxy_MyPiModule.py module available here: git clone https://github.com/MyPiDrone/MyPiModule
+    -2- Create your MAVProxy Module/modules/mavproxy_MyPiModule.py module available here: git clone https://github.com/MyPiDrone2/MyPiModule2
     
     -3- Execute python setup.py build install
     

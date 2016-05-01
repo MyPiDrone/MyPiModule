@@ -1,12 +1,15 @@
-''' --------------------------------------------------------------------------- '''
-''' MyPiModule for MyPIDrone                                                    '''
-''' www.MyPiDrone.com MyPiDrone kev&phil Project                                '''
-''' https://github.com/MyPiDrone/MyPiModule                                     '''
-''' --------------------------------------------------------------------------- '''
-''' Version 1.5 : Apr 17 2016                                                   '''
-''' --------------------------------------------------------------------------- '''
-''' README here : https://github.com/MyPiDrone/MyPiModule/blob/master/README.md '''
-''' --------------------------------------------------------------------------- '''
+''' ----------------------------------------------------------------------------------- '''
+''' MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 :                  '''
+'''        Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler      '''
+'''        Project 2 : TAROT 280 Copter QUAD with Raspberry PI3 & Navio2 controler      '''
+'''                    raspian Kernel 4.4.y                                             '''
+''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
+''' https://github.com/MyPiDrone/MyPiModule                                             '''
+''' ----------------------------------------------------------------------------------- '''
+''' Version 2.0 : May 1 2016                                                            '''
+''' ----------------------------------------------------------------------------------- '''
+''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
+''' ----------------------------------------------------------------------------------- '''
 
 import time
 from pymavlink import mavutil
@@ -37,7 +40,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.myversion = "1.5"
+        self.myversion = "2.0"
         # stats
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
@@ -143,7 +146,7 @@ class MyPiModule(mp_module.MPModule):
 	    if self.status.flightmode != mode:
               self.rtl_on = False
               print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-              #self.mpstate.functions.process_stdin("mode RTL")
+              self.mpstate.functions.process_stdin("mode RTL")
               self.master.set_mode(modenum)
 	      if self.status.flightmode != mode:
                 print ("INFO change mode to RTL modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -160,7 +163,7 @@ class MyPiModule(mp_module.MPModule):
 	    if self.status.flightmode != mode:
               self.stabilize_on = False
               print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-              #self.mpstate.functions.process_stdin("mode STABILIZE")
+              self.mpstate.functions.process_stdin("mode STABILIZE")
               self.master.set_mode(modenum)
 	      if self.status.flightmode != mode:
                 print ("INFO change mode to STABILIZE modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -307,7 +310,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("INFO",msg)
            if self.myrcraw[self.settings.myrcwlan0] > 0 and self.myrcraw[8] < self.RC_low_mark[self.settings.myrcwlan0]:
                ''' MANAGE mode STABILIZE : RC8 DOWN '''
-               self.mymode("STABILIZE")
+               #self.mymode("STABILIZE")
                ''' MANAGE WLAN0 DOWN : RC8 DOWN '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
@@ -325,7 +328,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan0] > self.RC_high_mark[self.settings.myrcwlan0]:
                ''' MANAGE mode RTL : RC8 UP '''
-               self.mymode("RTL")
+               #self.mymode("RTL")
                ''' MANAGE WLAN0 UP : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
@@ -334,7 +337,8 @@ class MyPiModule(mp_module.MPModule):
                    (stdoutData, stderrData) = p.communicate()
                    #rc = p.returncode
                    self.myip = stdoutData
-                   self.my_statustext_send("wlan0 up %s" % self.myip)
+                   self.my_statustext_send("wlan0 up")
+                   self.my_statustext_send("%s" % self.myip)
                msg = "MyRC%sRaw %s wlan0 is up : %s : DOWN" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            else:
@@ -348,8 +352,7 @@ class MyPiModule(mp_module.MPModule):
                    msg = "MyRC%sraw %s MyVideo on %s : UP" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
-                   self.my_subprocess(["killall","raspivid"])
-                   self.my_subprocess(["killall","tx"])
+                   self.my_subprocess(["/usr/local/bin/stop_video.sh"])
            ''' MANAGE VIDEO ON : RC6 DOWN '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                if self.video_on == False:

@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh -e
 #
 # rc.local
 #
@@ -30,8 +30,14 @@ fi
 #### --ap  : video over Acces Point
 ##############################################################
 
-sh -x /usr/local/bin/StartArduCopter-quad.sh --vbr >> /var/log/StartArduCopter-quad.log 2>&1
+[ -f /opt/apm/bin/ArduCopter2 ] && ln -sf /opt/apm/bin/ArduCopter2 /usr/bin/ArduCopter-quad
+#### NEW :
+#### systemctl start ArcuCopter-quad
+#### systemctl start mavproxy
+#### systemctl start myvideo
 
-tail -n 10 /var/log/ArduCopter-quad.log
+### OLD 
+#sh -x /usr/local/bin/StartArduCopter-quad.sh --vbr >> /var/log/StartArduCopter-quad.log 2>&1
+#tail -n 10 /var/log/ArduCopter-quad.log
 
 exit 0

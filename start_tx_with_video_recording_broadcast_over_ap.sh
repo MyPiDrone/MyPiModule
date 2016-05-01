@@ -31,7 +31,7 @@ TIMEOUT=1200000
 # 40 minutes
 #TIMEOUT=2400000
 
-VIDDIR="/home/kevin/fpv/videos"
+VIDDIR="/root/fpv/videos"
 
 C=`ps -ef|grep -v "grep"|grep -ci "raspivid"`
 if [ $C -ne 0 ]; then
