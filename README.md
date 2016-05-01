@@ -31,7 +31,8 @@ MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 :
 - start_tx_with_video_recording.sh                    : start Video Wifibroadcast
 - start_tx_with_video_recording_broadcast_over_ap.sh  : start Video Broadcast over Wifi AP : Beta test
 - start_ap.sh                                         : start Wifi AP on GCS
-- start_tx.sh                                         : view Video on GCS
+- start_rx.sh                                         : view Video on GCS
+- start_rx_and_broadcast_over_ap.sh                   : rx and streamin video over AP to Android QtGStreamerHUD emlid
 - show_modules.sh                                     : tools show params modules
 ########################################################################################################
 
