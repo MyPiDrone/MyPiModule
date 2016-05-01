@@ -31,7 +31,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mystabilize', self.cmd_mystabilize, "change flight mode to STABILIZE")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
-        self.settings.append(MPSetting('mytimerc', int, 5, 'RC Interval Time sec'))
+        self.settings.append(MPSetting('mytimerc', int, 2, 'RC Interval Time sec'))
         self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
