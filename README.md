@@ -1,21 +1,23 @@
-
 ########################################################################################################
-
-MyPiDrone2 Project Kev&Phil : Copter QUAD with Raspberry PI3 & NAVIO2 controler
-
-MyPiModule :  MAVProxy MyPiModule for MyPiDrone2 http://www.MyPiDrone.com
-
-https://github.com/MyPiDrone2/MyPiModule2/blob/master/mavproxy_MyPiModule.py
-
+MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 : 
+- Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler
+- Project 2 : TAROT 280 Copter QUAD with Raspberry PI3 & Navio2 controler
+- raspian Kernel 4.4.y 
+- www.MyPiDrone.com MyPiDrone kev&phil Project
+- https://github.com/MyPiDrone/MyPiModule 
+- Version 2.0 : May 1 2016 
+- https://github.com/MyPiDrone2/MyPiModule2/blob/master/mavproxy_MyPiModule.py
+- README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md
 ########################################################################################################
 
  Changelog :
-             version 1.5 :
+             version 2.0 :
 
                 - add myrtl function to set RTL mode (Return To Launch)
                 - add mystabilize function to set STABILIZE mode
                 - set RTL mode when RC8 UP wlan0 up
                 - set STABILIZE mode when RC8 DOWN wlan0 down
+                - support raspian Kernel 4.4.y emlid img for RIP2/RPI3 NAVIO+/NAVIO2
 
 ########################################################################################################
 - build.sh                                            : to install MyPiModule
