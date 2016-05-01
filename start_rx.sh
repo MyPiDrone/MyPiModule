@@ -1,6 +1,7 @@
 #!/bin/bash
 ################################################
 #### wwww.MyPiDrone.com
+#### TarotGroundStation Video Viewer
 ################################################
 
 clear
