@@ -44,16 +44,21 @@ then
 	
 	else
         	echo $WLAN choose by user to be the wireless interface TP-LINK 722N
-       		echo Setting wifi channel $CHANNEL
-        	iwconfig $WLAN channel $CHANNEL
+		ip link set $WLAN down                               
        		echo Setting wifi adapter in MONITOR mode
-      		ifconfig $WLAN down && iw dev $WLAN set monitor otherbss fcsfail
-        	echo Setting maximum Tx Power
+                iw dev $WLAN set monitor otherbss fcsfail
+                ip link set $WLAN up                               
+       		echo Setting wifi channel $CHANNEL
+                sleep 1
+                iw dev $WLAN set freq 2357
+                #sleep 1
+                ### channel -19
+                [ "$CHANNEL" = "-13" ] && iw dev $WLAN set freq 2312
+                ### channel 11
+                [ "$CHANNEL" = "11" ] && iw dev $WLAN set freq 2462
         	iw reg set BO
+        	echo Setting maximum Tx Power
         	iwconfig $WLAN txpower 30
-        	ifconfig $WLAN up
-        	echo Setting Channel $CHANNEL
-        	iwconfig $WLAN channel $CHANNEL
 		sleep 1
 		iwconfig $WLAN
         	echo Starting HD Video reception...
