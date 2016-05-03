@@ -285,7 +285,8 @@ class MyPiModule(mp_module.MPModule):
        if time.time() > self.last_battery_check_time + self.settings.mytimebat:
                 self.last_battery_check_time = time.time()
                 # System Status STANDBY = 3
-                if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
+                #if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt or self.myremaining <= self.settings.myminremain):
+                if self.armed == False and self.mystate == 3 and (self.myvolt <= self.settings.myminvolt):
                     msg = "LowVolt <=%s or LowRemain <=%s : Shutdown ByLowBat in progress..." % (self.settings.myminvolt,self.settings.myminremain)
                     self.my_write_log("WARNING",msg)
                     if self.shutdown_by_lowbat == False:
