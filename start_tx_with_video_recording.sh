@@ -1,7 +1,7 @@
 #!/bin/bash 
 ################################################################
 #### www.MyPiDrone.com
-#### Video over Wifibroadcast 2.4Ghz (CH 13) or 2.3Ghz (CH -13)
+#### Video over Wifibroadcast 2.4Ghz (CH 11) or 2.3Ghz (CH -19)
 ################################################################
 
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -57,8 +57,8 @@ else
         WLAN=$1
 fi
 if [ "_$2" = "_" ]; then
-        CHANNEL="-13"
-        #CHANNEL="13"
+        CHANNEL="-19"
+        #CHANNEL="11"
 else
         CHANNEL=$2
 fi
@@ -87,30 +87,24 @@ fi
 
 if [ "_$WLAN" != "_" ] && [ "_$CHANNEL" != "_" ];
 then
-	# DEBUG
-        echo "$PREFIX $WLAN choose by user to be the wireless interface TP-LINK 722N" 
-	ip a
-	ifconfig $WLAN
-        echo "$PREFIX $WLAN choose by user to be the wireless interface TP-LINK 722N"
-	#echo "$PREFIX Stopping ifplugd"
-	#service ifplugd stop
-	#killall ifplugd
-        echo "$PREFIX Setting $WLAN Channel $CHANNEL"
-        iwconfig $WLAN channel $CHANNEL
-        echo "$PREFIX Setting wifi adapter in MONITOR mode"
-        ifconfig $WLAN down && iw dev $WLAN set monitor otherbss fcsfail
-        echo "$PREFIX Setting maximum Tx Power"
+        echo $WLAN choose by user to be the wireless interface TP-LINK 722N
+        ip link set $WLAN down
+        echo Setting wifi adapter in MONITOR mode
+        iw dev $WLAN set monitor otherbss fcsfail
+        ip link set $WLAN up
+        echo Setting wifi channel $CHANNEL
+        sleep 1
+        iw dev $WLAN set freq 2357
+        #sleep 1
+        ### channel -19
+        [ "$CHANNEL" = "-19" ] && iw dev $WLAN set freq 2312
+        ### channel 11
+        [ "$CHANNEL" = "11" ] && iw dev $WLAN set freq 2462
         iw reg set BO
+        echo Setting maximum Tx Power
         iwconfig $WLAN txpower 30
-        ifconfig $WLAN up
-	#iwconfig wlan0 rate 54M
-	#iw dev wlan0 set bitrates legacy-2.4 54
-	#iw dev wlan0 set bitrates ht-mcs-2.4 5
-        echo "$PREFIX Setting $WLAN Channel $CHANNEL"
-        iwconfig $WLAN channel $CHANNEL
-	sleep 1
-	# DEBUG
-        echo "$PREFIX Setting $WLAN Channel $CHANNEL"
+        sleep 1
+        iwconfig $WLAN
 	echo "$PREFIX -----------------------------------------------------------------------------"
 	ip a 
 	echo "$PREFIX -----------------------------------------------------------------------------"
@@ -164,10 +158,10 @@ then
 else
         	echo "$PREFIX Please choose the interface of your TP-LINK 722N as the first argument" 
         	echo "$PREFIX Then the wifi channel as the second argument"
-       		echo "$PREFIX Usage $0 2.3ghz channel -13 and 2.4Ghz channel 13 :"
-        	echo "$PREFIX $0 wlan1 -13 --vb  : video with wifibroadcast (default)"
-        	echo "$PREFIX $0 wlan1 -13 --vbr : video with wifibroadcast and recording"
-        	echo "$PREFIX $0 wlan1 -13 --vr  : video recording"
-        	echo "$PREFIX $0 wlan1 -13 --vrt [video_filemane] : video retransmission and consersion h264 to mp4 (default last video)"
+       		echo "$PREFIX Usage $0 2.3ghz channel -19 and 2.4Ghz channel 11 :"
+        	echo "$PREFIX $0 wlan1 -19 --vb  : video with wifibroadcast (default)"
+        	echo "$PREFIX $0 wlan1 -19 --vbr : video with wifibroadcast and recording"
+        	echo "$PREFIX $0 wlan1 -19 --vr  : video recording"
+        	echo "$PREFIX $0 wlan1 -19 --vrt [video_filemane] : video retransmission and consersion h264 to mp4 (default last video)"
 fi
 

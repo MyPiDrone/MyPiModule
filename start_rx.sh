@@ -12,7 +12,7 @@ echo "Usage : $0 [wlan_number] [channel]"
 echo "           default wlan_number wlan1 30:B5:C2:11:83:22|30:b5:c2:11:62:ea"
 echo "           2.4Ghz channel 1 to 13"
 echo "           2.3ghz channel -1 to -19"
-echo "           channel default -13"
+echo "           channel default -19"
 
 WifiBroadcast_RX="/root/wifibroadcast/rx"
 WifiBroadcast_RX="/root/WifiBroadcast/wifibroadcast/rx"
@@ -30,8 +30,8 @@ else
 	WLAN=$1
 fi
 if [ "_$2" = "_" ]; then
-	CHANNEL="-13"
-	#CHANNEL="13"
+	CHANNEL="-19"
+	#CHANNEL="11"
 else
 	CHANNEL=$2
 fi
@@ -53,7 +53,7 @@ then
                 iw dev $WLAN set freq 2357
                 #sleep 1
                 ### channel -19
-                [ "$CHANNEL" = "-13" ] && iw dev $WLAN set freq 2312
+                [ "$CHANNEL" = "-19" ] && iw dev $WLAN set freq 2312
                 ### channel 11
                 [ "$CHANNEL" = "11" ] && iw dev $WLAN set freq 2462
         	iw reg set BO

@@ -1,12 +1,12 @@
 #!/bin/sh
 ################################################
 #### wwww.MyPiDrone.com
-#### TarotGroundStation Acces Point Wifi
 ################################################
 
 # dongle 1 atheros
 #WLAN="wlan1"
 WLAN="wlx60e3270f04fd"
+#WLAN="wlx30b5c21162ea"
 # other wlan0 or eth0
 #WLAN_INTERNET="wlan0"
 #WLAN_INTERNET="eth0"
@@ -35,7 +35,7 @@ service hostapd stop
 killall hostapd
 iwconfig $WLAN
 ip a
-/usr/local/bin/hostapd -d -K /etc/hostapd/hostapd.conf
+#/usr/sbin/hostapd -d -K /etc/hostapd/hostapd.conf
 ### restart once if exit failed
 sleep 1
 /usr/local/bin/hostapd -d -K /etc/hostapd/hostapd.conf
