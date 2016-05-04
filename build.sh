@@ -3,7 +3,7 @@
 #### www.MyPiDrone.com
 #### git clone  https://github.com/MyPiDrone/MyPiModule
 #########################################################
-date=`date`
+date=`date +'%Y-%m-%d'`
 MY_MAVPROXY_DIR="/root/MyPiDrone/MAVProxy-1.4.43"
 MY_DIR_MYPIDRONE="/root/MyPiDrone"
 MY_DIR_MYPIMODULE="/root/MyPiDrone/MyPiModule"
