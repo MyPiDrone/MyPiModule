@@ -43,10 +43,10 @@ do
 	DESC=`grep "^#TITLE#" $F|tr -d "#TITLE# "`
 	if [ "_$DESC" = "_" ]; then
 		git commit $F -m "\"$VERSION $date\""
-		echo "git commit $F -m "$VERSION $date RC=$?"
+		echo "git commit $F -m \"$VERSION $date\" RC=$?"
 	else
 		git commit $F -m "\"$VERSION $DESC $date\""
-		echo "git commit $F -m "$VERSION $DESC $date RC=$?"
+		echo ">>>>>>>>>>>>> git commit $F -m \"$VERSION $DESC $date\" RC=$?"
 	fi
 done
 git pull
