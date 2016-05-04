@@ -40,13 +40,13 @@ LIST="mav.parm build.sh mavproxy_MyPiModule.py rc.local ArduCopter-quad.service 
 git add $LIST
 for F in $LIST
 do
-	DESC=`grep "^#TITLE#" $F|tr -d "#TITLE# "`
+	DESC=`grep "^#TITLE#" $F|cut -d' ' -f2-`
 	if [ "_$DESC" = "_" ]; then
-		git commit $F -m "\"$VERSION $date\""
+		git commit $F -m "$VERSION $date"
 		echo "git commit $F -m \"$VERSION $date\" RC=$?"
 	else
 		git commit $F -m "\"$VERSION $DESC $date\""
-		echo ">>>>>>>>>>>>> git commit $F -m \"$VERSION $DESC $date\" RC=$?"
+		echo "git commit $F -m $VERSION $DESC $date RC=$?"
 	fi
 done
 #git pull
