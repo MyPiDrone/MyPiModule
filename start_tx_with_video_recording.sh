@@ -1,8 +1,8 @@
 #!/bin/bash 
-################################################################
-#### www.MyPiDrone.com
-#### Video over Wifibroadcast 2.4Ghz (CH 11) or 2.3Ghz (CH -19)
-################################################################
+##################################################################
+####### www.MyPiDrone.com
+#TITLE# Video over Wifibroadcast 2.4Ghz (CH 11) or 2.3Ghz (CH -19)
+##################################################################
 
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -49,10 +49,10 @@ TIMEOUT=1200000
 #TIMEOUT=2400000
 
 if [ "$1" = "-h" -o "$1" = "--help" ]; then
-	WLAN=""
+        WLAN=""
 elif [ "_$1" = "_" ]; then
         WLAN=`/sbin/ifconfig -a |egrep -i '30.*B5.*C2.*11.*83.*22|30.*b5.*c2.*11.*62.*ea'|awk '{print $1}'`
-	WLAN="wlan1"
+        WLAN="wlan1"
 else
         WLAN=$1
 fi
@@ -105,63 +105,63 @@ then
         iwconfig $WLAN txpower 30
         sleep 1
         iwconfig $WLAN
-	echo "$PREFIX -----------------------------------------------------------------------------"
-	ip a 
-	echo "$PREFIX -----------------------------------------------------------------------------"
-	ifconfig $WLAN
-	echo "$PREFIX -----------------------------------------------------------------------------"
-	iwconfig $WLAN
-	echo "$PREFIX -----------------------------------------------------------------------------"
-	#pour rejouer la video $OPTION = --VRT ou n importe quoi 
-	if [ "$OPTION" = "--vrt" -o "_$OPTION" = "_" ]; then
-		echo "$PREFIX -------------------------------- Liste des videos ---------------------------"
-		du -hs $VIDDIR
-		du -hs $VIDDIR/*
-		echo "$PREFIX -----------------------------------------------------------------------------"
-		sleep 3
-		# lecture du lien sur la derniere video
-		if [ "_$4" = "_" ]; then
-			VIDEO="$VIDDIR/Video-Tarot-h264"
-		else
-			VIDEO="$4"
-		fi
-        	#echo "$PREFIX Starting HD Video conversion h264 to mp4 : avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4 ..."
-		#avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4
-        	echo "$PREFIX Starting HD Video re-transmission for $VIDEO..."
-		cat $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
-	else
-        	echo "$PREFIX Starting HD Video transmission and recording..."
-		VIDEO="$VIDDIR/Video-Tarot-h264-`date +%Y%h%d-%H%M`"
-		# creation du lien sur la derniere video
-		[ ! -d $VIDDIR ] && mkdir -p $VIDDIR
-		touch $VIDEO
-		echo "$PREFIX New Video=$VIDEO"
-		echo "$PREFIX -------------------------------- Liste des videos ---------------------------"
-		du -hs $VIDDIR
-		du -hs $VIDDIR/*
-		echo "$PREFIX -----------------------------------------------------------------------------"
-		sleep 3
-		## pour renverser l image option --vflip
-		if [ "$OPTION" = "--vr" ]; then
-			ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
-			echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
-			raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o $VIDEO 
-		elif [ "$OPTION" = "--vbr" ]; then
-			ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
-			echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
-			raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>/var/log/myvideo.err
-		else
-			echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
-			raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
-		fi
-	fi
+        echo "$PREFIX -----------------------------------------------------------------------------"
+        ip a 
+        echo "$PREFIX -----------------------------------------------------------------------------"
+        ifconfig $WLAN
+        echo "$PREFIX -----------------------------------------------------------------------------"
+        iwconfig $WLAN
+        echo "$PREFIX -----------------------------------------------------------------------------"
+        #pour rejouer la video $OPTION = --VRT ou n importe quoi 
+        if [ "$OPTION" = "--vrt" -o "_$OPTION" = "_" ]; then
+                echo "$PREFIX -------------------------------- Liste des videos ---------------------------"
+                du -hs $VIDDIR
+                du -hs $VIDDIR/*
+                echo "$PREFIX -----------------------------------------------------------------------------"
+                sleep 3
+                # lecture du lien sur la derniere video
+                if [ "_$4" = "_" ]; then
+                        VIDEO="$VIDDIR/Video-Tarot-h264"
+                else
+                        VIDEO="$4"
+                fi
+                #echo "$PREFIX Starting HD Video conversion h264 to mp4 : avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4 ..."
+                #avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4
+                echo "$PREFIX Starting HD Video re-transmission for $VIDEO..."
+                cat $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
+        else
+                echo "$PREFIX Starting HD Video transmission and recording..."
+                VIDEO="$VIDDIR/Video-Tarot-h264-`date +%Y%h%d-%H%M`"
+                # creation du lien sur la derniere video
+                [ ! -d $VIDDIR ] && mkdir -p $VIDDIR
+                touch $VIDEO
+                echo "$PREFIX New Video=$VIDEO"
+                echo "$PREFIX -------------------------------- Liste des videos ---------------------------"
+                du -hs $VIDDIR
+                du -hs $VIDDIR/*
+                echo "$PREFIX -----------------------------------------------------------------------------"
+                sleep 3
+                ## pour renverser l image option --vflip
+                if [ "$OPTION" = "--vr" ]; then
+                        ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
+                        echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
+                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o $VIDEO 
+                elif [ "$OPTION" = "--vbr" ]; then
+                        ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
+                        echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
+                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>/var/log/myvideo.err
+                else
+                        echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
+                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
+                fi
+        fi
 else
-        	echo "$PREFIX Please choose the interface of your TP-LINK 722N as the first argument" 
-        	echo "$PREFIX Then the wifi channel as the second argument"
-       		echo "$PREFIX Usage $0 2.3ghz channel -19 and 2.4Ghz channel 11 :"
-        	echo "$PREFIX $0 wlan1 -19 --vb  : video with wifibroadcast (default)"
-        	echo "$PREFIX $0 wlan1 -19 --vbr : video with wifibroadcast and recording"
-        	echo "$PREFIX $0 wlan1 -19 --vr  : video recording"
-        	echo "$PREFIX $0 wlan1 -19 --vrt [video_filemane] : video retransmission and consersion h264 to mp4 (default last video)"
+                echo "$PREFIX Please choose the interface of your TP-LINK 722N as the first argument" 
+                echo "$PREFIX Then the wifi channel as the second argument"
+                echo "$PREFIX Usage $0 2.3ghz channel -19 and 2.4Ghz channel 11 :"
+                echo "$PREFIX $0 wlan1 -19 --vb  : video with wifibroadcast (default)"
+                echo "$PREFIX $0 wlan1 -19 --vbr : video with wifibroadcast and recording"
+                echo "$PREFIX $0 wlan1 -19 --vr  : video recording"
+                echo "$PREFIX $0 wlan1 -19 --vrt [video_filemane] : video retransmission and consersion h264 to mp4 (default last video)"
 fi
 
