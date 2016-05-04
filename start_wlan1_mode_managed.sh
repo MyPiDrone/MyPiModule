@@ -1,6 +1,6 @@
 #!/bin/sh
 ##################################################
-# test
+#TITLE# sample start wifi managed
 ##################################################
 #iw event -t
 systemctl stop myvideo
