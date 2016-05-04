@@ -59,12 +59,12 @@ then
         	iw reg set BO
         	echo Setting maximum Tx Power
         	iwconfig $WLAN txpower 30
-		sleep 1
-		iwconfig $WLAN
+                 sleep 1
+                iwconfig $WLAN
         	echo Starting HD Video reception...
         	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN
         	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH | mplayer -fps 15 -cache 1024 -
-		echo "$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN"
+         	echo "$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN"
 		#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN > /tmp/myvideo
         	$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-1.0 -v fdsrc ! h264parse ! avdec_h264 ! xvimagesink sync=false
         	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-0.10 -v fdsrc ! h264parse ! ffdec_h264 ! xvimagesink sync=false
