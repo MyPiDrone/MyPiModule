@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################
-#### www.MyPiDrone.com
-#### Video Broadcast over Wifi AP : beta test
+####### www.MyPiDrone.com
+#TITLE# Video Broadcast over Wifi AP
 ################################################################
 
 clear
