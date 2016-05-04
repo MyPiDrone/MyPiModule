@@ -1,8 +1,8 @@
 #!/bin/bash
-################################################
-#### wwww.MyPiDrone.com
-#### TarotGroundStation video streaming over AP
-################################################
+###################################################
+####### wwww.MyPiDrone.com
+#TITLE# TarotGroundStation video streaming over AP
+###################################################
 
 clear
 echo ##################RX Script#################
