@@ -1,3 +1,5 @@
+#!/bin/sh
+#TITLE# show module parameters
 cat /proc/modules | cut -f 1 -d " " | while read module; do \
  echo "Module: $module"; \
  if [ -d "/sys/module/$module/parameters" ]; then \
