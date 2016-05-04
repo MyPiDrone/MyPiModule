@@ -42,10 +42,10 @@ do
 	git add $F
 	DESC=`grep "^#TITLE#" $F|tr -d "#TITLE# "`
 	if [ "_$DESC" = "_" ]; then
-		git commit $F -m "$VERSION $date"
+		git commit $F -m "\"$VERSION $date\""
 		echo "git commit $F -m "$VERSION $date RC=$?"
 	else
-		git commit $F -m "$VERSION $DESC $date"
+		git commit $F -m "\"$VERSION $DESC $date\""
 		echo "git commit $F -m "$VERSION $DESC $date RC=$?"
 	fi
 done
