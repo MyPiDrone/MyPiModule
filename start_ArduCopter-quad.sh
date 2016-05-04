@@ -1,4 +1,5 @@
 #!/bin/sh
+#TITLE# start ArduCopter-quad
 # /lib/systemd/system/ArduCopter-quad.service
 # [Unit]
 # Description=ArduCopter-quad
