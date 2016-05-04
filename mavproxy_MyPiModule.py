@@ -1,3 +1,4 @@
+#TITLE# MAVProxy MyPiModule to control RPI2 or RPI3
 ''' ----------------------------------------------------------------------------------- '''
 ''' MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 :                  '''
 '''        Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler      '''
@@ -6,7 +7,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
-''' Version 2.0 : May 3 2016                                                            '''
+''' Version 2.1 : May 4 2016                                                            '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
 ''' ----------------------------------------------------------------------------------- '''
@@ -40,7 +41,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.myversion = "2.0"
+        self.myversion = "2.1"
         # stats
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
