@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#TITLE# stop video streaming
 echo "Video is stopped"
 killall raspivid
 WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx"
