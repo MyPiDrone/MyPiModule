@@ -37,8 +37,18 @@ cd ${MY_DIR_MYPIMODULE}
 VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print "v"$2}'`
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
 LIST="mav.parm build.sh mavproxy_MyPiModule.py rc.local ArduCopter-quad.service myvideo.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording.sh start_video.sh stop_video.sh start_tx_with_video_recording_broadcast_over_ap.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh ArduCopter.stg"
-git add $LIST
-git commit $LIST -m "$VERSION $date"
+for F in $LIST
+do
+	git add $F
+	DESC=`grep "^#TITLE#" $F|tr -d "#TITLE# "`
+	if [ "_$DESC" = "_" ]; then
+		git commit $F -m "$VERSION $date"
+		echo "git commit $F -m "$VERSION $date RC=$?"
+	else
+		git commit $F -m "$VERSION $DESC $date"
+		echo "git commit $F -m "$VERSION $DESC $date RC=$?"
+	fi
+done
 git pull
 git push
 cd ${MY_DIR_MYPIMODULE}
