@@ -164,19 +164,19 @@ then
                 elif [ "$OPTION" = "--vbr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
-                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>/var/log/myvideo.err
+                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
                         raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
                 fi
         fi
 else
-                echo "$PREFIX Please choose the interface of your TP-LINK 722N as the first argument" 
-                echo "$PREFIX Then the wifi channel as the second argument"
-                echo "$PREFIX Usage $0 2.3ghz channel -19 and 2.4Ghz channel 11 :"
-                echo "$PREFIX $0 wlan1 -19 --vb  : video with wifibroadcast (default)"
-                echo "$PREFIX $0 wlan1 -19 --vbr : video with wifibroadcast and recording"
-                echo "$PREFIX $0 wlan1 -19 --vr  : video recording"
-                echo "$PREFIX $0 wlan1 -19 --vrt [video_filemane] : video retransmission and consersion h264 to mp4 (default last video)"
+                echo "Please choose the interface of your TP-LINK 722N as the first argument" 
+                echo "Then the wifi channel as the second argument"
+                echo "Usage $0 2.3ghz channel -19 and 2.4Ghz channel 11 :"
+                echo "$0 wlan1 -19 --vb  : video with wifibroadcast (default)"
+                echo "$0 wlan1 -19 --vbr : video with wifibroadcast and recording"
+                echo "$0 wlan1 -19 --vr  : video recording"
+                echo "$0 wlan1 -19 --vrt [video_filemane] : video retransmission and consersion h264 to mp4 (default last video)"
 fi
 
