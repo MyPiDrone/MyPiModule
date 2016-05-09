@@ -312,7 +312,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("INFO",msg)
            if self.myrcraw[self.settings.myrcwlan0] > 0 and self.myrcraw[8] < self.RC_low_mark[self.settings.myrcwlan0]:
                ''' MANAGE mode STABILIZE : RC8 DOWN '''
-               #self.mymode("STABILIZE")
+               self.mymode("STABILIZE")
                ''' MANAGE WLAN0 DOWN : RC8 DOWN '''
                if self.wlan0_up == True:
                    self.wlan0_up = False
@@ -330,7 +330,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan0] > self.RC_high_mark[self.settings.myrcwlan0]:
                ''' MANAGE mode RTL : RC8 UP '''
-               #self.mymode("RTL")
+               self.mymode("RTL")
                ''' MANAGE WLAN0 UP : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
