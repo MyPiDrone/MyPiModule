@@ -1,15 +1,15 @@
 #!/bin/bash
-###################################################
-####### wwww.MyPiDrone.com
-#TITLE# TarotGroundStation video streaming over AP
-###################################################
+################################################
+#### wwww.MyPiDrone.com
+#### TarotGroundStation video streaming over AP
+################################################
 
 clear
 echo ##################RX Script#################
 echo Start this script with root authority
 
 echo "Usage : $0 [wlan_number] [channel]"
-echo "           default wlan_number wlan1 30:B5:C2:11:83:22|30:b5:c2:11:62:ea"
+echo "           default wlan_number wlan2 30:B5:C2:11:83:22|30:b5:c2:11:62:ea"
 echo "           2.4Ghz channel 1 to 13"
 echo "           2.3ghz channel -1 to -19"
 echo "           channel default -19"
@@ -24,7 +24,7 @@ PACKET_LENGTH=1024
 PORT=0
 if [ "_$1" = "_" ]; then
 	WLAN=`/sbin/ifconfig -a |egrep -i '30.*B5.*C2.*11.*83.*22|30.*b5.*c2.*11.*62.*ea'|awk '{print $1}'`
-	#WLAN="wlan1"
+	#WLAN="wlan2"
 	#WLAN="wlx60e3270f04fd"
 else
 	WLAN=$1
@@ -68,7 +68,8 @@ then
 		#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN > /tmp/myvideo
         	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-1.0 -v fdsrc ! h264parse ! avdec_h264 ! xvimagesink sync=false
         	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-0.10 -v fdsrc ! h264parse ! ffdec_h264 ! xvimagesink sync=false
-		$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=9000 host=10.0.0.12
+		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=9000 host=10.0.0.12
+		$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=5000 host=127.0.0.1
 	fi
 
 else
