@@ -19,6 +19,9 @@ cp ${MY_MAVPROXY_DIR}/MAVProxy/modules/mavproxy_MyPiModule.py        MyPiModule/
 cp /lib/systemd/system/ArduCopter-quad.service                       MyPiModule/
 cp /lib/systemd/system/myvideo.service                               MyPiModule/
 cp /lib/systemd/system/mavproxy.service                              MyPiModule/
+cp /lib/systemd/system/wifi.service                                  MyPiModule/
+cp /lib/systemd/system/hostapd.conf                                  MyPiModule/
+cp /lib/systemd/system/dnsmasq.conf                                  MyPiModule/
 cp /etc/rc.local                                                     MyPiModule/
 #
 cp /var/APM/ArduCopter.stg                                           MyPiModule/
