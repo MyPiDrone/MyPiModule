@@ -74,9 +74,6 @@ class MyPiModule(mp_module.MPModule):
         self.video_on = True
         self.rtl_on = False
         self.stabilize_on = False
-        if self.status.flightmode == "RTL": self.rtl_on = True
-        if self.status.flightmode == "STABILIZE": self.stabilize_on = True
-        print ("INFO current flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.battery_period = mavutil.periodic_event(5)
@@ -110,6 +107,12 @@ class MyPiModule(mp_module.MPModule):
             #self.master2.mav.statustext_send(1, str(strutf8))
             self.master2.mav.statustext_send(1, " 00 MyPiModule %s" % self.myversion)
             print("INFO  %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
+            # init var rtl_on and stabilize_on
+            if self.status.flightmode == "RTL": self.rtl_on = True
+            else: self.rtl_on = False
+            if self.status.flightmode == "STABILIZE": self.stabilize_on = True
+            else: self.stabilize_on = False
+            print ("INFO current flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
         self.mycountermessage += 1
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
