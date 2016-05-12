@@ -107,7 +107,9 @@ class MyPiModule(mp_module.MPModule):
             #self.master2.mav.statustext_send(1, str(strutf8))
             self.master2.mav.statustext_send(1, " 00 MyPiModule %s" % self.myversion)
             print("INFO  %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
+            ####################################################
             # init var rtl_on and stabilize_on
+            ####################################################
             if self.status.flightmode == "RTL": self.rtl_on = True
             else: self.rtl_on = False
             if self.status.flightmode == "STABILIZE": self.stabilize_on = True
@@ -142,10 +144,6 @@ class MyPiModule(mp_module.MPModule):
 
     def mymode(self,mode):
         print ("INFO request mode %s : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude))
-        #if self.status.flightmode == "RTL": self.rtl_on = True
-        #else: self.rtl_on = False
-        #if self.status.flightmode == "STABILIZE": self.stabilize_on = True
-        #else: self.stabilize_on = False
         if mode == "RTL" or mode == "STABILIZE":
           mode_mapping = self.master.mode_mapping()
           modenum = mode_mapping[mode]
