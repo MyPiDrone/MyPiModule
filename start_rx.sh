@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################
 #### wwww.MyPiDrone.com
-#### TarotGroundStation Video Viewer
+#TITLE# GCS TarotGroundStation Video Viewer
 ################################################
 
 DISPLAY=:0
