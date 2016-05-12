@@ -310,8 +310,8 @@ class MyPiModule(mp_module.MPModule):
            if self.settings.mydebug:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
-           if self.myrcraw[self.settings.myrcwlan0] < (self.RC_low_mark[self.settings.myrcwlan0]+100) and self.myrcraw[self.settings.myrcwlan0] > (self.RC_low_mark[self.settings.myrcwlan0]-100):
-               ''' MANAGE mode STABILIZE : RC8 DOWN RC_low_mark +100 or -100 '''
+           if self.myrcraw[self.settings.myrcwlan0] < self.RC_low_mark[self.settings.myrcwlan0] and self.myrcraw[self.settings.myrcwlan0] > (self.RC_low_mark[self.settings.myrcwlan0]-100):
+               ''' MANAGE mode STABILIZE : RC8 DOWN range RC_low_mark-100 to RC_low_mark '''
                self.mymode("STABILIZE")
            elif self.myrcraw[self.settings.myrcwlan0] > 0 and self.myrcraw[self.settings.myrcwlan0] < self.RC_low_mark[self.settings.myrcwlan0]:
                ''' MANAGE WLAN0 DOWN : RC8 DOWN '''
@@ -329,8 +329,8 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["ifdown","wlan0"])
                msg = "MyRC%sRaw %s wlan0 is up : %s : MIDDLE" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
-           elif self.myrcraw[self.settings.myrcwlan0] > (self.RC_high_mark[self.settings.myrcwlan0]-100) and self.myrcraw[self.settings.myrcwlan0] < (self.RC_high_mark[self.settings.myrcwlan0]+100) :
-               ''' MANAGE mode RTL : RC8 UP RC_high_mark +100 or -100 '''
+           elif self.myrcraw[self.settings.myrcwlan0] > self.RC_high_mark[self.settings.myrcwlan0 and self.myrcraw[self.settings.myrcwlan0] < (self.RC_high_mark[self.settings.myrcwlan0]+100) :
+               ''' MANAGE mode RTL : RC8 UP range RC_high_mark to RC_high_mark+100 '''
                self.mymode("RTL")
            elif self.myrcraw[self.settings.myrcwlan0] > self.RC_high_mark[self.settings.myrcwlan0]:
                ''' MANAGE WLAN0 UP : RC8 UP '''
@@ -341,8 +341,7 @@ class MyPiModule(mp_module.MPModule):
                    (stdoutData, stderrData) = p.communicate()
                    #rc = p.returncode
                    self.myip = stdoutData
-                   self.my_statustext_send("wlan0 up")
-                   self.my_statustext_send("%s" % self.myip)
+                   self.my_statustext_send("wlan0 up %s" % self.myip)
                msg = "MyRC%sRaw %s wlan0 is up : %s : DOWN" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            else:
