@@ -16,7 +16,7 @@
 
         - add myrtl function to set RTL mode (Return To Launch)
         - add mystabilize function to set STABILIZE mode
-        - set RTL mode when RC8 range HIGH_MARK to HIGHT_MARK+100
+        - set RTL mode when RC8 range HIGH_MARK to HIGH_MARK+100
         - set STABILIZE mode when RC8 range LOW_MARK-100 to LOW_MARK
         - support raspian Kernel 4.4.y emlid img for RIP2/RPI3 NAVIO+/NAVIO2
 
@@ -66,7 +66,7 @@ The main functions of MyPiModule (MAVProxy module):
         - RC8 LOW : wlan0 DOWN and SINGLE MODE OFF
         - RC8 range LOW_MARK-100 to LOW_MARK : set mode STABILIZE *NEW*
         - RC8 MIDDLE : SINGLE MODE ON
-        - RC8 range HIGHT_MARK to HIGHT_MARK+100 : set mode RTL
+        - RC8 range HIGH_MARK to HIGH_MARK+100 : set mode RTL
         - RC8 HIGH : ifup wlan0 
     - enable / disable the video on wifibroadcast wlan1 from the radio:
         - RC6 LOW (also used to tilt the camera left): Video wifibroadcast ON
