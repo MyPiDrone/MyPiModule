@@ -74,6 +74,9 @@ class MyPiModule(mp_module.MPModule):
         self.video_on = True
         self.rtl_on = False
         self.stabilize_on = False
+        if self.status.flightmode == "RTL": self.rtl_on = True
+        if self.status.flightmode == "STABILIZE": self.stabilize_on = True
+        print ("INFO current flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.battery_period = mavutil.periodic_event(5)
@@ -136,10 +139,10 @@ class MyPiModule(mp_module.MPModule):
 
     def mymode(self,mode):
         print ("INFO request mode %s : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude))
-        if self.status.flightmode == "RTL": self.rtl_on = True
-        else: self.rtl_on = False
-        if self.status.flightmode == "STABILIZE": self.stabilize_on = True
-        else: self.stabilize_on = False
+        #if self.status.flightmode == "RTL": self.rtl_on = True
+        #else: self.rtl_on = False
+        #if self.status.flightmode == "STABILIZE": self.stabilize_on = True
+        #else: self.stabilize_on = False
         if mode == "RTL" or mode == "STABILIZE":
           mode_mapping = self.master.mode_mapping()
           modenum = mode_mapping[mode]
