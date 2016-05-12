@@ -1,6 +1,6 @@
 #!/bin/sh
 ##################################################
-#TITLE# sample start wifi managed
+#TITLE# DRONE sample start wifi managed
 ##################################################
 #iw event -t
 systemctl stop myvideo
