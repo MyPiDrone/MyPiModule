@@ -1,5 +1,5 @@
 #!/bin/sh
-#TITLE# show module parameters
+#TITLE# DRONE show module parameters tools
 cat /proc/modules | cut -f 1 -d " " | while read module; do \
  echo "Module: $module"; \
  if [ -d "/sys/module/$module/parameters" ]; then \
