@@ -57,9 +57,11 @@ The main functions of MyPiModule (MAVProxy module):
         - Conditions: STANDBY + DISARMED
         - On the radio: LOW YAW (RC4) and ROLL LOW (RC1)
     - enable / disable the wireless network from the radio wlan0:
-        - RC8 LOW (the low level is also used in flight for SINGLE MODE OFF) and set mode STABILIZE *NEW*
+        - RC8 LOW (the low level is also used in flight for SINGLE MODE OFF) 
+        - RC8 LOW_MARK range -100 to +100: set mode STABILIZE *NEW*
           or RC8 MIDDLE (the neutral is also used in flight for SINGLE MODE ON): ifdown wlan0
-        - RC8 HIGH: ifup wlan0 and set mode RTL *NEW*
+        - RC8 HIGHT_MARK range -100 to +100: set mode RTL
+        - RC8 HIGH: ifup wlan0 
     - enable / disable the video on wifibroadcast wlan1 from the radio:
         - RC6 LOW (also used to tilt the camera left): Video wifibroadcast ON
         - RC6 HIGH (also used to tilt the camera to right): Video wifibroadcast OFF
