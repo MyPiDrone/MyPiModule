@@ -1,5 +1,5 @@
 ########################################################################################################
-#TITLE# MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2
+#TITLE# DRONE MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2
 - Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler
 - Project 2 : TAROT 280 Copter QUAD with Raspberry PI3 & Navio2 controler
 - raspian Kernel 4.4.y 
@@ -20,20 +20,23 @@
                 - support raspian Kernel 4.4.y emlid img for RIP2/RPI3 NAVIO+/NAVIO2
 
 ########################################################################################################
-- build.sh                                            : to install MyPiModule
-- mavproxy_MyPiModule.py                              : module MAVProxy
-- rc.local                                            : exec StartArduCopter-quad.sh
-- ArduCopter-quad.service                             : systemd call /usr/local/bin/start_ArduCopter-quad.sh
-- myvideo.service                                     : systemd call /usr/local/bin/start_video.sh /usr/local/bin/stop_video.sh
-- mavproxy.service                                    : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
-- start_video.sh                                      : fork /usr/local/bin/start_tx_with_video_recording.sh
-- stop_video.sh                                       : kill raspivid and tx
-- start_tx_with_video_recording.sh                    : start Video Wifibroadcast
-- start_tx_with_video_recording_broadcast_over_ap.sh  : start Video Broadcast over Wifi AP : Beta test
-- start_ap.sh                                         : start Wifi AP on GCS
-- start_rx.sh                                         : view Video on GCS
-- start_rx_and_broadcast_over_ap.sh                   : rx and streamin video over AP to Android QtGStreamerHUD emlid
-- show_modules.sh                                     : tools show params modules
+ - build.sh                                            DRONE : to install MyPiModule
+ - mavproxy_MyPiModule.py                              DRONE : module MAVProxy
+ - rc.local                                            DRONE : exec StartArduCopter-quad.sh
+ - ArduCopter-quad.service                             DRONE : systemd call /usr/local/bin/start_ArduCopter-quad.sh
+ - myvideo.service                                     DRONE : systemd call /usr/local/bin/start_video.sh /usr/local/bin/stop_video.sh
+ - mavproxy.service                                    DRONE : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
+ - wifiap.service                                      GCS   : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
+ - start_video.sh                                      DRONE : fork /usr/local/bin/start_tx_with_video_recording.sh
+ - stop_video.sh                                       DRONE : kill raspivid and tx
+ - start_tx_with_video_recording.sh                    DRONE : start Video Wifibroadcast
+ - start_tx_with_video_recording_broadcast_over_ap.sh  DRONE : start Video Broadcast over Wifi AP : Beta test
+ - start_ap.sh                                         GCS   : start Wifi AP on GCS
+ - start_rx.sh                                         GCS   : view Video on GCS
+ - start_rx_and_broadcast_over_ap.sh                   GCS   : rx and streamin video over AP to Android QtGStreamerHUD emlid
+ - hostapd.conf                                        GCS   : Wifi Access Point configuration
+ - dsnmasq.conf                                        GCS   : dsnmasq configuration
+ - show_modules.sh                                     DRONE : tools show params modules
 ########################################################################################################
 
 
