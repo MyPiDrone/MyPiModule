@@ -1,4 +1,5 @@
-#TITLE# /lib/systemd/system/mavproxy.service
+#TITLE# DRONE mavproxy service
+# /lib/systemd/system/mavproxy.service
 [Unit]
 Description=mavproxy
 After=ArduCopter-quad.service
