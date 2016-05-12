@@ -1,5 +1,5 @@
 #!/bin/sh
-#TITLE# start MAVProxy MyPiModule
+#TITLE# DRONE start MAVProxy MyPiModule
 # /lib/systemd/system/mavproxy.service 
 # [Unit]
 # Description=mavproxy
