@@ -10,7 +10,7 @@
 # bits.
 #
 # By default this script does nothing.
-#TITLE# /etc/rc.local
+#TITLE# DRONE /etc/rc.local : obsolete
 
 # Print the IP address
 _IP=$(hostname -I) || true
