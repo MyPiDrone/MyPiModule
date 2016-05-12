@@ -1,6 +1,6 @@
 #!/bin/sh
 ##################################################
-#TITLE# sample start wifi monitor
+#TITLE# DRONE sample start wifi monitor
 ##################################################
 systemctl stop myvideo
 ip link set wlan1 down                               
