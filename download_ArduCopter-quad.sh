@@ -1,5 +1,5 @@
 #!/bin/sh
-#TITLE# Download ArduCopter-quad from http://firmware.ardupilot.org/Copter
+#TITLE# DRONE Download ArduCopter-quad from http://firmware.ardupilot.org/Copter
 # https://community.emlid.com/t/apm-3-3-rc9-beta-testing/764/22
 
 wget http://firmware.ardupilot.org/Copter/stable/navio-quad/ArduCopter.elf --output-document=/opt/apm/bin/ArduCopter-quad-navio-V3.3.3.elf
