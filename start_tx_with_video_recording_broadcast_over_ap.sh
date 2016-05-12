@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################
 ####### www.MyPiDrone.com
-#TITLE# Video Broadcast over Wifi AP
+#TITLE# DRONE Video Broadcast over Wifi AP
 ################################################################
 
 clear
