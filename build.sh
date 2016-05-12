@@ -1,7 +1,7 @@
 #!/bin/sh
 ###########################################################
 ####### www.MyPiDrone.com
-#TITLE# git clone  https://github.com/MyPiDrone/MyPiModule
+#TITLE# DRONE build MAVProxy module MyPiModule
 ###########################################################
 date=`date +'%Y-%m-%d'`
 MY_MAVPROXY_DIR="/root/MyPiDrone/MAVProxy-1.4.43"
