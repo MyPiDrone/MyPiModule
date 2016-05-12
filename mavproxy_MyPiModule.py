@@ -191,7 +191,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_rc_check()
         if self.settings.mydebug:
            print("cmd_mybat %s" % self)
-        self.my_subprocess(["hostname","-I"])
+        self.my_subprocess(["/bin/hostname","-I"])
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
@@ -337,7 +337,7 @@ class MyPiModule(mp_module.MPModule):
                if self.wlan0_up == False:
                    self.wlan0_up = True
                    self.my_subprocess(["ifup","wlan0"])
-                   p = subprocess.Popen(["hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                   p = subprocess.Popen(["/bin/hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                    (stdoutData, stderrData) = p.communicate()
                    #rc = p.returncode
                    self.myip = stdoutData
