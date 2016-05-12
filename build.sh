@@ -19,9 +19,6 @@ cp ${MY_MAVPROXY_DIR}/MAVProxy/modules/mavproxy_MyPiModule.py        MyPiModule/
 cp /lib/systemd/system/ArduCopter-quad.service                       MyPiModule/
 cp /lib/systemd/system/myvideo.service                               MyPiModule/
 cp /lib/systemd/system/mavproxy.service                              MyPiModule/
-cp /lib/systemd/system/wifi.service                                  MyPiModule/
-cp /lib/systemd/system/hostapd.conf                                  MyPiModule/
-cp /lib/systemd/system/dnsmasq.conf                                  MyPiModule/
 cp /etc/rc.local                                                     MyPiModule/
 #
 cp /var/APM/ArduCopter.stg                                           MyPiModule/
@@ -39,7 +36,7 @@ cp /usr/local/bin/start_wlan1_mode_managed.sh                        MyPiModule/
 cd ${MY_DIR_MYPIMODULE}
 VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print "v"$2}'`
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
-LIST="mav.parm build.sh mavproxy_MyPiModule.py rc.local ArduCopter-quad.service myvideo.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording.sh start_video.sh stop_video.sh start_tx_with_video_recording_broadcast_over_ap.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg"
+LIST="mav.parm build.sh mavproxy_MyPiModule.py rc.local ArduCopter-quad.service myvideo.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording.sh start_video.sh stop_video.sh start_tx_with_video_recording_broadcast_over_ap.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf"
 git add $LIST
 for F in $LIST
 do
