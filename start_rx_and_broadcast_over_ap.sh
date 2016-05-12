@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################
 #### wwww.MyPiDrone.com
-#### TarotGroundStation video streaming over AP
+#TITLE# GCS TarotGroundStation video streaming over AP
 ################################################
 
 clear
