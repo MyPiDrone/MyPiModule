@@ -37,14 +37,14 @@ echo "$PREFIX Start this script with root authority"
 #HEIGHT=1080
 #FPS=30
 #---------------------
-WIDTH=1296
-HEIGHT=730
-FPS=49
+#WIDTH=1296
+#HEIGHT=730
+#FPS=49
 #FPS=60
 #---------------------
-#WIDTH=1296
-#HEIGHT=972
-#FPS=42
+WIDTH=1296
+HEIGHT=972
+FPS=42
 #---------------------
 BITRATE=2000000
 BITRATE=4000000
@@ -160,14 +160,14 @@ then
                 if [ "$OPTION" = "--vr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
-                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o $VIDEO 
+                        raspivid -vf -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o $VIDEO 
                 elif [ "$OPTION" = "--vbr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
-                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
+                        raspivid -vf -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
-                        raspivid -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
+                        raspivid -vf -ih -t $TIMEOUT -w $WIDTH -h $HEIGHT -fps $FPS -b $BITRATE -n -g $KEYFRAMERATE -pf high -o - | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
                 fi
         fi
 else
