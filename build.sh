@@ -50,7 +50,7 @@ do
 	fi
 done
 #git pull
-git push
+#git push
 cd ${MY_DIR_MYPIMODULE}
 systemctl stop mavproxy
 echo "/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"
