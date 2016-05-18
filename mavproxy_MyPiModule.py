@@ -123,6 +123,7 @@ class MyPiModule(mp_module.MPModule):
             self.myip = stdoutData
             self.my_statustext_send("wlan0 ip %s" % self.myip)
 
+    def my_statustext_send(self,text):
         if self.mycountermessage == 0:
             #strutf8 = unicode(" 00 MyPiModule %s" % self.myversion)
             #self.master2.mav.statustext_send(1, str(strutf8))
