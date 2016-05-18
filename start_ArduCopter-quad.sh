@@ -8,7 +8,8 @@
 # [Service]
 # Type=forking
 # ExecStart=/usr/local/bin/start_ArduCopter-quad.sh
-# Restart=always
+# # Nerver use Restart option with ArduCopter-quad
+# #Restart=always
 # #Restart=on-failure
 # #RestartSec=1s
 #
