@@ -91,7 +91,7 @@ class MyPiModule(mp_module.MPModule):
         self.mytext = "nulltext"
         self.myip = "0.0.0.0"
         # to send statustext
-        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common")
+        #self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common")
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -134,7 +134,8 @@ class MyPiModule(mp_module.MPModule):
         if self.mycountermessage == 0:
             #strutf8 = unicode(" 00 MyPiModule %s" % self.myversion)
             #self.master2.mav.statustext_send(1, str(strutf8))
-            self.master2.mav.statustext_send(1, " 00 MyPiModule %s" % self.myversion)
+            #self.master2.mav.statustext_send(1, " 00 MyPiModule %s" % self.myversion)
+            self.master.mav.statustext_send(1, " 00 MyPiModule %s" % self.myversion)
             print("INFO  %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
         self.mycountermessage += 1
         #---------------------------------------------------
@@ -145,7 +146,8 @@ class MyPiModule(mp_module.MPModule):
         #---------------------------------------------------
         #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
-        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+        #self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+        self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         self.say(text)
         self.my_write_log("INFO",text)
         print ("INFO %02d %s" % (self.mycountermessage,text))
