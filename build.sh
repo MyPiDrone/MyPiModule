@@ -39,7 +39,7 @@ cd ${MY_DIR_MYPIMODULE}
 VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print "v"$2}'`
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
 LIST="mav.parm build.sh mavproxy_MyPiModule.py rc.local ArduCopter-quad.service myvideo.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording.sh start_video.sh stop_video.sh start_tx_with_video_recording_broadcast_over_ap.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf start_network.sh stop_network.sh"
-EXCLUDE=" README_videostreaming_apmplanner2.txt build2.sh mav.tlog mav.tlog.raw mav_save.parm mavproxy_MyPiModule.py.save start_gst-launch.sh start_wlan0_mode_monitor.sh start_wlan2_mode_managed.sh start_wlan2_mode_monitor.sh"
+git config --global status.showUntrackedFiles no
 git add $LIST
 #git commit -i $LIST
 for F in $LIST
@@ -47,10 +47,10 @@ do
 	DESC=`grep "^#TITLE#" $F|cut -d' ' -f2-`
 	if [ "_$DESC" = "_" ]; then
 		git commit $F -m "$VERSION $date"
-		echo "git commit $F -u $EXCLUDE -m $VERSION $date RC=$?"
+		echo "git commit $F -m $VERSION $date RC=$?"
 	else
 		git commit $F -m "$VERSION $date $DESC"
-		echo "git commit $F -u $EXCLUDE -m $VERSION $date $DESC RC=$?"
+		echo "git commit $F -m $VERSION $date $DESC RC=$?"
 	fi
 done
 #git pull
