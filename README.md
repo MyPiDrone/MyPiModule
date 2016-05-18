@@ -31,7 +31,7 @@
         - wifiap.service                                      GCS   : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
         - start_video.sh                                      DRONE : fork /usr/local/bin/start_tx_with_video_recording.sh called by MyPiModule
         - stop_video.sh                                       DRONE : kill raspivid and tx called by MyPiModule
-        - start_network.sh                                    DRONE : ifup wlan0 called by MyPiModule
+        - start_network.sh                                    DRONE : ifup wlan0 called by MyPiModule 
         - stop_network.sh                                     DRONE : ifdown wlan0 called by MyPiModule
         - start_tx_with_video_recording.sh                    DRONE : start Video Wifibroadcast
         - start_tx_with_video_recording_broadcast_over_ap.sh  DRONE : start Video Broadcast over Wifi AP : Beta test
