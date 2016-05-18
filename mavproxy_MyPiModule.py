@@ -115,6 +115,8 @@ class MyPiModule(mp_module.MPModule):
             else: self.rtl_on = False
             if self.status.flightmode == "STABILIZE": self.stabilize_on = True
             else: self.stabilize_on = False
+            self.mycountermessage += 1
+            self.master2.mav.statustext_send(1, " %02d mode %s" % (self.mycountermessage,self.status.flightmode))
             print ("INFO current flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
             ####################################################
             # init var wlan0_ip
@@ -123,7 +125,9 @@ class MyPiModule(mp_module.MPModule):
             (stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
             self.myip = stdoutData
-            self.my_statustext_send("wlan0 up %s" % self.myip)
+            self.mycountermessage += 1
+            self.master2.mav.statustext_send(1, " %02d wlan0 ip %s" % (self.mycountermessage,self.myip))
+            print ("INFO wlan0 ip %s" % (self.myip))
             self.wlan0_ip = self.myip
         self.mycountermessage += 1
         #---------------------------------------------------
