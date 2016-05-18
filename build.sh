@@ -51,7 +51,7 @@ do
 		echo "git commit $F -m $VERSION $date $DESC RC=$?"
 	fi
 done
-#git pull
+git pull
 git push
 cd ${MY_DIR_MYPIMODULE}
 systemctl stop mavproxy
