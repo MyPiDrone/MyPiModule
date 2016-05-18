@@ -123,9 +123,8 @@ class MyPiModule(mp_module.MPModule):
             (stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
             self.myip = stdoutData
-            if self.myip != "":
-                self.my_statustext_send("wlan0 up %s" % self.myip)
-                self.wlan0_ip = self.myip
+            self.my_statustext_send("wlan0 up %s" % self.myip)
+            self.wlan0_ip = self.myip
         self.mycountermessage += 1
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
