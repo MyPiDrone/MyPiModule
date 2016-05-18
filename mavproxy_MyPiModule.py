@@ -42,6 +42,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.myversion = "2.1"
+        self.myinit = False
         # stats
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
@@ -102,7 +103,26 @@ class MyPiModule(mp_module.MPModule):
         fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
         fo.close()
 
-    def my_statustext_send(self,text):
+    def my_init(self):
+        if self.myinit == False:
+            self.myinit = True
+            ####################################################
+            # init var rtl_on and stabilize_on
+            ####################################################
+            if self.status.flightmode == "RTL": self.rtl_on = True
+            else: self.rtl_on = False
+            if self.status.flightmode == "STABILIZE": self.stabilize_on = True
+            else: self.stabilize_on = False
+            self.my_statustext_send("mode %s" % self.status.flightmode)
+            ####################################################
+            # init var wlan0_ip
+            ####################################################
+            p = subprocess.Popen(["/bin/hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            (stdoutData, stderrData) = p.communicate()
+            #rc = p.returncode
+            self.myip = stdoutData
+            self.my_statustext_send("wlan0 ip %s" % self.myip)
+
         if self.mycountermessage == 0:
             #strutf8 = unicode(" 00 MyPiModule %s" % self.myversion)
             #self.master2.mav.statustext_send(1, str(strutf8))
@@ -117,7 +137,7 @@ class MyPiModule(mp_module.MPModule):
             else: self.stabilize_on = False
             self.mycountermessage += 1
             self.master2.mav.statustext_send(1, " %02d mode %s" % (self.mycountermessage,self.status.flightmode))
-            print ("INFO current flightmode %s altitude %s" % (self.status.flightmode,self.status.altitude))
+            print ("INFO %02d mode %s" % (self.mycountermessage,self.status.flightmode))
             ####################################################
             # init var wlan0_ip
             ####################################################
@@ -127,7 +147,7 @@ class MyPiModule(mp_module.MPModule):
             self.myip = stdoutData
             self.mycountermessage += 1
             self.master2.mav.statustext_send(1, " %02d wlan0 ip %s" % (self.mycountermessage,self.myip))
-            print ("INFO wlan0 ip %s" % (self.myip))
+            print ("INFO %02d wlan0 ip %s" % (self.mycountermessage,self.myip))
             self.wlan0_ip = self.myip
         self.mycountermessage += 1
         #---------------------------------------------------
@@ -467,6 +487,8 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = m.system_status
+            if self.myinit == False:
+                my_init()
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
