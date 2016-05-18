@@ -1,4 +1,4 @@
-#TITLE# DRONE MAVProxy module MyPiModule to control RPI2 or RPI3
+#TITLE# DRONE MAVProxy module MyPiModule to control RPI2i/NAVIO+ or RPI3/NAVIO2 
 ''' ----------------------------------------------------------------------------------- '''
 ''' MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 :                  '''
 '''        Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler      '''
