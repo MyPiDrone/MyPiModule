@@ -103,7 +103,7 @@ class MyPiModule(mp_module.MPModule):
         fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
         fo.close()
 
-    def my_init(self):
+    def my_init_var(self):
         if self.myinit == False:
             self.myinit = True
             ####################################################
@@ -129,27 +129,6 @@ class MyPiModule(mp_module.MPModule):
             #self.master2.mav.statustext_send(1, str(strutf8))
             self.master2.mav.statustext_send(1, " 00 MyPiModule %s" % self.myversion)
             print("INFO  %02d MyPiModule %s" % (self.mycountermessage,self.myversion))
-            ####################################################
-            # init var rtl_on and stabilize_on
-            ####################################################
-            if self.status.flightmode == "RTL": self.rtl_on = True
-            else: self.rtl_on = False
-            if self.status.flightmode == "STABILIZE": self.stabilize_on = True
-            else: self.stabilize_on = False
-            self.mycountermessage += 1
-            self.master2.mav.statustext_send(1, " %02d mode %s" % (self.mycountermessage,self.status.flightmode))
-            print ("INFO %02d mode %s" % (self.mycountermessage,self.status.flightmode))
-            ####################################################
-            # init var wlan0_ip
-            ####################################################
-            p = subprocess.Popen(["/bin/hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            (stdoutData, stderrData) = p.communicate()
-            #rc = p.returncode
-            self.myip = stdoutData
-            self.mycountermessage += 1
-            self.master2.mav.statustext_send(1, " %02d wlan0 ip %s" % (self.mycountermessage,self.myip))
-            print ("INFO %02d wlan0 ip %s" % (self.mycountermessage,self.myip))
-            self.wlan0_ip = self.myip
         self.mycountermessage += 1
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
@@ -489,7 +468,7 @@ class MyPiModule(mp_module.MPModule):
             self.HEARTBEAT += 1
             self.mystate = m.system_status
             if self.myinit == False:
-                my_init()
+                self.my_init_var()
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
