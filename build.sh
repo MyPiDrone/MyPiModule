@@ -40,8 +40,7 @@ VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{prin
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
 LIST="mav.parm build.sh mavproxy_MyPiModule.py rc.local ArduCopter-quad.service myvideo.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording.sh start_video.sh stop_video.sh start_tx_with_video_recording_broadcast_over_ap.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf start_network.sh stop_network.sh"
 git add $LIST
-git commit $LIST
-exit
+git commit -i $LIST
 for F in $LIST
 do
 	DESC=`grep "^#TITLE#" $F|cut -d' ' -f2-`
