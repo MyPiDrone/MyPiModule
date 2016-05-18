@@ -121,7 +121,14 @@ class MyPiModule(mp_module.MPModule):
             (stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
             self.myip = stdoutData
-            self.my_statustext_send("wlan0 ip %s" % self.myip)
+            if self.myip == "":
+                self.my_statustext_send("wlan0 ip missing")
+                self.wlan0_ip = "null" 
+                self.wlan0_up = False 
+            else:
+                self.my_statustext_send("wlan0 ip %s" % self.myip)
+                self.wlan0_ip = self.myip
+                self.wlan0_up = True
 
     def my_statustext_send(self,text):
         if self.mycountermessage == 0:
