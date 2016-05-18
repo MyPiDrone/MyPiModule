@@ -1,6 +1,6 @@
 #!/bin/sh
 ###########################################################
-####### www.MyPiDrone.com
+####### www.MyPiDrone.com  
 #TITLE# DRONE build MAVProxy module MyPiModule
 ###########################################################
 date=`date +'%Y-%m-%d'`
@@ -40,19 +40,22 @@ VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{prin
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
 LIST="mav.parm build.sh mavproxy_MyPiModule.py rc.local ArduCopter-quad.service myvideo.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording.sh start_video.sh stop_video.sh start_tx_with_video_recording_broadcast_over_ap.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf start_network.sh stop_network.sh"
 git add $LIST
+git commit $LIST
+exit
 for F in $LIST
 do
 	DESC=`grep "^#TITLE#" $F|cut -d' ' -f2-`
 	if [ "_$DESC" = "_" ]; then
 		git commit $F -m "$VERSION $date"
-		echo "git commit $F -m $VERSION $date RC=$?"
+		echo "git commit -i $F -m $VERSION $date RC=$?"
 	else
 		git commit $F -m "$VERSION $date $DESC"
-		echo "git commit $F -m $VERSION $date $DESC RC=$?"
+		echo "git commit -i $F -m $VERSION $date $DESC RC=$?"
 	fi
 done
-git pull
-git push
+#git pull
+git push -f
+#git push
 cd ${MY_DIR_MYPIMODULE}
 systemctl stop mavproxy
 echo "/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"

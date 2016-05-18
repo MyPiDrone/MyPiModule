@@ -1,5 +1,5 @@
 #!/bin/sh
-#TITLE# DRONE stop video streaming
+#TITLE# DRONE stop video streaming called by MyPiModule
 echo "Video is stopped"
 killall raspivid
 WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx"

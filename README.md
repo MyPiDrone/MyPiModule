@@ -12,7 +12,7 @@
 
  Changelog :
 
-      version 2.1 :
+      version 2.2 :
 
         - add myrtl function to set RTL mode (Return To Launch)
         - add mystabilize function to set STABILIZE mode
@@ -29,8 +29,10 @@
         - myvideo.service                                     DRONE : systemd call /usr/local/bin/start_video.sh /usr/local/bin/stop_video.sh
         - mavproxy.service                                    DRONE : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
         - wifiap.service                                      GCS   : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
-        - start_video.sh                                      DRONE : fork /usr/local/bin/start_tx_with_video_recording.sh
-        - stop_video.sh                                       DRONE : kill raspivid and tx
+        - start_video.sh                                      DRONE : fork /usr/local/bin/start_tx_with_video_recording.sh called by MyPiModule
+        - stop_video.sh                                       DRONE : kill raspivid and tx called by MyPiModule
+        - start_network.sh                                    DRONE : ifup wlan0 called by MyPiModule
+        - stop_network.sh                                     DRONE : ifdown wlan0 called by MyPiModule
         - start_tx_with_video_recording.sh                    DRONE : start Video Wifibroadcast
         - start_tx_with_video_recording_broadcast_over_ap.sh  DRONE : start Video Broadcast over Wifi AP : Beta test
         - start_ap.sh                                         GCS   : start Wifi AP on GCS
