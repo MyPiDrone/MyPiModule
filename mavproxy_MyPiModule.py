@@ -7,7 +7,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
-''' Version 2.1 : May 4 2016                                                            '''
+''' Version 2.2 : May 18 2016                                                            '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
 ''' ----------------------------------------------------------------------------------- '''
@@ -41,7 +41,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.myversion = "2.1"
+        self.myversion = "2.2"
         self.myinit = False
         # stats
         self.VFR_HUD = 0
