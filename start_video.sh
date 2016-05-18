@@ -1,6 +1,5 @@
 #!/bin/sh
 #TITLE# DRONE start video streaming and recording called by MyPiModule
-# /lib/systemd/system/myvideo.service                                                                                                                                                             
 # [Unit]
 # Description=myvideo
 # After=multi-user.target
