@@ -124,6 +124,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_init_var(self):
         if self.myinit == False:
+            self.master.param_fetch_all()
             self.myinit = True
             self.my_statustext_send("MyPiModule %s" % self.myversion)
             ####################################################
