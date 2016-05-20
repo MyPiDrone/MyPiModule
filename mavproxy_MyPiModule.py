@@ -96,7 +96,7 @@ class MyPiModule(mp_module.MPModule):
         self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14551", input=False, dialect="common", source_system=self.settings.source_system)
         #self.master2 = mavutil.mavlink_connection("/dev/ttyUSB0,57600", input=False, dialect="common", source_system=self.settings.source_system)
-        #self.master.param_fetch_all()
+        self.master.param_fetch_all()
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -124,7 +124,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_init_var(self):
         if self.myinit == False:
-            self.master.param_fetch_all()
+            #self.master.param_fetch_all()
             self.myinit = True
             self.my_statustext_send("MyPiModule %s" % self.myversion)
             ####################################################
