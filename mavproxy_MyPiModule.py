@@ -69,7 +69,8 @@ class MyPiModule(mp_module.MPModule):
         # default values
         self.armed = False
         self.mystate = 0
-        self.mystatename = ["UNINIT","BOOT","CALIBRATING","STANDBY","ACTIVE","CRITICAL","EMERGENCY","POWEROFF"]
+        #self.mystatename = ["UNINIT","BOOT","CALIBRATING","STANDBY","ACTIVE","CRITICAL","EMERGENCY","POWEROFF"]
+        self.mystatename = ["UNINIT","BOOT","CALIBRATING"]
         self.myvolt = 0
         self.mythrottle = 0
         self.mycurrent = 0
