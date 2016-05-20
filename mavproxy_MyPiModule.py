@@ -128,7 +128,7 @@ class MyPiModule(mp_module.MPModule):
                 self.wlan_ip = "null" 
                 self.wlan_up = False 
             else:
-                self.my_statustext_send("wlan0 ip %s" % self.myip)
+                self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.myip))
                 self.wlan_ip = self.myip
                 self.wlan_up = True
 
@@ -342,18 +342,18 @@ class MyPiModule(mp_module.MPModule):
                if self.wlan_up == True:
                    self.wlan_up = False
                    self.wlan_ip = "null"
-                   self.my_statustext_send("wlan0 down")
+                   self.my_statustext_send("%s down" % self.settings.mywlan)
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","stop"])
-               msg = "MyRC%sRaw %s wlan0 is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.wlan_up)
+               msg = "MyRC%sRaw %s %s is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan] > self.RC_low_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] < self.RC_high_mark[self.settings.myrcwlan]:
                ''' MANAGE WLAN0 LOW : RC8 MIDDLE '''
                if self.wlan_up == True:
                    self.wlan_up = False
                    self.wlan_ip = "null"
-                   self.my_statustext_send("wlan0 down")
+                   self.my_statustext_send("%s down" % self.settings.mywlan)
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","stop"])
-               msg = "MyRC%sRaw %s wlan0 is up : %s : MIDDLE" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.wlan_up)
+               msg = "MyRC%sRaw %s %s is up : %s : MIDDLE" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan] > self.RC_high_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] < (self.RC_high_mark[self.settings.myrcwlan]+100) :
                ''' MANAGE mode RTL : RC8 UP range RC_high_mark to RC_high_mark+100 '''
@@ -369,12 +369,12 @@ class MyPiModule(mp_module.MPModule):
                    #rc = p.returncode
                    self.myip = stdoutData
                    if self.myip != "":
-                       self.my_statustext_send("wlan0 up %s" % self.myip)
+                       self.my_statustext_send("%s up %s" % (self.settings.mywlan,self.myip))
                        self.wlan_ip = self.myip
-               msg = "MyRC%sRaw %s wlan0 is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.wlan_up)
+               msg = "MyRC%sRaw %s %s is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            else:
-               msg = "MyRC%sRaw %s wlan0 is up : %s : unknown RC value" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.wlan_up)
+               msg = "MyRC%sRaw %s %s is up : %s : unknown RC value" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
