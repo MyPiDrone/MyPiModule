@@ -96,9 +96,9 @@ class MyPiModule(mp_module.MPModule):
         self.myip = "0.0.0.0"
         # to send statustext
         #print("self.settings.source_system=%s" % self.settings.source_system)
-        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+        #self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14551", input=False, dialect="common", source_system=self.settings.source_system)
-        #self.master2 = mavutil.mavlink_connection("/dev/ttyUSB0,57600", input=False, dialect="common", source_system=self.settings.source_system)
+        self.master2 = mavutil.mavlink_connection("/dev/ttyUSB0,57600", input=False, dialect="common", source_system=self.settings.source_system)
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
