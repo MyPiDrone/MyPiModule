@@ -39,7 +39,7 @@
         - start_rx.sh                                         GCS   : view Video on GCS
         - start_rx_and_broadcast_over_ap.sh                   GCS   : rx and streamin video over AP to Android QtGStreamerHUD emlid
         - hostapd.conf                                        GCS   : Wifi Access Point configuration
-        - dsnmasq.conf                                        GCS   : dsnmasq configuration
+        - dnsmasq.conf                                        GCS   : dnsmasq configuration
         - show_modules.sh                                     DRONE : tools show params modules
 
 ###########################################################################################
