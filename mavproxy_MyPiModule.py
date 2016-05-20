@@ -497,7 +497,8 @@ class MyPiModule(mp_module.MPModule):
 
     def idle_task(self):
         '''handle missing parameters'''
-        print ("self.vehicle_name=%s" % self.vehicle_name)
+        myvehicle_name = self.vehicle_name
+        #print ("self.vehicle_name=%s" % self.vehicle_name)
 
 def init(mpstate):
     '''initialise module'''
