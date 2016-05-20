@@ -6,8 +6,8 @@ After=multi-user.target
 
 [Service]
 Type=forking
-ExecStart=/usr/local/bin/start_video.sh
-ExecStop=/usr/local/bin/stop_video.sh
+ExecStart=/usr/local/bin/manage_video.sh start
+ExecStop=/usr/local/bin/manage_video.sh stop
 #KillMode=process
 #Restart=on-failure
 
