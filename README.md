@@ -1,7 +1,7 @@
 ###########################################################################################
 #TITLE# DRONE MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2
 - Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler
-- Project 2 : TAROT 280 Copter QUAD with Raspberry PI3 & Navio2 controler
+- Project 2 : Racer 30cm Copter QUAD with Raspberry PI3 & Navio2 controler
 - raspian Kernel 4.4.y 
 - www.MyPiDrone.com MyPiDrone kev&phil Project
 - https://github.com/MyPiDrone/MyPiModule 
