@@ -41,7 +41,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcwlan0', int, 8, 'Radio channel to change wlan0 on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.settings.append(MPSetting('mywlan', char, "wlan0", 'Wlan interface name'))
+        self.settings.append(MPSetting('mywlan', string, "wlan0", 'Wlan interface name'))
         self.myversion = "2.2"
         self.myinit = False
         # stats
