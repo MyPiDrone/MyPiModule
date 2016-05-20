@@ -389,7 +389,7 @@ class MyPiModule(mp_module.MPModule):
                msg = "MyRC%sRaw %s %s is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            else:
-               msg = "unknown RC value"
+               msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s unknown RC value" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
