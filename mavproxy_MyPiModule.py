@@ -42,6 +42,8 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('mywlan', str, "wlan0", 'Wlan interface name'))
+        self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
+        self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.2"
         self.myinit = False
         # stats
@@ -67,6 +69,7 @@ class MyPiModule(mp_module.MPModule):
         # default values
         self.armed = False
         self.mystate = 0
+        self.mystatename = ["UNINIT","BOOT","CALIBRATING","STANDBY","ACTIVE","CRITICAL","EMERGENCY","POWEROFF"]
         self.myvolt = 0
         self.mythrottle = 0
         self.mycurrent = 0
@@ -99,13 +102,14 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed %s MyState %s NetUP %s MyThrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystate,self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "Armed %s MyState %s NetUP %s MyThrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
         if self.settings.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
-        fo = open("/var/log/mavproxy_MyPiModule.log", "a")
-        fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
-        fo.close()
+        if self.settings.mylogverbose or level == "WARNING" or level == "ERROR":
+            fo = open(self.settings.mylog, "a")
+            fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
+            fo.close()
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -230,7 +234,7 @@ class MyPiModule(mp_module.MPModule):
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            prefix = "Armed %s MyState %s NetUP %s MyThrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystate,self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+            prefix = "Armed %s MyState %s NetUP %s MyThrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
             print ("INFO %s %s" % (prefix,msg))
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
         self.my_write_log("INFO",msg)
