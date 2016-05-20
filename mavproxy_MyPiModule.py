@@ -136,7 +136,7 @@ class MyPiModule(mp_module.MPModule):
             ####################################################
             # init var wlan_ip
             ####################################################
-            my_network_status()
+            self.my_network_status()
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
@@ -222,7 +222,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_rc_check()
         if self.settings.mydebug:
            print("cmd_mybat %s" % self)
-        my_network_status()
+        self.my_network_status()
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
