@@ -28,7 +28,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
         self.add_command('myreboot', self.cmd_myreboot, "to reboot")
-        self.add_command('myrtl', self.cmd_myrtl, "change flight mode to RTL")
+        self.add_command('myrtl', self.cmd_myrtl, "change flight mode to tTL")
         self.add_command('mystabilize', self.cmd_mystabilize, "change flight mode to STABILIZE")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
@@ -165,6 +165,7 @@ class MyPiModule(mp_module.MPModule):
           mode_mapping = self.master.mode_mapping()
           modenum = mode_mapping[mode]
           if mode == "RTL":
+            self.stabilize_on = False
 	    if self.status.flightmode != mode:
               self.rtl_on = False
               print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -181,8 +182,8 @@ class MyPiModule(mp_module.MPModule):
                 print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
                 self.my_statustext_send("mode %s" % self.status.flightmode)
                 self.rtl_on = True
-                self.stabilize_on = False
           if mode == "STABILIZE":
+            self.rtl_on = False
 	    if self.status.flightmode != mode:
               self.stabilize_on = False
               print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -199,7 +200,6 @@ class MyPiModule(mp_module.MPModule):
                 print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
                 self.my_statustext_send("mode %s" % self.status.flightmode)
                 self.stabilize_on = True
-                self.rtl_on = False
         else:
           print ("WARNING mode %s not supported : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude))
           self.my_statustext_send("mode %s not supported" % mode)
