@@ -118,7 +118,7 @@ class MyPiModule(mp_module.MPModule):
             ####################################################
             # init var wlan0_ip
             ####################################################
-            p = subprocess.Popen(["/bin/hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
             self.myip = stdoutData
@@ -214,7 +214,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_rc_check()
         if self.settings.mydebug:
            print("cmd_mybat %s" % self)
-        self.my_subprocess(["/bin/hostname","-I"])
+        self.my_subprocess(["/usr/local/bin/manage_network.sh","status"])
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
@@ -342,7 +342,7 @@ class MyPiModule(mp_module.MPModule):
                    self.wlan0_up = False
                    self.wlan0_ip = "null"
                    self.my_statustext_send("wlan0 down")
-                   self.my_subprocess(["/usr/local/bin/stop_network.sh"])
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop"])
                msg = "MyRC%sRaw %s wlan0 is up : %s : LOW" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan0] > self.RC_low_mark[self.settings.myrcwlan0] and self.myrcraw[self.settings.myrcwlan0] < self.RC_high_mark[self.settings.myrcwlan0]:
@@ -351,7 +351,7 @@ class MyPiModule(mp_module.MPModule):
                    self.wlan0_up = False
                    self.wlan0_ip = "null"
                    self.my_statustext_send("wlan0 down")
-                   self.my_subprocess(["/usr/local/bin/stop_network.sh"])
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop"])
                msg = "MyRC%sRaw %s wlan0 is up : %s : MIDDLE" % (self.settings.myrcwlan0,self.myrcraw[self.settings.myrcwlan0],self.wlan0_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan0] > self.RC_high_mark[self.settings.myrcwlan0] and self.myrcraw[self.settings.myrcwlan0] < (self.RC_high_mark[self.settings.myrcwlan0]+100) :
@@ -361,9 +361,9 @@ class MyPiModule(mp_module.MPModule):
                ''' MANAGE WLAN0 UP : RC8 UP '''
                if self.wlan0_up == False:
                    self.wlan0_up = True
-                   self.my_subprocess(["/usr/local/bin/start_network.sh"])
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","start"])
                if self.wlan0_ip == "null":
-                   p = subprocess.Popen(["/bin/hostname","-I"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                   p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                    (stdoutData, stderrData) = p.communicate()
                    #rc = p.returncode
                    self.myip = stdoutData
@@ -383,7 +383,7 @@ class MyPiModule(mp_module.MPModule):
                    msg = "MyRC%sraw %s MyVideo on %s : UP" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
-                   self.my_subprocess(["/usr/local/bin/stop_video.sh"])
+                   self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                if self.video_on == False:
@@ -391,7 +391,7 @@ class MyPiModule(mp_module.MPModule):
                    msg = "MyRC%sraw %s MyVideo on %s : LOW" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video on")
-                   self.my_subprocess(["/usr/local/bin/start_video.sh"])
+                   self.my_subprocess(["/usr/local/bin/manage_video.sh","stop"])
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
