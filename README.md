@@ -22,17 +22,17 @@
 
 ###########################################################################################
 
-        - build.sh                                            DRONE : to install MyPiModule
+        - MyPiDrone_drone_install.sh                          DRONE : to install MyPiModule
+        - MyPiDrone_gcs_install.sh                            GCS   : to install start_rx and wifiap
+        - MyPiModule_build_and_git_update.sh                  DRONE : build MyPiModule and update github
         - mavproxy_MyPiModule.py                              DRONE : module MAVProxy
         - rc.local                                            DRONE : exec StartArduCopter-quad.sh
         - ArduCopter-quad.service                             DRONE : systemd call /usr/local/bin/start_ArduCopter-quad.sh
         - myvideo.service                                     DRONE : systemd call /usr/local/bin/start_video.sh /usr/local/bin/stop_video.sh
         - mavproxy.service                                    DRONE : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
         - wifiap.service                                      GCS   : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
-        - start_video.sh                                      DRONE : fork /usr/local/bin/start_tx_with_video_recording.sh called by MyPiModule
-        - stop_video.sh                                       DRONE : kill raspivid and tx called by MyPiModule
-        - start_network.sh                                    DRONE : ifup wlan0 called by MyPiModule 
-        - stop_network.sh                                     DRONE : ifdown wlan0 called by MyPiModule
+        - manage_video.sh                                     DRONE : start/stop /usr/local/bin/start_tx_with_video_recording.sh called by MyPiModule
+        - maanage_network.sh                                  DRONE : ifup/ifdown/status wlan0 called by MyPiModule 
         - start_tx_with_video_recording.sh                    DRONE : start Video Wifibroadcast
         - start_tx_with_video_recording_broadcast_over_ap.sh  DRONE : start Video Broadcast over Wifi AP : Beta test
         - start_ap.sh                                         GCS   : start Wifi AP on GCS
