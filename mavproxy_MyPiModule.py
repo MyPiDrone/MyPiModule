@@ -102,7 +102,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed %s MyState %s NetUP %s MyThrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "Armed=%s MyState=%s NetUP=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
         if self.settings.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
@@ -234,7 +234,7 @@ class MyPiModule(mp_module.MPModule):
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            prefix = "Armed %s MyState %s NetUP %s MyThrottle %s MyVolt %s MyCurrent %s MyRemaining %s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+            prefix = "Armed=%s MyState=%s NetUP=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
             print ("INFO %s %s" % (prefix,msg))
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
         self.my_write_log("INFO",msg)
@@ -389,7 +389,7 @@ class MyPiModule(mp_module.MPModule):
                msg = "MyRC%sRaw %s %s is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            else:
-               msg = "MyRC%sRaw %s %s is up : %s : unknown RC value" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
+               msg = "unknown RC value"
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 UP '''
