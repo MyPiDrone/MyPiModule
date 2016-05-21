@@ -98,7 +98,7 @@ class MyPiModule(mp_module.MPModule):
         #print("self.settings.source_system=%s" % self.settings.source_system)
         #self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14551", input=False, dialect="common", source_system=self.settings.source_system)
-        self.master2 = mavutil.mavlink_connection("/dev/ttyUSB0,57600", input=False, dialect="common", source_system=self.settings.source_system)
+        #self.master2 = mavutil.mavlink_connection("/dev/ttyUSB0,57600", input=False, dialect="common", source_system=self.settings.source_system)
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -157,7 +157,9 @@ class MyPiModule(mp_module.MPModule):
         #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
         # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
+        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+        self.master2.close()
         self.say(text)
         self.my_write_log("INFO",text)
         print ("INFO %02d %s" % (self.mycountermessage,text))
