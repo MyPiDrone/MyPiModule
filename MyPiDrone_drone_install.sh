@@ -7,6 +7,7 @@ date=`date +'%Y-%m-%d'`
 MY_MAVPROXY_DIR="/root/MyPiDrone/MAVProxy-1.4.43"
 MY_DIR_MYPIDRONE="/root/MyPiDrone"
 MY_DIR_MYPIMODULE="/root/MyPiDrone/MyPiModule"
+MAVPROXY="/usr/local/bin/mavproxy.py"
 cd ${MY_DIR_MYPIDRONE}
 cp MyPiModule/mavproxy_MyPiModule.py  ${MY_MAVPROXY_DIR}/MAVProxy/modules/mavproxy_MyPiModule.py
 #
@@ -18,10 +19,8 @@ cp MyPiModule/rc.local                                           /etc/
 cp MyPiModule/start_MAVProxy_MyPiModule.sh                       /usr/local/bin/
 cp MyPiModule/start_ArduCopter-quad.sh                           /usr/local/bin/
 cp MyPiModule/start_tx_with_video_recording.sh                   /usr/local/bin/
-cp MyPiModule/start_video.sh                                     /usr/local/bin/
-cp MyPiModule/stop_video.sh                                      /usr/local/bin/
-cp MyPiModule/start_network.sh                                   /usr/local/bin/
-cp MyPiModule/stop_network.sh                                    /usr/local/bin/
+cp MyPiModule/manage_video.sh                                    /usr/local/bin/
+cp MyPiModule/manage_network.sh                                  /usr/local/bin/
 cp MyPiModule/start_tx_with_video_recording_broadcast_over_ap.sh /usr/local/bin/
 cp MyPiModule/show_modules.sh                                    /usr/local/bin/
 cp MyPiModule/start_wlan1_mode_monitor.sh                        /usr/local/bin/
