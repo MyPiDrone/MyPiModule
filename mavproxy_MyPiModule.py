@@ -150,7 +150,7 @@ class MyPiModule(mp_module.MPModule):
             rc = p.returncode
             if (rc == 0):
                self.video_on = True
-            else
+            else:
                self.video_on = False
 
     def my_statustext_send(self,text):
