@@ -14,3 +14,5 @@ cp MyPiModule/start_rx_and_broadcast_over_ap.sh               /usr/local/bin/
 cp MyPiModule/start_rx.sh                                     /usr/local/bin/
 cp MyPiModule/start_gst-launch.sh                             /usr/local/bin/
 #
+systemctl deamon-reload
+
