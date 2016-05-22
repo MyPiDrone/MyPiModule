@@ -99,7 +99,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed=%s MyState=%s NetUP=%s VideoON=% MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
         if self.settings.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
