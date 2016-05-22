@@ -29,7 +29,14 @@ case "$1" in
         echo "Video is stopped"
         ;;
   status)
-	
+	PID=`pgrep raspivid`
+	if [ $? -eq 0 ]; then
+		echo "raspivid is running pid $PID"
+		exit 0
+	else
+		echo "raspivid is not running"
+		exit 1
+	fi
         ;;
   *)
         echo "Usage: $0 {start|stop|status}"
