@@ -99,7 +99,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed=%s MyState=%s NetUP=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "Armed=%s MyState=%s NetUP=%s VideoON=% MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
         if self.settings.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
@@ -142,6 +142,16 @@ class MyPiModule(mp_module.MPModule):
             # reclaim params + version + frame type
             ####################################################
             self.master.param_fetch_all()
+            ####################################################
+            # video status
+            ####################################################
+            p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            (stdoutData, stderrData) = p.communicate()
+            rc = p.returncode
+            if (rc == 0):
+               self.video_on = True
+            else
+               self.video_on = False
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
@@ -233,7 +243,7 @@ class MyPiModule(mp_module.MPModule):
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
         if self.settings.mydebug == False:
-            prefix = "Armed=%s MyState=%s NetUP=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+            prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
             print ("INFO %s %s" % (prefix,msg))
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
         self.my_write_log("INFO",msg)
