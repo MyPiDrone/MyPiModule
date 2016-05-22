@@ -26,6 +26,8 @@ cp MyPiModule/show_modules.sh                                    /usr/local/bin/
 cp MyPiModule/start_wlan1_mode_monitor.sh                        /usr/local/bin/
 cp MyPiModule/start_wlan1_mode_managed.sh                        /usr/local/bin/
 #
+systemctl deamon-reload
+#
 cd ${MY_DIR_MYPIMODULE}
 ln -sf MyPiModule_build_and_git_update.sh build.sh
 echo "/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"
