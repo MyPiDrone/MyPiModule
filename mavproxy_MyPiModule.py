@@ -46,6 +46,8 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.2"
         self.myinit = False
+        self.mylogverbose = self.setting.mylogverbose
+        self.mydebug = self.settings.mydebug
         # stats
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
@@ -101,7 +103,7 @@ class MyPiModule(mp_module.MPModule):
         #OUTPUT FILE
         prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
-        if self.settings.mydebug:
+        if self.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
         if self.settings.mylogverbose or level == "WARNING" or level == "ERROR":
             fo = open(self.settings.mylog, "a")
@@ -180,11 +182,11 @@ class MyPiModule(mp_module.MPModule):
         #rc = p.returncode
         msg = "cmd %s sdtout %s" % (cmd,stdoutData)
         self.my_write_log("INFO",msg)
-        if self.settings.mydebug == False:
+        if self.mydebug == False:
             print("INFO %s" % msg)
         msg = "cmd %s stderr %s" % (cmd,stderrData)
         self.my_write_log("INFO",msg)
-        if self.settings.mydebug == False:
+        if self.mydebug == False:
             print("INFO %s" % msg)
 
     def mymode(self,mode):
@@ -240,12 +242,12 @@ class MyPiModule(mp_module.MPModule):
 
     def cmd_mybat(self, args):
         self.my_rc_check()
-        if self.settings.mydebug:
+        if self.mydebug:
            print("cmd_mybat %s" % self)
         self.my_network_status()
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
-        if self.settings.mydebug == False:
+        if self.mydebug == False:
             prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
             print ("INFO %s %s" % (prefix,msg))
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
@@ -358,7 +360,7 @@ class MyPiModule(mp_module.MPModule):
     def my_rc_check(self):
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
-           if self.settings.mydebug:
+           if self.mydebug:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
            if self.myrcraw[self.settings.myrcwlan] < self.RC_low_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] > (self.RC_low_mark[self.settings.myrcwlan]-100):
@@ -485,6 +487,9 @@ class MyPiModule(mp_module.MPModule):
             self.VFR_HUD += 1
             self.armed = self.master.motors_armed()
             self.mythrottle = m.throttle
+            if (self.armed == True): self.mylogverbose = True
+            else: self.mylogverbose = self.setting.mylogverbose
+            self.mydebug = self.settings.mydebug
         if mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
             self.myvolt = m.voltage_battery
@@ -518,7 +523,7 @@ class MyPiModule(mp_module.MPModule):
                 if (flags != self.myflags):
                     self.myflags = flags    
                     self.my_statustext_send("%s" % self.myflags)
-                if self.settings.mydebug:
+                if self.mydebug:
                     print ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
                     print ("MIN  : %s" % self.RC_MIN)
                     print ("TRIM : %s" % self.RC_TRIM)
