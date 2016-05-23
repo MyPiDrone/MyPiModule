@@ -535,7 +535,7 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "PARAM_VALUE":
             print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
             for i in range(1,8):
-                print ("%s" i)
+                print ("%s" % i)
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
                 if (m.param_id == "RC%s_MIN" % i): self.RC_MIN[i] = m.param_value
                 if (m.param_id == "RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
