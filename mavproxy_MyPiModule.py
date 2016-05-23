@@ -505,15 +505,15 @@ class MyPiModule(mp_module.MPModule):
                 self.my_network_status()
                 self.my_video_status()
                 self.my_mode_status()
-                if (self.wlan_up == True): NS = "N*"
+                if (self.wlan_up == True): NS = "N+"
                 else: NS = "N_"
-                if (self.video_on == True): VO = "V*"
+                if (self.video_on == True): VO = "V+"
                 else: VO="V_"
-                if (self.rtl_on == True): MR = "R*"
+                if (self.rtl_on == True): MR = "R+"
                 else: MR = "R_"
-                if (self.stabilize_on == True): MS = "S*"
+                if (self.stabilize_on == True): MS = "S+"
                 else: MS = "S_"
-                flags="%s%s%s%s" % (NS,VO,MR,MS)
+                flags="%s %s %s %s" % (NS,VO,MR,MS)
                 if (flags != self.myflags):
                     self.myflags = flags    
                     self.my_statustext_send("%s" % self.myflags)
