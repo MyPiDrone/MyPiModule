@@ -536,12 +536,10 @@ class MyPiModule(mp_module.MPModule):
             print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
             for i in range(1,8):
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
-                if (m.param_id == "RC%s_MIN" % i): 
-                    self.RC_MIN[i] = m.param_value
-                    self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
-                if (m.param_id == "RC%s_MAX" % i): 
-                    self.RC_MAX[i]=m.param_value
-                    self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
+                if (m.param_id == "RC%s_MIN" % i): self.RC_MIN[i] = m.param_value
+                if (m.param_id == "RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
+                self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
+                self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
