@@ -89,6 +89,9 @@ class MyPiModule(mp_module.MPModule):
         # default to servo range of 1000 to 1700
         #self.RC1_MIN  = self.get_mav_param('RC1_MIN', 0)
         #self.RC1_MAX  = self.get_mav_param('RC1_MAX', 0)
+        self.RC_MIN = [900,900,900,900,900,900,900,900,900] 
+        self.RC_TRIM = [1500,1500,1500,1500,1500,1500,1500,1500,1500] 
+        self.RC_MAX = [2200,2200,2200,2200,2200,2200,2200,2200,2200] 
         self.RC_low_mark = [1200,1200,1200,1200,1200,1200,1200,1200,1200] 
         self.RC_high_mark = [1700,1700,1700,1700,1700,1700,1700,1700,1700]
         self.myseverity = 0
@@ -497,7 +500,6 @@ class MyPiModule(mp_module.MPModule):
             self.mystate = m.system_status
             if (self.myinit == False and self.HEARTBEAT == 15):
                 print ("INFO HEARTBEAT sequence %s : init var network, video, mode" % self.HEARTBEAT)
-                self.master.param_fetch_all()
                 self.my_init_var()
             seq = self.HEARTBEAT % 30
             if (seq == 0):
@@ -524,9 +526,13 @@ class MyPiModule(mp_module.MPModule):
             self.mytext = m.text
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
-            for i in range(8):
-                RC="RC%s_MIN" % i
-                if (m.param_id == RC): print ("%s %s" % (RC,m.param_value))
+            for i in range(1,8):
+                if (m.param_id == RC="RC%s_MIN" % i): self.RC_MIN[i]=m.param_value
+                if (m.param_id == RC="RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
+                if (m.param_id == RC="RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
+            print ("MIN: %s" % self.RC_MIN)
+            print ("TRIM: %s" % self.RC_TRIM)
+            print ("MAX: %s" % self.RC_MAX)
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
