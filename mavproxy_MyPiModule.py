@@ -136,6 +136,10 @@ class MyPiModule(mp_module.MPModule):
             self.myinit = True
             self.my_statustext_send("MyPiModule %s" % self.myversion)
             ####################################################
+            # reclaim params + version + frame type
+            ####################################################
+            self.master.param_fetch_all()
+            ####################################################
             # init var rtl_on and stabilize_on
             ####################################################
             self.my_mode_status()
@@ -144,7 +148,7 @@ class MyPiModule(mp_module.MPModule):
             # init var wlan_ip
             ####################################################
             self.my_network_status()
-            if (self.self.wlan_up == True): self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
+            if (self.wlan_up == True): self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
             else: self.my_statustext_send("%s ip missing" % self.settings.mywlan)
             ####################################################
             # video status
@@ -152,10 +156,6 @@ class MyPiModule(mp_module.MPModule):
             self.my_video_status()
             if (self.video_on == True): self.my_statustext_send("VIDEO ON")
             else: self.my_statustext_send("VIDEO OFF")
-            ####################################################
-            # reclaim params + version + frame type
-            ####################################################
-            #self.master.param_fetch_all()
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
@@ -525,7 +525,7 @@ class MyPiModule(mp_module.MPModule):
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
             param_id = "%.16s" % m.param_id
-            print ("%s %s %s %s" % (param_id,m.param_count,m.param_index,m.param_value))
+            print ("%s %s %s %s %s" % (m.param_id,param_id,m.param_count,m.param_index,m.param_value))
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
