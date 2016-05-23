@@ -495,10 +495,10 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = m.system_status
-            if (self.myinit == False and self.HEARTBEAT == 40):
+            if (self.myinit == False and self.HEARTBEAT == 25):
                 print ("INFO HEARTBEAT sequence %s : init var network, video, mode" % self.HEARTBEAT)
                 self.my_init_var()
-            seq = self.HEARTBEAT % 100
+            seq = self.HEARTBEAT % 50
             if (seq == 0):
                 self.my_network_status()
                 self.my_video_status()
