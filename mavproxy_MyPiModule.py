@@ -33,7 +33,7 @@ class MyPiModule(mp_module.MPModule):
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 4, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
+        self.settings.append(MPSetting('mydebug', bool, True, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
@@ -43,7 +43,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('mywlan', str, "wlan0", 'Wlan interface name'))
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
-        self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
+        self.settings.append(MPSetting('mylogverbose', bool, True, 'Verbose log'))
         self.myversion = "2.2"
         self.myinit = False
         # stats
@@ -96,8 +96,6 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount = 0
         self.myseverity = 0
         self.mytext = "nulltext"
-        # to send statustext
-        #print("self.settings.source_system=%s" % self.settings.source_system)
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -159,6 +157,8 @@ class MyPiModule(mp_module.MPModule):
             self.my_video_status()
             if (self.video_on == True): self.my_statustext_send("VIDEO ON")
             else: self.my_statustext_send("VIDEO OFF")
+            # to send statustext
+            #print("self.settings.source_system=%s" % self.settings.source_system)
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
