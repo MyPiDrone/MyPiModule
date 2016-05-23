@@ -524,8 +524,9 @@ class MyPiModule(mp_module.MPModule):
             self.mytext = m.text
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
-            param_id = "%.16s" % m.param_id
-            print ("%s %s %s %s %s" % (m.param_id,param_id,m.param_count,m.param_index,m.param_value))
+            for i in range(8):
+                RC="RC" .. i .. "_MIN"
+                if (m.param_id == RC): print ("%s %s" % (RC,m.param_value))
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
