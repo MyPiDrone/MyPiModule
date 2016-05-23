@@ -481,7 +481,7 @@ class MyPiModule(mp_module.MPModule):
         '''  6: System Status EMERGENCY   '''
         '''  7: System Status POWEROFF    '''
         mtype = m.get_type()
-        #print("System Status %s" % mtype)
+        print("System Status %s" % mtype)
         if mtype == "VFR_HUD":
             self.VFR_HUD += 1
             self.armed = self.master.motors_armed()
@@ -522,7 +522,6 @@ class MyPiModule(mp_module.MPModule):
             self.myseverity = m.severity
             self.mytext = m.text
             self.my_statustext_check()
-print ("%s" % mtype)
          #if mtype == "PARAM_VALUE":
          #   param_id = "%.16s" % m.param_id
          #   print ("%s %s %s %s" % (param_id,m.param_count,m.param_index,m.param_value))
