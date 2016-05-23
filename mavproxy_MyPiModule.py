@@ -512,7 +512,7 @@ class MyPiModule(mp_module.MPModule):
                 else: MR="r"
                 if (self.statiblize_on == True): MS="S"
                 else: MS="s"
-                self.my_statustext_send("%s%s%s%s" % (NS,VO,MR,MS))
+                self.my_statustext_send(" %s %s %s %s" % (NS,VO,MR,MS))
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
