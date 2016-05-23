@@ -155,7 +155,7 @@ class MyPiModule(mp_module.MPModule):
             ####################################################
             # reclaim params + version + frame type
             ####################################################
-            self.master.param_fetch_all()
+            #self.master.param_fetch_all()
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
@@ -497,6 +497,7 @@ class MyPiModule(mp_module.MPModule):
             self.mystate = m.system_status
             if (self.myinit == False and self.HEARTBEAT == 15):
                 print ("INFO HEARTBEAT sequence %s : init var network, video, mode" % self.HEARTBEAT)
+                self.master.param_fetch_all()
                 self.my_init_var()
             seq = self.HEARTBEAT % 30
             if (seq == 0):
