@@ -13,7 +13,14 @@ case "$1" in
         echo "ifdown $WLAN"
         ;;
   status)
-        ip a|grep "inet"|grep "$WLAN"|awk '{print $2}'|awk -F'/' '{print $1}'
+        IP=`ip a|grep "inet"|grep "$WLAN"|awk '{print $2}'|awk -F'/' '{print $1}'`
+        if [ "_$IP" = "_" ]; then
+                echo "$WLAN is down"
+                exit 1
+        else
+                echo "$WLAN is up $IP"
+                exit 0
+        fi
         ;;
   *)
         echo "Usage: $0 {start|stop|status} wlan_name"
