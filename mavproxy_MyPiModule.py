@@ -87,13 +87,11 @@ class MyPiModule(mp_module.MPModule):
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         #self.FORMAT2 = '%Hh%Mm%Ss'
         self.mycountermessage = 0
-        # default to servo range of 1000 to 1700
-        #self.RC1_MIN  = self.get_mav_param('RC1_MIN', 0)
-        #self.RC1_MAX  = self.get_mav_param('RC1_MAX', 0)
+        # default to servo range of 990 to 2010
         self.RC_MIN = [990,990,990,990,990,990,990,990,990] 
         self.RC_TRIM = [1500,1500,1500,1500,1500,1500,1500,1500,1500] 
         self.RC_MAX = [2010,2010,2010,2010,2010,2010,2010,2010,2010] 
-        self.RC_low_mark = [1255,1255,1255,1255,1255,1255,1255,1255,1255] 
+        self.RC_low_mark = [1245,1245,1245,1245,1245,1245,1245,1245,1245] 
         self.RC_high_mark = [1755,1755,1755,1755,1755,1755,1755,1755,1755]
         self.myseverity = 0
         self.mytext = "nulltext"
@@ -520,6 +518,11 @@ class MyPiModule(mp_module.MPModule):
                 if (flags != self.myflags):
                     self.myflags = flags    
                     self.my_statustext_send("%s" % self.myflags)
+                    print ("MIN: %s" % self.RC_MIN)
+                    print ("TRIM: %s" % self.RC_TRIM)
+                    print ("MAX: %s" % self.RC_MAX)
+                    print ("low: %s" % self.RC_low_mark)
+                    print ("high: %s" % self.RC_high_mark)
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
@@ -538,11 +541,6 @@ class MyPiModule(mp_module.MPModule):
                 if (m.param_id == "RC%s_MAX" % i): 
                     self.RC_MAX[i]=m.param_value
                     self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
-            print ("MIN: %s" % self.RC_MIN)
-            print ("TRIM: %s" % self.RC_TRIM)
-            print ("MAX: %s" % self.RC_MAX)
-            print ("low: %s" % self.RC_low_mark)
-            print ("high: %s" % self.RC_high_mark)
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
