@@ -505,7 +505,6 @@ class MyPiModule(mp_module.MPModule):
                 self.my_network_status()
                 self.my_video_status()
                 self.my_mode_status()
-                print ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
                 if (self.wlan_up == True): NS = "N*"
                 else: NS = "N_"
                 if (self.video_on == True): VO = "V*"
@@ -518,12 +517,13 @@ class MyPiModule(mp_module.MPModule):
                 if (flags != self.myflags):
                     self.myflags = flags    
                     self.my_statustext_send("%s" % self.myflags)
-                    if self.settings.mydebug:
-                        print ("MIN  : %s" % self.RC_MIN)
-                        print ("TRIM : %s" % self.RC_TRIM)
-                        print ("MAX  : %s" % self.RC_MAX)
-                        print ("low  : %s" % self.RC_low_mark)
-                        print ("high : %s" % self.RC_high_mark)
+                if self.settings.mydebug:
+                    print ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
+                    print ("MIN  : %s" % self.RC_MIN)
+                    print ("TRIM : %s" % self.RC_TRIM)
+                    print ("MAX  : %s" % self.RC_MAX)
+                    print ("low  : %s" % self.RC_low_mark)
+                    print ("high : %s" % self.RC_high_mark)
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
@@ -534,7 +534,7 @@ class MyPiModule(mp_module.MPModule):
             self.mytext = m.text
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
-            print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
+            #print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
             for i in range(1,17):
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i] = m.param_value
                 if (m.param_id == "RC%s_MIN" % i):  self.RC_MIN[i] = m.param_value
