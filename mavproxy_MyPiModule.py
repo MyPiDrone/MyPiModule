@@ -93,6 +93,7 @@ class MyPiModule(mp_module.MPModule):
         self.RC_MAX = [0,2010,2010,2010,2010,2010,2010,2010,2010,0,0,0,0,0,0,0,0,0] 
         self.RC_low_mark = [0,1245,1245,1245,1245,1245,1245,1245,1245,0,0,0,0,0,0,0,0,0] 
         self.RC_high_mark = [0,1755,1755,1755,1755,1755,1755,1755,1755,0,0,0,0,0,0,0,0,0]
+        self.myparamcount = 0
         self.myseverity = 0
         self.mytext = "nulltext"
         # to send statustext
@@ -513,7 +514,7 @@ class MyPiModule(mp_module.MPModule):
                 else: MR = "R_"
                 if (self.stabilize_on == True): MS = "S+"
                 else: MS = "S_"
-                flags="%s %s %s %s" % (NS,VO,MR,MS)
+                flags="%s %s %s %s %s" % (NS,VO,MR,MS,self.myparamcount)
                 if (flags != self.myflags):
                     self.myflags = flags    
                     self.my_statustext_send("%s" % self.myflags)
@@ -535,6 +536,7 @@ class MyPiModule(mp_module.MPModule):
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
             #print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
+            self.myparamcount += 1
             for i in range(1,17):
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i] = m.param_value
                 if (m.param_id == "RC%s_MIN" % i):  self.RC_MIN[i] = m.param_value
