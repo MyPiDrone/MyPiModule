@@ -114,27 +114,22 @@ class MyPiModule(mp_module.MPModule):
             if (rc == 0):
                 self.wlan_ip = stdoutData
                 self.wlan_up = True
-                self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
             else:
                 self.wlan_ip = "null" 
                 self.wlan_up = False 
-                self.my_statustext_send("%s ip missing" % self.settings.mywlan)
 
     def my_video_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             rc = p.returncode
-            if (rc == 0):
-               self.video_on = True
-            else:
-               self.video_on = False
+            if (rc == 0): self.video_on = True
+            else: self.video_on = False
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
             else: self.rtl_on = False
             if self.status.flightmode == "STABILIZE": self.stabilize_on = True
             else: self.stabilize_on = False
-            self.my_statustext_send("mode %s" % self.status.flightmode)
 
     def my_init_var(self):
         if self.myinit == False:
@@ -144,14 +139,19 @@ class MyPiModule(mp_module.MPModule):
             # init var rtl_on and stabilize_on
             ####################################################
             self.my_mode_status()
+            self.my_statustext_send("mode %s" % self.status.flightmode)
             ####################################################
             # init var wlan_ip
             ####################################################
             self.my_network_status()
+            if (self.self.wlan_up == True): self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
+            else: self.my_statustext_send("%s ip missing" % self.settings.mywlan)
             ####################################################
             # video status
             ####################################################
             self.my_video_status()
+            if (self.video_on == True): self.my_statustext_send("VIDEO ON")
+            else: self.my_statustext_send("VIDEO OFF")
             ####################################################
             # reclaim params + version + frame type
             ####################################################
@@ -393,6 +393,8 @@ class MyPiModule(mp_module.MPModule):
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.mywlan])
                if self.wlan_ip == "null":
                    self.my_network_status()
+                   if (self.self.wlan_up == True): self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
+                   else: self.my_statustext_send("%s ip missing" % self.settings.mywlan)
                msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            else:
