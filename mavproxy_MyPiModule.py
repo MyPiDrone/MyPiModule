@@ -495,10 +495,10 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = m.system_status
-            if (self.myinit == False and self.HEARTBEAT == 25):
+            if (self.myinit == False and self.HEARTBEAT == 15):
                 print ("INFO HEARTBEAT sequence %s : init var network, video, mode" % self.HEARTBEAT)
                 self.my_init_var()
-            seq = self.HEARTBEAT % 50
+            seq = self.HEARTBEAT % 30
             if (seq == 0):
                 self.my_network_status()
                 self.my_video_status()
@@ -512,8 +512,7 @@ class MyPiModule(mp_module.MPModule):
                 else: MR = "r"
                 if (self.stabilize_on == True): MS = "S"
                 else: MS = "s"
-                #self.my_statustext_send(" %s %s %s %s" % (NS,VO,MR,MS))
-                print(" %s %s %s %s" % (NS,VO,MR,MS))
+                self.my_statustext_send("%s%s%s%s" % (NS,VO,MR,MS))
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
@@ -523,6 +522,9 @@ class MyPiModule(mp_module.MPModule):
             self.myseverity = m.severity
             self.mytext = m.text
             self.my_statustext_check()
+         if mtype == "PARAM_VALUE":
+            param_id = "%.16s" % m.param_id
+            print ("%s %s %s %s" % (param_id,m.param_count,m.param_index,m.param_value)
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
