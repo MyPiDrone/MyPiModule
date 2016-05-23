@@ -531,12 +531,18 @@ class MyPiModule(mp_module.MPModule):
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
             for i in range(1,8):
-                if (m.param_id == "RC%s_MIN" % i): self.RC_MIN[i]=m.param_value
+                if (m.param_id == "RC%s_MIN" % i): 
+                    self.RC_MIN[i] = m.param_value
+                    self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
-                if (m.param_id == "RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
+                if (m.param_id == "RC%s_MAX" % i): 
+                    self.RC_MAX[i]=m.param_value
+                    self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
             print ("MIN: %s" % self.RC_MIN)
             print ("TRIM: %s" % self.RC_TRIM)
             print ("MAX: %s" % self.RC_MAX)
+            print ("low: %s" % self.RC_low_mark)
+            print ("high: %s" % self.RC_high_mark)
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
