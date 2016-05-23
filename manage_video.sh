@@ -22,21 +22,25 @@ case "$1" in
         ;;
   stop)
         killall raspivid
-        WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx"
-        killall $WifiBroadcast_TX
-        WifiBroadcast_TX="/root/wifibroadcast/tx"
-        killall $WifiBroadcast_TX
+        WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx" ; killall $WifiBroadcast_TX
+        WifiBroadcast_TX="/root/wifibroadcast/tx" ; killall $WifiBroadcast_TX
         echo "Video is stopped"
         ;;
   status)
+        RC=0
+	PID=`pgrep tx`
+	if [ $? -eq 0 ]; then
+		RC=0 ; echo "tx is running $PID"
+        else
+		RC=1 ; echo "tx is not running"
+        fi
 	PID=`pgrep raspivid`
 	if [ $? -eq 0 ]; then
-		echo "raspivid is running pid $PID"
-		exit 0
+		RC=0 ; echo "raspivid is running pid $PID"
 	else
-		echo "raspivid is not running"
-		exit 1
+		RC=1 ; echo "raspivid is not running"
 	fi
+        exit $RC
         ;;
   *)
         echo "Usage: $0 {start|stop|status}"
