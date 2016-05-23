@@ -524,12 +524,12 @@ class MyPiModule(mp_module.MPModule):
             self.my_statustext_check()
          if mtype == "PARAM_VALUE":
             param_id = "%.16s" % m.param_id
-            print ("%s %s %s %s" % (param_id,m.param_count,m.param_index,m.param_value)
+            print ("%s %s %s %s" % (param_id,m.param_count,m.param_index,m.param_value))
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
 #           self.my_battery_check()
-
+#
 #    def idle_task(self):
 #        '''handle missing parameters'''
 #        myvehicle_name = self.vehicle_name
