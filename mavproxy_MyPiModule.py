@@ -43,7 +43,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('mywlan', str, "wlan0", 'Wlan interface name'))
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
-        self.settings.append(MPSetting('mylogverbose', bool, True, 'Verbose log'))
+        self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.2"
         self.myinit = False
         # stats
@@ -136,10 +136,6 @@ class MyPiModule(mp_module.MPModule):
         if self.myinit == False:
             self.myinit = True
             self.my_statustext_send("MyPiModule %s" % self.myversion)
-            ####################################################
-            # reclaim params + version + frame type
-            ####################################################
-            self.master.param_fetch_all()
             ####################################################
             # init var rtl_on and stabilize_on
             ####################################################
@@ -501,6 +497,10 @@ class MyPiModule(mp_module.MPModule):
             if (self.myinit == False and self.HEARTBEAT == 15):
                 print ("INFO HEARTBEAT sequence %s : init var network, video, mode" % self.HEARTBEAT)
                 self.my_init_var()
+                ####################################################
+                # reclaim params + version + frame type
+                ####################################################
+                self.master.param_fetch_all()
             seq = self.HEARTBEAT % 30
             if (seq == 0):
                 self.my_network_status()
