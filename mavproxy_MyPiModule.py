@@ -500,12 +500,12 @@ class MyPiModule(mp_module.MPModule):
             self.HEARTBEAT += 1
             self.mystate = m.system_status
             if (self.myinit == False and self.HEARTBEAT == 15):
-                print ("INFO HEARTBEAT sequence %s : init var network, video, mode" % self.HEARTBEAT)
                 self.my_init_var()
                 ####################################################
                 # reclaim params + version + frame type
                 ####################################################
                 self.master.param_fetch_all()
+                print ("INFO HEARTBEAT sequence %s : reclaim params and init var network, video, mode" % self.HEARTBEAT)
             seq = self.HEARTBEAT % 30
             if (seq == 0):
                 self.my_network_status()
