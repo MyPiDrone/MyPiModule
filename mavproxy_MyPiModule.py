@@ -109,7 +109,7 @@ class MyPiModule(mp_module.MPModule):
             fo.close()
 
     def my_network_status(self):
-            p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.mywlan], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
             self.myip = stdoutData
@@ -122,29 +122,7 @@ class MyPiModule(mp_module.MPModule):
                 self.wlan_ip = self.myip
                 self.wlan_up = True
 
-    def my_init_var(self):
-        if self.myinit == False:
-            self.myinit = True
-            self.my_statustext_send("MyPiModule %s" % self.myversion)
-            ####################################################
-            # init var rtl_on and stabilize_on
-            ####################################################
-            if self.status.flightmode == "RTL": self.rtl_on = True
-            else: self.rtl_on = False
-            if self.status.flightmode == "STABILIZE": self.stabilize_on = True
-            else: self.stabilize_on = False
-            self.my_statustext_send("mode %s" % self.status.flightmode)
-            ####################################################
-            # init var wlan_ip
-            ####################################################
-            self.my_network_status()
-            ####################################################
-            # reclaim params + version + frame type
-            ####################################################
-            self.master.param_fetch_all()
-            ####################################################
-            # video status
-            ####################################################
+    def my_video_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             rc = p.returncode
@@ -152,6 +130,34 @@ class MyPiModule(mp_module.MPModule):
                self.video_on = True
             else:
                self.video_on = False
+
+    def my_mode_status(self):
+            if self.status.flightmode == "RTL": self.rtl_on = True
+            else: self.rtl_on = False
+            if self.status.flightmode == "STABILIZE": self.stabilize_on = True
+            else: self.stabilize_on = False
+            self.my_statustext_send("mode %s" % self.status.flightmode)
+
+    def my_init_var(self):
+        if self.myinit == False:
+            self.myinit = True
+            self.my_statustext_send("MyPiModule %s" % self.myversion)
+            ####################################################
+            # init var rtl_on and stabilize_on
+            ####################################################
+            self.my_mode_status()
+            ####################################################
+            # init var wlan_ip
+            ####################################################
+            self.my_network_status()
+            ####################################################
+            # video status
+            ####################################################
+            self.my_video_status()
+            ####################################################
+            # reclaim params + version + frame type
+            ####################################################
+            self.master.param_fetch_all()
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
@@ -362,61 +368,61 @@ class MyPiModule(mp_module.MPModule):
                ''' MANAGE mode STABILIZE : RC8 LOW range RC_low_mark-100 to RC_low_mark '''
                self.mymode("STABILIZE")
            elif self.myrcraw[self.settings.myrcwlan] > 0 and self.myrcraw[self.settings.myrcwlan] < self.RC_low_mark[self.settings.myrcwlan]:
-               ''' MANAGE WLAN0 LOW : RC8 LOW '''
+               ''' MANAGE WLAN0 UP : RC8 LOW '''
                if self.wlan_up == True:
                    self.wlan_up = False
                    self.wlan_ip = "null"
                    self.my_statustext_send("%s down" % self.settings.mywlan)
-                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop"])
-               msg = "MyRC%sRaw %s %s is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.mywlan])
+               msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan] > self.RC_low_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] < self.RC_high_mark[self.settings.myrcwlan]:
-               ''' MANAGE WLAN0 LOW : RC8 MIDDLE '''
+               ''' MANAGE WLAN0 DOWN : RC8 MIDDLE '''
                if self.wlan_up == True:
                    self.wlan_up = False
                    self.wlan_ip = "null"
                    self.my_statustext_send("%s down" % self.settings.mywlan)
-                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop"])
-               msg = "MyRC%sRaw %s %s is up : %s : MIDDLE" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.mywlan])
+               msg = "MyRC%sRaw %s MIDDLE : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcwlan] > self.RC_high_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] < (self.RC_high_mark[self.settings.myrcwlan]+100) :
-               ''' MANAGE mode RTL : RC8 UP range RC_high_mark to RC_high_mark+100 '''
+               ''' MANAGE mode RTL : RC8 HIGH range RC_high_mark to RC_high_mark+100 '''
                self.mymode("RTL")
            elif self.myrcraw[self.settings.myrcwlan] > self.RC_high_mark[self.settings.myrcwlan]:
-               ''' MANAGE WLAN0 UP : RC8 UP '''
+               ''' MANAGE WLAN0 UP : RC8 HIGH '''
                if self.wlan_up == False:
                    self.wlan_up = True
-                   self.my_subprocess(["/usr/local/bin/manage_network.sh","start"])
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.mywlan])
                if self.wlan_ip == "null":
-                   p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                   p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.mywlan], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                    (stdoutData, stderrData) = p.communicate()
                    #rc = p.returncode
                    self.myip = stdoutData
                    if self.myip != "":
                        self.my_statustext_send("%s up %s" % (self.settings.mywlan,self.myip))
                        self.wlan_ip = self.myip
-               msg = "MyRC%sRaw %s %s is up : %s : LOW" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
+               msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            else:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s unknown RC value" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("WARNING",msg)
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
-           ''' MANAGE VIDEO OFF : RC6 UP '''
+           ''' MANAGE VIDEO OFF : RC6 HIGH '''
            if self.myrcraw[self.settings.myrcvideo] > self.RC_high_mark[self.settings.myrcvideo]:
                if self.video_on == True:
                    self.video_on = False
-                   msg = "MyRC%sraw %s MyVideo on %s : UP" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
+                   msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
-                   self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
+                   self.my_subprocess(["/usr/local/bin/manage_video.sh","stop"])
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                if self.video_on == False:
                    self.video_on = True
-                   msg = "MyRC%sraw %s MyVideo on %s : LOW" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
+                   msg = "MyRC%sraw %s LOW : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video on")
-                   self.my_subprocess(["/usr/local/bin/manage_video.sh","stop"])
+                   self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
@@ -495,8 +501,15 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = m.system_status
-            if self.myinit == False:
+            if (self.myinit == False and self.HEARTBEAT == 10):
+                print ("HEARTBEAT sequence %s : init var network, video, mode" % self.HEARTBEAT)
                 self.my_init_var()
+            seq = self.HEARTBEAT // 10
+            if (seq == 0):
+                print  "HEARTBEAT sequence %s : recheck network, video, mode" % self.HEARTBEAT)
+                self.my_network_status()
+                self.my_video_status()
+                self.my_mode_status()
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
@@ -506,10 +519,10 @@ class MyPiModule(mp_module.MPModule):
             self.myseverity = m.severity
             self.mytext = m.text
             self.my_statustext_check()
-       # not used
-       #if self.battery_period.trigger():
-       #     self.battery_period_trigger += 1
-       #     self.my_battery_check()
+#not used
+#      if self.battery_period.trigger():
+#           self.battery_period_trigger += 1
+#           self.my_battery_check()
 
 #    def idle_task(self):
 #        '''handle missing parameters'''
