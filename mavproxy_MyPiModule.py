@@ -506,14 +506,14 @@ class MyPiModule(mp_module.MPModule):
                 self.my_video_status()
                 self.my_mode_status()
                 print ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
-                if (self.wlan_up == True): NS = "N"
-                else: NS = "n"
-                if (self.video_on == True): VO = "V"
-                else: VO="v"
-                if (self.rtl_on == True): MR = "R"
-                else: MR = "r"
-                if (self.stabilize_on == True): MS = "S"
-                else: MS = "s"
+                if (self.wlan_up == True): NS = "N*"
+                else: NS = "N_"
+                if (self.video_on == True): VO = "V*"
+                else: VO="V_"
+                if (self.rtl_on == True): MR = "R*"
+                else: MR = "R_"
+                if (self.stabilize_on == True): MS = "S*"
+                else: MS = "S_"
                 flags="%s%s%s%s" % (NS,VO,MR,MS)
                 if (flags != self.myflags):
                     self.myflags = flags    
@@ -535,6 +535,7 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "PARAM_VALUE":
             print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
             for i in range(1,8):
+                print ("%s" i)
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
                 if (m.param_id == "RC%s_MIN" % i): self.RC_MIN[i] = m.param_value
                 if (m.param_id == "RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
