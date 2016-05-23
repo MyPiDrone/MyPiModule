@@ -392,9 +392,9 @@ class MyPiModule(mp_module.MPModule):
                if self.wlan_up == False:
                    self.wlan_up = True
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.mywlan])
+               self.my_network_status()
                if self.wlan_ip == "null":
-                   self.my_network_status()
-                   if (self.self.wlan_up == True): self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
+                   if (self.wlan_up == True): self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
                    else: self.my_statustext_send("%s ip missing" % self.settings.mywlan)
                msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
@@ -511,13 +511,13 @@ class MyPiModule(mp_module.MPModule):
                 self.my_network_status()
                 self.my_video_status()
                 self.my_mode_status()
-                if (self.wlan_up == True): NS = "N+"
+                if (self.wlan_up == True): NS = "N1"
                 else: NS = "N_"
-                if (self.video_on == True): VO = "V+"
+                if (self.video_on == True): VO = "V1"
                 else: VO="V_"
-                if (self.rtl_on == True): MR = "R+"
+                if (self.rtl_on == True): MR = "R1"
                 else: MR = "R_"
-                if (self.stabilize_on == True): MS = "S+"
+                if (self.stabilize_on == True): MS = "S1"
                 else: MS = "S_"
                 flags="%s %s %s %s %s" % (NS,VO,MR,MS,self.myparamcount)
                 if (flags != self.myflags):
