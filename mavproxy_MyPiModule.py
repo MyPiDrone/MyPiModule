@@ -88,11 +88,11 @@ class MyPiModule(mp_module.MPModule):
         #self.FORMAT2 = '%Hh%Mm%Ss'
         self.mycountermessage = 0
         # default to servo range of 990 to 2010
-        self.RC_MIN = [0,990,990,990,990,990,990,990,990] 
-        self.RC_TRIM = [0,1500,1500,1500,1500,1500,1500,1500,1500] 
-        self.RC_MAX = [0,2010,2010,2010,2010,2010,2010,2010,2010] 
-        self.RC_low_mark = [0,1245,1245,1245,1245,1245,1245,1245,1245] 
-        self.RC_high_mark = [0,1755,1755,1755,1755,1755,1755,1755,1755]
+        self.RC_MIN = [0,990,990,990,990,990,990,990,990,0,0,0,0,0,0,0,0,0] 
+        self.RC_TRIM = [0,1500,1500,1500,1500,1500,1500,1500,1500,0,0,0,0,0,0,0,0,0] 
+        self.RC_MAX = [0,2010,2010,2010,2010,2010,2010,2010,2010,0,0,0,0,0,0,0,0,0] 
+        self.RC_low_mark = [0,1245,1245,1245,1245,1245,1245,1245,1245,0,0,0,0,0,0,0,0,0] 
+        self.RC_high_mark = [0,1755,1755,1755,1755,1755,1755,1755,1755,0,0,0,0,0,0,0,0,0]
         self.myseverity = 0
         self.mytext = "nulltext"
         # to send statustext
@@ -534,7 +534,7 @@ class MyPiModule(mp_module.MPModule):
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
             print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
-            for i in range(1,8):
+            for i in range(1,17):
                 print ("%s" % i)
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
                 if (m.param_id == "RC%s_MIN" % i): self.RC_MIN[i] = m.param_value
