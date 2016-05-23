@@ -33,7 +33,7 @@ class MyPiModule(mp_module.MPModule):
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 4, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('mydelayinit', int, 15, 'Delay before init var Time sec'))
+        self.settings.append(MPSetting('myseqtime', int, 15, 'Delay before init var Time sec'))
         self.settings.append(MPSetting('myseq', int, 30, 'Delay bewind poll status Netowk, Video, mode Time sec'))
         self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
@@ -503,7 +503,7 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = m.system_status
-            if (self.myinit == False and time.time() > self.last_time_init + self.settings.mydelayinit):
+            if (self.myinit == False and time.time() > self.last_time_init + self.settings.myseqinit):
                 self.last_time_init = time.time()
                 self.my_init_var()
                 ####################################################
