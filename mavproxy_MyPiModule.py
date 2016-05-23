@@ -500,10 +500,11 @@ class MyPiModule(mp_module.MPModule):
                 self.my_init_var()
             seq = self.HEARTBEAT % 50
             if (seq == 0):
+                print  ("INFO HEARTBEAT sequence %s" % self.HEARTBEAT)
                 self.my_network_status()
                 self.my_video_status()
                 self.my_mode_status()
-                print  ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: " % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
+                print  ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
