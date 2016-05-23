@@ -46,7 +46,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.2"
         self.myinit = False
-        self.mylogverbose = self.setting.mylogverbose
+        self.mylogverbose = self.settings.mylogverbose
         self.mydebug = self.settings.mydebug
         # stats
         self.VFR_HUD = 0
@@ -488,7 +488,7 @@ class MyPiModule(mp_module.MPModule):
             self.armed = self.master.motors_armed()
             self.mythrottle = m.throttle
             if (self.armed == True): self.mylogverbose = True
-            else: self.mylogverbose = self.setting.mylogverbose
+            else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
         if mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
