@@ -93,7 +93,6 @@ class MyPiModule(mp_module.MPModule):
         self.RC_high_mark = [1700,1700,1700,1700,1700,1700,1700,1700,1700]
         self.myseverity = 0
         self.mytext = "nulltext"
-        self.myip = "0.0.0.0"
         # to send statustext
         #print("self.settings.source_system=%s" % self.settings.source_system)
 
@@ -111,16 +110,15 @@ class MyPiModule(mp_module.MPModule):
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.mywlan], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
-            #rc = p.returncode
-            self.myip = stdoutData
-            if self.myip == "":
-                self.my_statustext_send("%s ip missing" % self.settings.mywlan)
+            rc = p.returncode
+            if (rc == 0):
+                self.wlan_ip = stdoutData
+                self.wlan_up = True
+                self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip))
+            else:
                 self.wlan_ip = "null" 
                 self.wlan_up = False 
-            else:
-                self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.myip))
-                self.wlan_ip = self.myip
-                self.wlan_up = True
+                self.my_statustext_send("%s ip missing" % self.settings.mywlan)
 
     def my_video_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -394,13 +392,7 @@ class MyPiModule(mp_module.MPModule):
                    self.wlan_up = True
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.mywlan])
                if self.wlan_ip == "null":
-                   p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.mywlan], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                   (stdoutData, stderrData) = p.communicate()
-                   #rc = p.returncode
-                   self.myip = stdoutData
-                   if self.myip != "":
-                       self.my_statustext_send("%s up %s" % (self.settings.mywlan,self.myip))
-                       self.wlan_ip = self.myip
+                   self.my_network_status()
                msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up)
                self.my_write_log("INFO",msg)
            else:
