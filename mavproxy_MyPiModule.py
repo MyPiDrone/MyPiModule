@@ -527,9 +527,9 @@ class MyPiModule(mp_module.MPModule):
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
             for i in range(1,8):
-                if (m.param_id == RC="RC%s_MIN" % i): self.RC_MIN[i]=m.param_value
-                if (m.param_id == RC="RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
-                if (m.param_id == RC="RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
+                if (m.param_id == "RC%s_MIN" % i): self.RC_MIN[i]=m.param_value
+                if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
+                if (m.param_id == "RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
             print ("MIN: %s" % self.RC_MIN)
             print ("TRIM: %s" % self.RC_TRIM)
             print ("MAX: %s" % self.RC_MAX)
