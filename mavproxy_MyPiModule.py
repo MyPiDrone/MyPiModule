@@ -503,9 +503,12 @@ class MyPiModule(mp_module.MPModule):
                 self.my_network_status()
                 self.my_video_status()
                 self.my_mode_status()
-                if (self.wlan_up == True): NS="N" else: NS="n"
-                if (self.video_on == True): VO="V" else: VO="v"
-                if (self.rtl_on == True): MR="R" else: MR="r"
+                if (self.wlan_up == True): NS="N"
+                else: NS="n"
+                if (self.video_on == True): VO="V"
+                else: VO="v"
+                if (self.rtl_on == True): MR="R"
+                else: MR="r"
                 if (self.statiblize_on == True): MS="S" else: MS="s"
                 self.my_statustext_send("%s%s%s" % (NS,VO,MR,MS))
                 print ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
