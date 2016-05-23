@@ -536,7 +536,7 @@ class MyPiModule(mp_module.MPModule):
             self.my_statustext_check()
         if mtype == "PARAM_VALUE":
             #print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
-            self.myparamcount += 1
+            self.myparamcount = m.param_count
             for i in range(1,17):
                 if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i] = m.param_value
                 if (m.param_id == "RC%s_MIN" % i):  self.RC_MIN[i] = m.param_value
