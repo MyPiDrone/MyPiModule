@@ -518,11 +518,12 @@ class MyPiModule(mp_module.MPModule):
                 if (flags != self.myflags):
                     self.myflags = flags    
                     self.my_statustext_send("%s" % self.myflags)
-                    print ("MIN  : %s" % self.RC_MIN)
-                    print ("TRIM : %s" % self.RC_TRIM)
-                    print ("MAX  : %s" % self.RC_MAX)
-                    print ("low  : %s" % self.RC_low_mark)
-                    print ("high : %s" % self.RC_high_mark)
+                    if self.settings.mydebug:
+                        print ("MIN  : %s" % self.RC_MIN)
+                        print ("TRIM : %s" % self.RC_TRIM)
+                        print ("MAX  : %s" % self.RC_MAX)
+                        print ("low  : %s" % self.RC_low_mark)
+                        print ("high : %s" % self.RC_high_mark)
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
@@ -535,10 +536,9 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "PARAM_VALUE":
             print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
             for i in range(1,17):
-                print ("%s" % i)
-                if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i]=m.param_value
-                if (m.param_id == "RC%s_MIN" % i): self.RC_MIN[i] = m.param_value
-                if (m.param_id == "RC%s_MAX" % i): self.RC_MAX[i]=m.param_value
+                if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i] = m.param_value
+                if (m.param_id == "RC%s_MIN" % i):  self.RC_MIN[i] = m.param_value
+                if (m.param_id == "RC%s_MAX" % i):  self.RC_MAX[i] = m.param_value
                 self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
                 self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
 #not used
