@@ -522,7 +522,7 @@ class MyPiModule(mp_module.MPModule):
             self.myseverity = m.severity
             self.mytext = m.text
             self.my_statustext_check()
-         if mtype == "PARAM_VALUE":
+         if mtype == "TOTO":
             param_id = "%.16s" % m.param_id
             print ("%s %s %s %s" % (param_id,m.param_count,m.param_index,m.param_value))
 #not used
