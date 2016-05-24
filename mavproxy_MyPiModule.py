@@ -503,7 +503,7 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = m.system_status
-            if (self.myinit == False and time.time() > self.last_time_init + self.settings.myseqinit):
+            if (self.myinit == False and (time.time() > self.last_time_init + self.settings.myseqinit)):
                 self.last_time_init = time.time()
                 self.my_init_var()
                 ####################################################
