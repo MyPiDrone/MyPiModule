@@ -72,7 +72,6 @@ class MyPiModule(mp_module.MPModule):
         self.reboot_by_cmd_time = 0
         # default values
         self.armed = False
-        self.myflags = "null"
         self.mystate = 0
         self.mystatename = ["UNINIT","BOOT","CALIBRATING","STANDBY","ACTIVE","CRITICAL","EMERGENCY","POWEROFF"]
         self.myvolt = 0
@@ -81,10 +80,14 @@ class MyPiModule(mp_module.MPModule):
         self.myremaining = 0
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
         self.wlan_up = False
+        self.wlan_up_prev = False
         self.wlan_ip = "null"
         self.video_on = True
+        self.video_on_prev = True
         self.rtl_on = False
+        self.rtl_on_prev = False
         self.stabilize_on = False
+        self.stabilize_on_prev = False
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.last_seq_time = time.time()
@@ -516,25 +519,27 @@ class MyPiModule(mp_module.MPModule):
                 self.my_network_status()
                 self.my_video_status()
                 self.my_mode_status()
-                if (self.wlan_up == True): NS = "N1"
-                else: NS = "N_"
-                if (self.video_on == True): VO = "V1"
-                else: VO="V_"
-                if (self.rtl_on == True): MR = "R1"
-                else: MR = "R_"
-                if (self.stabilize_on == True): MS = "S1"
-                else: MS = "S_"
-                flags="%s %s %s %s %s" % (NS,VO,MR,MS,self.myparamcount)
-                if (flags != self.myflags):
-                    self.myflags = flags    
-                    self.my_statustext_send("%s" % self.myflags)
+                if (self.wlan_up != self.wlan_up_prev):
+                    if (self.wlan_up == True): self.my_statustext_send("Waln up")
+                    else: self.my_statustext_send("Wlan down")
+                    self.wlan_up_prev = self.wlan_up
+                if (self.video_on != self.video_on_prev):
+                    if (self.video_on == True): self.my_statustext_send("Video on")
+                    else: self.my_statustext_send("Video off")
+                    self.video_on_prev = self.video_on
+                if (self.rtl_on != self.rtl_on_prev):
+                    if (self.rtl_on == True): self.my_statustext_send("Mode RTL")
+                    self.rtl_on_prev = self.rtl_on
+                if (self.stabilize_on != self.stabilize_on_prev):
+                    self.stabilize_on_prev = self.stabilize_on
+                    if (self.stabilize_on == True): self.my_statustext_send("Mode STABILIZE")
                 if self.mydebug:
-                    print ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
                     print ("MIN  : %s" % self.RC_MIN)
                     print ("TRIM : %s" % self.RC_TRIM)
                     print ("MAX  : %s" % self.RC_MAX)
                     print ("low  : %s" % self.RC_low_mark)
                     print ("high : %s" % self.RC_high_mark)
+                print ("INFO HEARTBEAT sequence %s : recheck status : network %s, video %s, mode RTL %s, mode STABILIZE: %s" % (self.HEARTBEAT,self.wlan_up,self.video_on,self.rtl_on,self.stabilize_on))
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
