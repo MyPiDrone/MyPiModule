@@ -81,7 +81,7 @@ class MyPiModule(mp_module.MPModule):
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
         self.wlan_up_request = False
         self.wlan_up_request_time = time.time()
-        self.wlan_up_request_retry = 10
+        self.wlan_up_request_retry = 20
         self.wlan_up_current = False
         self.wlan_up_current_prev = False
         self.wlan_ip_current = "null"
