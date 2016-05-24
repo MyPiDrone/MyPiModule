@@ -33,8 +33,8 @@ class MyPiModule(mp_module.MPModule):
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 4, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('myseqtime', int, 15, 'Delay before init var Time sec'))
-        self.settings.append(MPSetting('myseq', int, 30, 'Delay bewind poll status Netowk, Video, mode Time sec'))
+        self.settings.append(MPSetting('myseqinit', int, 15, 'Delay before init var Time sec'))
+        self.settings.append(MPSetting('myseqpoll', int, 30, 'Delay bewind poll status Netowk, Video, mode Time sec'))
         self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
@@ -503,15 +503,15 @@ class MyPiModule(mp_module.MPModule):
         if mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = m.system_status
-            if (self.myinit == False and (time.time() > self.last_time_init + self.settings.myseqinit)):
-                self.last_time_init = time.time()
+            if (self.myinit == False and (time.time() > self.last_init_time + self.settings.myseqinit)):
+                self.last_init_time = time.time()
                 self.my_init_var()
                 ####################################################
                 # reclaim params + version + frame type
                 ####################################################
                 self.master.param_fetch_all()
                 print ("INFO HEARTBEAT sequence %s : reclaim params and init var network, video, mode" % self.HEARTBEAT)
-            if (time.time() > self.last_seq_time + self.settings.myseq):
+            if (time.time() > self.last_seq_time + self.settings.myseqpoll):
                 self.last_seq_time = time.time()
                 self.my_network_status()
                 self.my_video_status()
