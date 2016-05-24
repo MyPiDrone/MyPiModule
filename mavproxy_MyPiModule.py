@@ -402,7 +402,7 @@ class MyPiModule(mp_module.MPModule):
            elif self.myrcraw[self.settings.myrcwlan] > self.RC_high_mark[self.settings.myrcwlan]:
                ''' MANAGE WLAN0 UP : RC8 HIGH '''
                self.my_network_status()
-               if self.wlan_up_current == False):
+               if (self.wlan_up_current == False):
                    if (self.wlan_up_request == False or (self.wlan_up_current == False and self.wlan_up_request == True and (time.time() > self.wlan_up_request_time + self.wlan_up_request_retry))):
                        self.wlan_up_request = True
                        self.wlan_up_request_time = time.time()
