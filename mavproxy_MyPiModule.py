@@ -79,18 +79,32 @@ class MyPiModule(mp_module.MPModule):
         self.mycurrent = 0
         self.myremaining = 0
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
+        #
         self.net_up_request = False
         self.net_up_request_time = time.time()
         self.net_up_request_retry = 20
         self.net_up = False
         self.net_up_prev = False
         self.net_ip_current = "null"
+        #
+        self.video_on_request = False
+        self.video_on_request_time = time.time()
+        self.video_on_request_retry = 20
         self.video_on = True
         self.video_on_prev = True
+        #
+        self.rtl_on_request = False
+        self.rtl_on_request_time = time.time()
+        self.rtl_on_request_retry = 20
         self.rtl_on = False
         self.rtl_on_prev = False
+        #
+        self.stabilize_on_request = False
+        self.stabilize_on_request_time = time.time()
+        self.stabilize_on_request_retry = 20
         self.stabilize_on = False
         self.stabilize_on_prev = False
+        #
         self.last_battery_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.last_seq_time = time.time()
@@ -384,6 +398,7 @@ class MyPiModule(mp_module.MPModule):
                self.mymode("STABILIZE")
            elif self.myrcraw[self.settings.myrcnet] > 0 and self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 UP : RC8 LOW '''
+               self.my_network_status()
                if self.net_up == True:
                    self.net_up_request = False
                    self.net_up = False
@@ -394,6 +409,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcnet] > self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < self.RC_high_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 DOWN : RC8 MIDDLE '''
+               self.my_network_status()
                if self.net_up == True:
                    self.net_up_request = False
                    self.net_up = False
@@ -424,20 +440,25 @@ class MyPiModule(mp_module.MPModule):
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 HIGH '''
            if self.myrcraw[self.settings.myrcvideo] > self.RC_high_mark[self.settings.myrcvideo]:
+               self.my_video_status()
                if self.video_on == True:
                    self.video_on = False
+                   self.video_on_request = False
                    msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
                    self.my_subprocess(["/usr/local/bin/manage_video.sh","stop"])
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
+               self.my_video_status()
                if self.video_on == False:
-                   self.video_on = True
-                   msg = "MyRC%sraw %s LOW : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
-                   self.my_write_log("INFO",msg)
-                   self.my_statustext_send("Video on")
-                   self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
+                   if (self.video_on_request == False or (self.video_on == False and self.video_on_request == True and (time.time() > self.video_on_request_time + self.video_on_request_retry))):
+                       self.video_on_request = True
+                       self.video_on_request_time = time.time()
+                       self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
+                       print ("MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on))
+               else:
+                   self.video_on_prev = self.video_on
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
