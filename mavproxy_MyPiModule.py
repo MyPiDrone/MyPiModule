@@ -158,8 +158,8 @@ class MyPiModule(mp_module.MPModule):
             # init var net_ip
             ####################################################
             self.my_network_status()
-            if (self.net_up == True): self.my_statustext_send("%s ip %s" % (self.settings.myinterface,self.net_ip_current))
-            else: self.my_statustext_send("%s ip missing" % self.settings.myinterface)
+            if (self.net_up == True): self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
+            else: self.my_statustext_send("%s down" % self.settings.myinterface)
             ####################################################
             # video status
             ####################################################
@@ -414,6 +414,8 @@ class MyPiModule(mp_module.MPModule):
                        self.net_up_request_time = time.time()
                        self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.myinterface])
                        print ("MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up))
+               else:
+                   self.net_up_prev = self.net_up
                msg = "MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
            else:
@@ -535,9 +537,9 @@ class MyPiModule(mp_module.MPModule):
                 self.my_video_status()
                 self.my_mode_status()
                 print ("INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on))
-                if (self.net_up != self.net_up_prev):
-                    if (self.net_up == True): self.my_statustext_send("Wlan up %s" % self.net_ip_current)
-                    else: self.my_statustext_send("Wlan down")
+            if (self.net_up == True): self.my_statustext_send("%s ip %s" % (self.settings.myinterface,self.net_ip_current))
+                    if (self.net_up == True): self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
+                    else: self.my_statustext_send("%s down" % self.settings.myinterface)
                     self.net_up_prev = self.net_up
                 if (self.video_on != self.video_on_prev):
                     if (self.video_on == True): self.my_statustext_send("Video on")
