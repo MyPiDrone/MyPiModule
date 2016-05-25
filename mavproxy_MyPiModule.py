@@ -227,7 +227,7 @@ class MyPiModule(mp_module.MPModule):
               msg = "INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
               self.my_write_log("INFO",msg)
               self.mpstate.functions.process_stdin("mode RTL")
-              ##self.master.set_mode(modenum)
+              self.master.set_mode(modenum)
             else:
               if self.rtl_on == False:
                   msg = "INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
@@ -241,7 +241,7 @@ class MyPiModule(mp_module.MPModule):
               msg = "INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
               self.my_write_log("INFO",msg)
               self.mpstate.functions.process_stdin("mode STABILIZE")
-              ##self.master.set_mode(modenum)
+              self.master.set_mode(modenum)
             else:
               if self.stabilize_on == False:
                   msg = "INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
