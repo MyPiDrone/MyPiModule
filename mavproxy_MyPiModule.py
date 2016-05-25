@@ -126,7 +126,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.net_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "Armed=%s MyState=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s MyStabilize=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
         if self.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
@@ -276,7 +276,7 @@ class MyPiModule(mp_module.MPModule):
         print ("low    : %s" % self.RC_low_mark)
         print ("high   : %s" % self.RC_high_mark)
         if self.mydebug == False:
-            prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyRTL=%s MyStabilize=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+            prefix = "Armed=%s MyState=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s MyStabilize=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
             print ("INFO %s %s" % (prefix,msg))
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
         self.my_write_log("INFO",msg)
