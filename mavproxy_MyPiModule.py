@@ -139,7 +139,7 @@ class MyPiModule(mp_module.MPModule):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             rc = p.returncode
-            if (rc == 0):
+            if rc == 0:
                 self.net_ip_current = stdoutData
                 self.net_up = True
             else:
@@ -150,7 +150,7 @@ class MyPiModule(mp_module.MPModule):
             p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             rc = p.returncode
-            if (rc == 0): self.video_on = True
+            if rc == 0: self.video_on = True
             else: self.video_on = False
 
     def my_mode_status(self):
@@ -172,13 +172,13 @@ class MyPiModule(mp_module.MPModule):
             # init var net_ip
             ####################################################
             self.my_network_status()
-            if (self.net_up == True): self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
+            if self.net_up == True: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
             else: self.my_statustext_send("%s down" % self.settings.myinterface)
             ####################################################
             # video status
             ####################################################
             self.my_video_status()
-            if (self.video_on == True): self.my_statustext_send("VIDEO ON")
+            if self.video_on == True: self.my_statustext_send("VIDEO ON")
             else: self.my_statustext_send("VIDEO OFF")
             # to send statustext
             #print("self.settings.source_system=%s" % self.settings.source_system)
@@ -215,7 +215,8 @@ class MyPiModule(mp_module.MPModule):
             print("INFO %s" % msg)
 
     def mymode(self,mode):
-        print ("INFO request mode %s : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude))
+        msg = "INFO request mode %s : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude)
+        self.my_write_log("INFO",msg)
         if mode == "RTL" or mode == "STABILIZE":
           mode_mapping = self.master.mode_mapping()
           modenum = mode_mapping[mode]
@@ -223,29 +224,34 @@ class MyPiModule(mp_module.MPModule):
             self.stabilize_on = False
 	    if self.status.flightmode != mode:
               self.rtl_on = False
-              print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+              msg = "INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
+              self.my_write_log("INFO",msg)
               ##self.mpstate.functions.process_stdin("mode RTL")
               self.master.set_mode(modenum)
             else:
               if self.rtl_on == False:
-                print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                self.my_statustext_send("mode %s" % self.status.flightmode)
-                self.rtl_on = True
+                  msg = "INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
+                  self.my_write_log("INFO",msg)
+                  self.my_statustext_send("mode %s" % self.status.flightmode)
+                  self.rtl_on = True
           if mode == "STABILIZE":
             self.rtl_on = False
 	    if self.status.flightmode != mode:
               self.stabilize_on = False
-              print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
+              msg = "INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
+              self.my_write_log("INFO",msg)
               ##self.mpstate.functions.process_stdin("mode STABILIZE")
               self.master.set_mode(modenum)
             else:
               if self.stabilize_on == False:
-                print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                self.my_statustext_send("mode %s" % self.status.flightmode)
-                self.stabilize_on = True
+                  msg = "INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
+                  self.my_write_log("INFO",msg)
+                  self.my_statustext_send("mode %s" % self.status.flightmode)
+                  self.stabilize_on = True
         else:
-          print ("WARNING mode %s not supported : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude))
-          self.my_statustext_send("mode %s not supported" % mode)
+            msg = "WARNING mode %s not supported : current flightmode %s altitude %s" % (mode,self.status.flightmode,self.status.altitude)
+            self.my_write_log("INFO",msg)
+            self.my_statustext_send("mode %s not supported" % mode)
 
     def cmd_myrtl(self, args):
         self.mymode("RTL")
@@ -394,7 +400,8 @@ class MyPiModule(mp_module.MPModule):
                        self.stabilize_on_request = True
                        self.stabilize_on_request_time = time.time()
                        self.mymode("STABILIZE")
-                       print ("MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on))
+                       msg = "MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on)
+                       self.my_write_log("INFO",msg)
                else:
                    if self.stabilize_on_prev != self.stabilize_on: self.my_statustext_send("Mode STABILIZE")
                    self.stabilize_on_prev = self.stabilize_on
@@ -429,7 +436,8 @@ class MyPiModule(mp_module.MPModule):
                        self.rtl_on_request = True
                        self.rtl_on_request_time = time.time()
                        self.mymode("RTL")
-                       print ("MyRC%sRaw %s HIGH range RC_high_mark to RC_high_mark+100 : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.rtl_on_request,self.rtl_on))
+                       msg = "MyRC%sRaw %s HIGH range RC_high_mark to RC_high_mark+100 : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.rtl_on_request,self.rtl_on)
+                       self.my_write_log("INFO",msg)
                else:
                    if self.rtl_on_prev != self.rtl_on: self.my_statustext_send("Mode RTL")
                    self.rtl_on_prev = self.rtl_on
@@ -442,7 +450,8 @@ class MyPiModule(mp_module.MPModule):
                        self.net_up_request = True
                        self.net_up_request_time = time.time()
                        self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.myinterface])
-                       print ("MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up))
+                       msg = "MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
+                       self.my_write_log("INFO",msg)
                else:
                    if self.net_up_prev != self.net_up: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
                    self.net_up_prev = self.net_up
@@ -471,7 +480,8 @@ class MyPiModule(mp_module.MPModule):
                        self.video_on_request = True
                        self.video_on_request_time = time.time()
                        self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
-                       print ("MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on))
+                       msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on)
+                       self.my_write_log("INFO",msg)
                else:
                    if self.video_on_prev != self.video_on: self.my_statustext_send("Video ON")
                    self.video_on_prev = self.video_on
@@ -544,7 +554,7 @@ class MyPiModule(mp_module.MPModule):
             self.VFR_HUD += 1
             self.armed = self.master.motors_armed()
             self.mythrottle = m.throttle
-            if (self.armed == True): self.mylogverbose = True
+            if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
         if mtype == "SYS_STATUS":
@@ -568,14 +578,16 @@ class MyPiModule(mp_module.MPModule):
                 # reclaim params + version + frame type
                 ####################################################
                 self.master.param_fetch_all()
-                print ("INFO HEARTBEAT sequence %s : reclaim params and init var network, video, mode" % self.HEARTBEAT)
-            if (self.myinit == True):
+                msg = "INFO HEARTBEAT sequence %s : reclaim params and init var network, video, mode" % self.HEARTBEAT
+                self.my_write_log("INFO",msg)
+            if self.myinit == True:
                 if (time.time() > self.last_seq_time + self.settings.myseqpoll):
                     self.last_seq_time = time.time()
                     self.my_network_status()
                     self.my_video_status()
                     self.my_mode_status()
-                    print ("INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s params: %s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on,self.myparamcount))
+                    msg = "INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s params: %s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on,self.myparamcount)
+                    self.my_write_log("INFO",msg)
                     if self.net_up != self.net_up_prev:
                         if self.net_up == True: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
                         else: self.my_statustext_send("%s down" % self.settings.myinterface)
