@@ -40,10 +40,10 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
         self.settings.append(MPSetting('myrcvideo', int, 6, 'Radio channel to change video on/off'))
-        self.settings.append(MPSetting('myrcwlan', int, 8, 'Radio channel to change wlan on/off'))
+        self.settings.append(MPSetting('myrcnet', int, 8, 'Radio channel to change network on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.settings.append(MPSetting('mywlan', str, "wlan0", 'Wlan interface name'))
+        self.settings.append(MPSetting('myinterface', str, "wlan0", 'Wlan interface name'))
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.2"
@@ -79,12 +79,12 @@ class MyPiModule(mp_module.MPModule):
         self.mycurrent = 0
         self.myremaining = 0
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
-        self.wlan_up_request = False
-        self.wlan_up_request_time = time.time()
-        self.wlan_up_request_retry = 20
-        self.wlan_up_current = False
-        self.wlan_up_current_prev = False
-        self.wlan_ip_current = "null"
+        self.net_up_request = False
+        self.net_up_request_time = time.time()
+        self.net_up_request_retry = 20
+        self.net_up = False
+        self.net_up_prev = False
+        self.net_ip_current = "null"
         self.video_on = True
         self.video_on_prev = True
         self.rtl_on = False
@@ -106,12 +106,13 @@ class MyPiModule(mp_module.MPModule):
         self.RC_low_mark = [0,1245,1245,1245,1245,1245,1245,1245,1245,0,0,0,0,0,0,0,0,0] 
         self.RC_high_mark = [0,1755,1755,1755,1755,1755,1755,1755,1755,0,0,0,0,0,0,0,0,0]
         self.myparamcount = 0
+        self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up_current,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.net_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         date = datetime.now().strftime(self.FORMAT)
         if self.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
@@ -121,15 +122,15 @@ class MyPiModule(mp_module.MPModule):
             fo.close()
 
     def my_network_status(self):
-            p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.mywlan], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             rc = p.returncode
             if (rc == 0):
-                self.wlan_ip_current = stdoutData
-                self.wlan_up_current = True
+                self.net_ip_current = stdoutData
+                self.net_up = True
             else:
-                self.wlan_ip_current = "null" 
-                self.wlan_up_current = False 
+                self.net_ip_current = "null" 
+                self.net_up = False 
 
     def my_video_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -154,11 +155,11 @@ class MyPiModule(mp_module.MPModule):
             self.my_mode_status()
             self.my_statustext_send("mode %s" % self.status.flightmode)
             ####################################################
-            # init var wlan_ip
+            # init var net_ip
             ####################################################
             self.my_network_status()
-            if (self.wlan_up_current == True): self.my_statustext_send("%s ip %s" % (self.settings.mywlan,self.wlan_ip_current))
-            else: self.my_statustext_send("%s ip missing" % self.settings.mywlan)
+            if (self.net_up == True): self.my_statustext_send("%s ip %s" % (self.settings.myinterface,self.net_ip_current))
+            else: self.my_statustext_send("%s ip missing" % self.settings.myinterface)
             ####################################################
             # video status
             ####################################################
@@ -257,8 +258,13 @@ class MyPiModule(mp_module.MPModule):
         self.my_network_status()
         msg = "LowVolt %s LowRemain %s" % (self.settings.myminvolt,self.settings.myminremain)
         self.my_write_log("INFO",msg)
+        print ("MIN  : %s" % self.RC_MIN)
+        print ("TRIM : %s" % self.RC_TRIM)
+        print ("MAX  : %s" % self.RC_MAX)
+        print ("low  : %s" % self.RC_low_mark)
+        print ("high : %s" % self.RC_high_mark)
         if self.mydebug == False:
-            prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.wlan_up_current,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+            prefix = "Armed=%s MyState=%s NetUP=%s VideoON=%s MyThrottle=%s MyVolt=%s MyCurrent=%s MyRemaining=%s" % (self.armed,self.mystatename[self.mystate],self.net_up,self.video_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
             print ("INFO %s %s" % (prefix,msg))
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
         self.my_write_log("INFO",msg)
@@ -373,42 +379,42 @@ class MyPiModule(mp_module.MPModule):
            if self.mydebug:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
-           if self.myrcraw[self.settings.myrcwlan] < self.RC_low_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] > (self.RC_low_mark[self.settings.myrcwlan]-100):
+           if self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] > (self.RC_low_mark[self.settings.myrcnet]-100):
                ''' MANAGE mode STABILIZE : RC8 LOW range RC_low_mark-100 to RC_low_mark '''
                self.mymode("STABILIZE")
-           elif self.myrcraw[self.settings.myrcwlan] > 0 and self.myrcraw[self.settings.myrcwlan] < self.RC_low_mark[self.settings.myrcwlan]:
+           elif self.myrcraw[self.settings.myrcnet] > 0 and self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 UP : RC8 LOW '''
-               if self.wlan_up_current == True:
-                   self.wlan_up_request = False
-                   self.wlan_up_current = False
-                   self.wlan_ip_current = "null"
-                   self.my_statustext_send("%s down" % self.settings.mywlan)
-                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.mywlan])
-               msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up_current)
+               if self.net_up == True:
+                   self.net_up_request = False
+                   self.net_up = False
+                   self.net_ip_current = "null"
+                   self.my_statustext_send("%s down" % self.settings.myinterface)
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
+               msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
                self.my_write_log("INFO",msg)
-           elif self.myrcraw[self.settings.myrcwlan] > self.RC_low_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] < self.RC_high_mark[self.settings.myrcwlan]:
+           elif self.myrcraw[self.settings.myrcnet] > self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < self.RC_high_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 DOWN : RC8 MIDDLE '''
-               if self.wlan_up_current == True:
-                   self.wlan_up_request = False
-                   self.wlan_up_current = False
-                   self.wlan_ip_current = "null"
-                   self.my_statustext_send("%s down" % self.settings.mywlan)
-                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.mywlan])
-               msg = "MyRC%sRaw %s MIDDLE : %s is up : %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up_current)
+               if self.net_up == True:
+                   self.net_up_request = False
+                   self.net_up = False
+                   self.net_ip_current = "null"
+                   self.my_statustext_send("%s down" % self.settings.myinterface)
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
+               msg = "MyRC%sRaw %s MIDDLE : %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
                self.my_write_log("INFO",msg)
-           elif self.myrcraw[self.settings.myrcwlan] > self.RC_high_mark[self.settings.myrcwlan] and self.myrcraw[self.settings.myrcwlan] < (self.RC_high_mark[self.settings.myrcwlan]+100) :
+           elif self.myrcraw[self.settings.myrcnet] > self.RC_high_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < (self.RC_high_mark[self.settings.myrcnet]+100) :
                ''' MANAGE mode RTL : RC8 HIGH range RC_high_mark to RC_high_mark+100 '''
                self.mymode("RTL")
-           elif self.myrcraw[self.settings.myrcwlan] > self.RC_high_mark[self.settings.myrcwlan]:
+           elif self.myrcraw[self.settings.myrcnet] > self.RC_high_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 UP : RC8 HIGH '''
                self.my_network_status()
-               if (self.wlan_up_current == False):
-                   if (self.wlan_up_request == False or (self.wlan_up_current == False and self.wlan_up_request == True and (time.time() > self.wlan_up_request_time + self.wlan_up_request_retry))):
-                       self.wlan_up_request = True
-                       self.wlan_up_request_time = time.time()
-                       self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.mywlan])
-                       print ("MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up_request,self.wlan_up_current))
-               msg = "MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcwlan,self.myrcraw[self.settings.myrcwlan],self.settings.mywlan,self.wlan_up_request,self.wlan_up_current)
+               if (self.net_up == False):
+                   if (self.net_up_request == False or (self.net_up == False and self.net_up_request == True and (time.time() > self.net_up_request_time + self.net_up_request_retry))):
+                       self.net_up_request = True
+                       self.net_up_request_time = time.time()
+                       self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.myinterface])
+                       print ("MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up))
+               msg = "MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
            else:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s unknown RC value" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
@@ -514,7 +520,7 @@ class MyPiModule(mp_module.MPModule):
             if (self.myinit == False and (time.time() > self.last_init_time + self.settings.myseqinit)):
                 self.last_init_time = time.time()
                 self.my_init_var()
-                self.wlan_up_current_prev = self.wlan_up_current
+                self.net_up_prev = self.net_up
                 self.video_on_prev = self.video_on
                 self.rtl_on_prev = self.rtl_on
                 self.stabilize_on_prev = self.stabilize_on
@@ -528,11 +534,11 @@ class MyPiModule(mp_module.MPModule):
                 self.my_network_status()
                 self.my_video_status()
                 self.my_mode_status()
-                print ("INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s" % (self.HEARTBEAT,self.wlan_up_current_prev,self.wlan_up_current,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on))
-                if (self.wlan_up_current != self.wlan_up_current_prev):
-                    if (self.wlan_up_current == True): self.my_statustext_send("Wlan up")
+                print ("INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on))
+                if (self.net_up != self.net_up_prev):
+                    if (self.net_up == True): self.my_statustext_send("Wlan up %s" % self.net_ip_current)
                     else: self.my_statustext_send("Wlan down")
-                    self.wlan_up_current_prev = self.wlan_up_current
+                    self.net_up_prev = self.net_up
                 if (self.video_on != self.video_on_prev):
                     if (self.video_on == True): self.my_statustext_send("Video on")
                     else: self.my_statustext_send("Video off")
@@ -543,6 +549,9 @@ class MyPiModule(mp_module.MPModule):
                 if (self.stabilize_on != self.stabilize_on_prev):
                     self.stabilize_on_prev = self.stabilize_on
                     if (self.stabilize_on == True): self.my_statustext_send("Mode STABILIZE")
+                if ( self.myparamcount != self.myparamcount_prev):
+                    self.myparamcount_prev = self.myparamcount
+                    self.my_statustext_send("%s params" % self.myparamcount)
                 if self.mydebug:
                     print ("MIN  : %s" % self.RC_MIN)
                     print ("TRIM : %s" % self.RC_TRIM)
