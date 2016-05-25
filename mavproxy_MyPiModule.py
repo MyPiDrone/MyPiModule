@@ -411,6 +411,7 @@ class MyPiModule(mp_module.MPModule):
                if self.net_up == True:
                    self.net_up_request = False
                    self.net_up = False
+                   self.net_up_prev = self.net_up
                    self.net_ip_current = "null"
                    self.my_statustext_send("%s down" % self.settings.myinterface)
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
@@ -422,6 +423,7 @@ class MyPiModule(mp_module.MPModule):
                if self.net_up == True:
                    self.net_up_request = False
                    self.net_up = False
+                   self.net_up_prev = self.net_up
                    self.net_ip_current = "null"
                    self.my_statustext_send("%s down" % self.settings.myinterface)
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
@@ -466,6 +468,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_video_status()
                if self.video_on == True:
                    self.video_on = False
+                   self.video_on_prev = self.video_on
                    self.video_on_request = False
                    msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
