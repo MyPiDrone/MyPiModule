@@ -33,8 +33,8 @@ class MyPiModule(mp_module.MPModule):
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 4, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('myseqinit', int, 15, 'Delay before init var Time sec'))
-        self.settings.append(MPSetting('myseqpoll', int, 30, 'Delay bewind poll status Netowk, Video, mode Time sec'))
+        self.settings.append(MPSetting('myseqinit', int, 15, 'Delay before init var'))
+        self.settings.append(MPSetting('myseqpoll', int, 25, 'Delay between poll status Network, Video, mode'))
         self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
