@@ -589,19 +589,19 @@ class MyPiModule(mp_module.MPModule):
                     msg = "INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s params: %s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on,self.myparamcount)
                     self.my_write_log("INFO",msg)
                     if self.net_up != self.net_up_prev:
-                        if self.net_up == True: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
-                        else: self.my_statustext_send("%s down" % self.settings.myinterface)
+                        if self.net_up == True: self.my_statustext_send("%s up. %s" % (self.settings.myinterface,self.net_ip_current))
+                        else: self.my_statustext_send("%s down." % self.settings.myinterface)
                         self.net_up_prev = self.net_up
                     if self.video_on != self.video_on_prev:
-                        if self.video_on == True: self.my_statustext_send("Video on")
-                        else: self.my_statustext_send("Video off")
+                        if self.video_on == True: self.my_statustext_send("Video on.")
+                        else: self.my_statustext_send("Video off.")
                         self.video_on_prev = self.video_on
                     if self.rtl_on != self.rtl_on_prev:
-                        if self.rtl_on == True: self.my_statustext_send("Mode RTL")
+                        if self.rtl_on == True: self.my_statustext_send("Mode RTL.")
                         self.rtl_on_prev = self.rtl_on
                     if self.stabilize_on != self.stabilize_on_prev:
                         self.stabilize_on_prev = self.stabilize_on
-                        if self.stabilize_on == True: self.my_statustext_send("Mode STABILIZE")
+                        if self.stabilize_on == True: self.my_statustext_send("Mode STABILIZE.")
                     if self.myparamcount != self.myparamcount_prev:
                         self.myparamcount_prev = self.myparamcount
                         self.my_statustext_send("%s params" % self.myparamcount)
