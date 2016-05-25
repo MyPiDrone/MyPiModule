@@ -558,6 +558,7 @@ class MyPiModule(mp_module.MPModule):
             self.mystate = m.system_status
             if (self.myinit == False and (time.time() > self.last_init_time + self.settings.myseqinit)):
                 self.last_init_time = time.time()
+                self.last_seq_time = time.time()
                 self.my_init_var()
                 self.net_up_prev = self.net_up
                 self.video_on_prev = self.video_on
