@@ -33,8 +33,8 @@ class MyPiModule(mp_module.MPModule):
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimerc', int, 4, 'RC Interval Time sec'))
-        self.settings.append(MPSetting('myseqinit', int, 15, 'Delay before init var'))
-        self.settings.append(MPSetting('myseqpoll', int, 25, 'Delay between poll status Network, Video, mode'))
+        self.settings.append(MPSetting('myseqinit', int, 15, 'Time sec before init var and start polling'))
+        self.settings.append(MPSetting('myseqpoll', int, 10, 'Time sec between poll status Network, Video, mode'))
         self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
@@ -390,11 +390,13 @@ class MyPiModule(mp_module.MPModule):
                my_mode_status()
                if self.stabilize_on == False:
                    if (self.stabilize_on_request == False or (self.stabilize_on == False and self.stabilize_on_request == True and (time.time() > self.stabilize_on_request_time + self.stabilize_on_request_retry))):
+                       if self.stabilize_on_request == True: self.my_statustext_send("Mode STABILIZE retry")
                        self.stabilize_on_request = True
                        self.stabilize_on_request_time = time.time()
                        self.mymode("STABILIZE")
                        print ("MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on))
                else:
+                   if self.stabilize_on_prev != self.stabilize_on: self.my_statustext_send("Mode STABILIZE")
                    self.stabilize_on_prev = self.stabilize_on
            elif self.myrcraw[self.settings.myrcnet] > 0 and self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 UP : RC8 LOW '''
@@ -423,22 +425,26 @@ class MyPiModule(mp_module.MPModule):
                my_mode_status()
                if self.rtl_on == False:
                    if (self.rtl_on_request == False or (self.rtl_on == False and self.rtl_on_request == True and (time.time() > self.rtl_on_request_time + self.rtl_on_request_retry))):
+                       if self.rtl_on_request == True: self.my_statustext_send("Mode RTL retry")
                        self.rtl_on_request = True
                        self.rtl_on_request_time = time.time()
                        self.mymode("RTL")
                        print ("MyRC%sRaw %s HIGH range RC_high_mark to RC_high_mark+100 : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.rtl_on_request,self.rtl_on))
                else:
+                   if self.rtl_on_prev != self.rtl_on: self.my_statustext_send("Mode RTL")
                    self.rtl_on_prev = self.rtl_on
            elif self.myrcraw[self.settings.myrcnet] > self.RC_high_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 UP : RC8 HIGH '''
                self.my_network_status()
                if self.net_up == False:
                    if (self.net_up_request == False or (self.net_up == False and self.net_up_request == True and (time.time() > self.net_up_request_time + self.net_up_request_retry))):
+                       if self.net_up_request == True: self.my_statustext_send("Net up retry")
                        self.net_up_request = True
                        self.net_up_request_time = time.time()
                        self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.myinterface])
                        print ("MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up))
                else:
+                   if self.net_up_prev != self.net_up: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
                    self.net_up_prev = self.net_up
                msg = "MyRC%sRaw %s LOW : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
@@ -461,11 +467,13 @@ class MyPiModule(mp_module.MPModule):
                self.my_video_status()
                if self.video_on == False:
                    if (self.video_on_request == False or (self.video_on == False and self.video_on_request == True and (time.time() > self.video_on_request_time + self.video_on_request_retry))):
+                       if self.video_on_request == True: self.my_statustext_send("Video ON retry")
                        self.video_on_request = True
                        self.video_on_request_time = time.time()
                        self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
                        print ("MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on))
                else:
+                   if self.video_on_prev != self.video_on: self.my_statustext_send("Video ON")
                    self.video_on_prev = self.video_on
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
@@ -560,35 +568,36 @@ class MyPiModule(mp_module.MPModule):
                 ####################################################
                 self.master.param_fetch_all()
                 print ("INFO HEARTBEAT sequence %s : reclaim params and init var network, video, mode" % self.HEARTBEAT)
-            if (time.time() > self.last_seq_time + self.settings.myseqpoll):
-                self.last_seq_time = time.time()
-                self.my_network_status()
-                self.my_video_status()
-                self.my_mode_status()
-                print ("INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on))
-                if (self.net_up != self.net_up_prev):
-                    if (self.net_up == True): self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
-                    else: self.my_statustext_send("%s down" % self.settings.myinterface)
-                    self.net_up_prev = self.net_up
-                if (self.video_on != self.video_on_prev):
-                    if (self.video_on == True): self.my_statustext_send("Video on")
-                    else: self.my_statustext_send("Video off")
-                    self.video_on_prev = self.video_on
-                if (self.rtl_on != self.rtl_on_prev):
-                    if (self.rtl_on == True): self.my_statustext_send("Mode RTL")
-                    self.rtl_on_prev = self.rtl_on
-                if (self.stabilize_on != self.stabilize_on_prev):
-                    self.stabilize_on_prev = self.stabilize_on
-                    if (self.stabilize_on == True): self.my_statustext_send("Mode STABILIZE")
-                if ( self.myparamcount != self.myparamcount_prev):
-                    self.myparamcount_prev = self.myparamcount
-                    self.my_statustext_send("%s params" % self.myparamcount)
-                if self.mydebug:
-                    print ("MIN  : %s" % self.RC_MIN)
-                    print ("TRIM : %s" % self.RC_TRIM)
-                    print ("MAX  : %s" % self.RC_MAX)
-                    print ("low  : %s" % self.RC_low_mark)
-                    print ("high : %s" % self.RC_high_mark)
+            else:
+                if (time.time() > self.last_seq_time + self.settings.myseqpoll):
+                    self.last_seq_time = time.time()
+                    self.my_network_status()
+                    self.my_video_status()
+                    self.my_mode_status()
+                    print ("INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on))
+                    if self.net_up != self.net_up_prev:
+                        if self.net_up == True: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
+                        else: self.my_statustext_send("%s down" % self.settings.myinterface)
+                        self.net_up_prev = self.net_up
+                    if self.video_on != self.video_on_prev:
+                        if self.video_on == True: self.my_statustext_send("Video on")
+                        else: self.my_statustext_send("Video off")
+                        self.video_on_prev = self.video_on
+                    if self.rtl_on != self.rtl_on_prev:
+                        if self.rtl_on == True: self.my_statustext_send("Mode RTL")
+                        self.rtl_on_prev = self.rtl_on
+                    if self.stabilize_on != self.stabilize_on_prev:
+                        self.stabilize_on_prev = self.stabilize_on
+                        if self.stabilize_on == True: self.my_statustext_send("Mode STABILIZE")
+                    if self.myparamcount != self.myparamcount_prev:
+                        self.myparamcount_prev = self.myparamcount
+                        self.my_statustext_send("%s params" % self.myparamcount)
+                    if self.mydebug:
+                        print ("MIN  : %s" % self.RC_MIN)
+                        print ("TRIM : %s" % self.RC_TRIM)
+                        print ("MAX  : %s" % self.RC_MAX)
+                        print ("low  : %s" % self.RC_low_mark)
+                        print ("high : %s" % self.RC_high_mark)
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
