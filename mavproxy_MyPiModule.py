@@ -224,7 +224,7 @@ class MyPiModule(mp_module.MPModule):
 	    if self.status.flightmode != mode:
               self.rtl_on = False
               print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-              self.mpstate.functions.process_stdin("mode RTL")
+              ##self.mpstate.functions.process_stdin("mode RTL")
               self.master.set_mode(modenum)
             else:
               if self.rtl_on == False:
@@ -236,7 +236,7 @@ class MyPiModule(mp_module.MPModule):
 	    if self.status.flightmode != mode:
               self.stabilize_on = False
               print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-              self.mpstate.functions.process_stdin("mode STABILIZE")
+              ##self.mpstate.functions.process_stdin("mode STABILIZE")
               self.master.set_mode(modenum)
             else:
               if self.stabilize_on == False:
