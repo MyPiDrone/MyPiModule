@@ -255,6 +255,9 @@ class MyPiModule(mp_module.MPModule):
 
     def cmd_mybat(self, args):
         self.my_rc_check()
+        self.my_network_status()
+        self.my_video_status()
+        self.my_mode_status()
         if self.mydebug:
            print("cmd_mybat %s" % self)
         self.my_network_status()
