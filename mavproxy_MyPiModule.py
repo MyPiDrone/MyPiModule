@@ -45,7 +45,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myinterface', str, "wlan0", 'Wlan interface name'))
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
-        self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
+        self.settings.append(MPSetting('mylogverbose', bool, True, 'Verbose log'))
         self.myversion = "2.2"
         self.myinit = False
         self.mylogverbose = self.settings.mylogverbose
