@@ -242,7 +242,7 @@ class MyPiModule(mp_module.MPModule):
 	    if self.status.flightmode != mode:
               self.stabilize_on = False
               print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-              ###self.mpstate.functions.process_stdin("mode STABILIZE")
+              self.mpstate.functions.process_stdin("mode STABILIZE")
               self.master.set_mode(modenum)
 	      if self.status.flightmode != mode:
                 print ("INFO change mode to STABILIZE modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
