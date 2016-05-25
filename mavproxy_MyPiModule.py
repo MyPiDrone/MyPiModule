@@ -226,12 +226,6 @@ class MyPiModule(mp_module.MPModule):
               print ("INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
               self.mpstate.functions.process_stdin("mode RTL")
               self.master.set_mode(modenum)
-	      if self.status.flightmode != mode:
-                print ("INFO change mode to RTL modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                self.my_statustext_send("mode %s RTL no yet" % self.status.flightmode)
-              else:
-                print ("INFO after change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                self.my_statustext_send("mode %s" % self.status.flightmode)
             else:
               if self.rtl_on == False:
                 print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -244,12 +238,6 @@ class MyPiModule(mp_module.MPModule):
               print ("INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
               self.mpstate.functions.process_stdin("mode STABILIZE")
               self.master.set_mode(modenum)
-	      if self.status.flightmode != mode:
-                print ("INFO change mode to STABILIZE modenum %s not yet done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                self.my_statustext_send("mode %s STABILIZE not yet" % self.status.flightmode)
-              else:
-                print ("INFO after change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
-                self.my_statustext_send("mode %s" % self.status.flightmode)
             else:
               if self.stabilize_on == False:
                 print ("INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude))
@@ -395,7 +383,15 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("INFO",msg)
            if self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] > (self.RC_low_mark[self.settings.myrcnet]-100):
                ''' MANAGE mode STABILIZE : RC8 LOW range RC_low_mark-100 to RC_low_mark '''
-               self.mymode("STABILIZE")
+               my_mode_status()
+               if self.stabilize_on == False:
+                   if (self.stabilize_on_request == False or (self.stabilize_on == False and self.stabilize_on_request == True and (time.time() > self.stabilize_on_request_time + self.stabilize_on_request_retry))):
+                       self.stabilize_on_request = True
+                       self.stabilize_on_request_time = time.time()
+                       self.mymode("STABILIZE")
+                       print ("MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on))
+               else:
+                   self.stabilize_on_prev = self.stabilize_on
            elif self.myrcraw[self.settings.myrcnet] > 0 and self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 UP : RC8 LOW '''
                self.my_network_status()
@@ -405,7 +401,7 @@ class MyPiModule(mp_module.MPModule):
                    self.net_ip_current = "null"
                    self.my_statustext_send("%s down" % self.settings.myinterface)
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
-               msg = "MyRC%sRaw %s LOW : %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
+               msg = "MyRC%sRaw %s LOW : request DOWN : interface %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcnet] > self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < self.RC_high_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 DOWN : RC8 MIDDLE '''
@@ -416,23 +412,31 @@ class MyPiModule(mp_module.MPModule):
                    self.net_ip_current = "null"
                    self.my_statustext_send("%s down" % self.settings.myinterface)
                    self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
-               msg = "MyRC%sRaw %s MIDDLE : %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
+               msg = "MyRC%sRaw %s MIDDLE : request DOWN : interface %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcnet] > self.RC_high_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < (self.RC_high_mark[self.settings.myrcnet]+100) :
                ''' MANAGE mode RTL : RC8 HIGH range RC_high_mark to RC_high_mark+100 '''
-               self.mymode("RTL")
+               my_mode_status()
+               if self.rtl_on == False:
+                   if (self.rtl_on_request == False or (self.rtl_on == False and self.rtl_on_request == True and (time.time() > self.rtl_on_request_time + self.rtl_on_request_retry))):
+                       self.rtl_on_request = True
+                       self.rtl_on_request_time = time.time()
+                       self.mymode("RTL")
+                       print ("MyRC%sRaw %s HIGH range RC_high_mark to RC_high_mark+100 : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.rtl_on_request,self.rtl_on))
+               else:
+                   self.rtl_on_prev = self.rtl_on
            elif self.myrcraw[self.settings.myrcnet] > self.RC_high_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 UP : RC8 HIGH '''
                self.my_network_status()
-               if (self.net_up == False):
+               if self.net_up == False:
                    if (self.net_up_request == False or (self.net_up == False and self.net_up_request == True and (time.time() > self.net_up_request_time + self.net_up_request_retry))):
                        self.net_up_request = True
                        self.net_up_request_time = time.time()
                        self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.myinterface])
-                       print ("MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up))
+                       print ("MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up))
                else:
                    self.net_up_prev = self.net_up
-               msg = "MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
+               msg = "MyRC%sRaw %s LOW : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
            else:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s unknown RC value" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
@@ -456,7 +460,7 @@ class MyPiModule(mp_module.MPModule):
                        self.video_on_request = True
                        self.video_on_request_time = time.time()
                        self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
-                       print ("MyRCyy%sRaw %s LOW : %s request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on))
+                       print ("MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on))
                else:
                    self.video_on_prev = self.video_on
            if self.armed == False and self.mystate == 3:
