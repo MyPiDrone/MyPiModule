@@ -18,7 +18,7 @@ case "$1" in
                 echo "$WLAN is down"
                 exit 1
         else
-                echo "$WLAN is up $IP"
+                echo "$IP"
                 exit 0
         fi
         ;;
