@@ -568,7 +568,7 @@ class MyPiModule(mp_module.MPModule):
                 ####################################################
                 self.master.param_fetch_all()
                 print ("INFO HEARTBEAT sequence %s : reclaim params and init var network, video, mode" % self.HEARTBEAT)
-            else:
+            if (self.myinit == True):
                 if (time.time() > self.last_seq_time + self.settings.myseqpoll):
                     self.last_seq_time = time.time()
                     self.my_network_status()
