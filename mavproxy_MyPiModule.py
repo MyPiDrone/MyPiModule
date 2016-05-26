@@ -401,6 +401,7 @@ class MyPiModule(mp_module.MPModule):
                        self.stabilize_on_request_time = time.time()
                        self.mymode("STABILIZE")
                        msg = "MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on)
+                       print ("%s" % msg)
                        self.my_write_log("INFO",msg)
                else:
                    if self.stabilize_on_prev != self.stabilize_on: self.my_statustext_send("Mode STABILIZE")
@@ -439,6 +440,7 @@ class MyPiModule(mp_module.MPModule):
                        self.rtl_on_request_time = time.time()
                        self.mymode("RTL")
                        msg = "MyRC%sRaw %s HIGH range RC_high_mark to RC_high_mark+100 : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.rtl_on_request,self.rtl_on)
+                       print ("%s" % msg)
                        self.my_write_log("INFO",msg)
                else:
                    if self.rtl_on_prev != self.rtl_on: self.my_statustext_send("Mode RTL")
