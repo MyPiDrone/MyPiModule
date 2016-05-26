@@ -9,7 +9,7 @@ case "$1" in
         echo "ifup $WLAN"
         ;;
   stop)
-        nohup ifdown $WLAN >/var/log/start_network.log 2>&1 &
+        #nohup ifdown $WLAN >/var/log/start_network.log 2>&1 &
         echo "ifdown $WLAN"
         ;;
   status)
