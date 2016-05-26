@@ -19,7 +19,7 @@ case "$1" in
                 exit 1
         else
                 echo "$IP"
-                exit 0
+                exit 1
         fi
         ;;
   *)
