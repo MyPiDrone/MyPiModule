@@ -394,9 +394,9 @@ class MyPiModule(mp_module.MPModule):
            print ("DEBUG %s < %s and > %s" % (self.myrcraw[self.settings.myrcnet],self.RC_low_mark[self.settings.myrcnet],self.RC_low_mark[self.settings.myrcnet]-100))
            if self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] > (self.RC_low_mark[self.settings.myrcnet]-100):
                ''' MANAGE mode STABILIZE : RC8 LOW range RC_low_mark-100 to RC_low_mark '''
-               my_mode_status()
-               msg = "MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on)
+               msg = "DEBUG MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on)
                print ("%s" % msg)
+               my_mode_status()
                if self.stabilize_on == False:
                    if (self.stabilize_on_request == False or (self.stabilize_on == False and self.stabilize_on_request == True and (time.time() > self.stabilize_on_request_time + self.stabilize_on_request_retry))):
                        if self.stabilize_on_request == True: self.my_statustext_send("Mode STABILIZE retry")
