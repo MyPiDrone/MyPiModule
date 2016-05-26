@@ -227,7 +227,7 @@ class MyPiModule(mp_module.MPModule):
               msg = "INFO request change mode to RTL modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
               self.my_write_log("INFO",msg)
               self.mpstate.functions.process_stdin("mode RTL")
-              self.master.set_mode(modenum)
+              ##self.master.set_mode(modenum)
             else:
               if self.rtl_on == False:
                   msg = "INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
@@ -241,7 +241,7 @@ class MyPiModule(mp_module.MPModule):
               msg = "INFO request change mode to STABILIZE modenum %s : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
               self.my_write_log("INFO",msg)
               self.mpstate.functions.process_stdin("mode STABILIZE")
-              self.master.set_mode(modenum)
+              ##self.master.set_mode(modenum)
             else:
               if self.stabilize_on == False:
                   msg = "INFO change mode to RTL modenum %s already done : current flightmode %s altitude %s" % (modenum,self.status.flightmode,self.status.altitude)
@@ -391,22 +391,16 @@ class MyPiModule(mp_module.MPModule):
            if self.mydebug:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
                self.my_write_log("INFO",msg)
-           print ("DEBUG %s < %s and > %s" % (self.myrcraw[self.settings.myrcnet],self.RC_low_mark[self.settings.myrcnet],self.RC_low_mark[self.settings.myrcnet]-100))
            if self.myrcraw[self.settings.myrcnet] < self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] > (self.RC_low_mark[self.settings.myrcnet]-100):
                ''' MANAGE mode STABILIZE : RC8 LOW range RC_low_mark-100 to RC_low_mark '''
-               msg = "DEBUG MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on)
-               print ("%s" % msg)
-               my_mode_status()
+               self.my_mode_status()
                if self.stabilize_on == False:
-                   msg = "DEBUG2 MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on)
-                   print ("%s" % msg)
                    if (self.stabilize_on_request == False or (self.stabilize_on == False and self.stabilize_on_request == True and (time.time() > self.stabilize_on_request_time + self.stabilize_on_request_retry))):
                        if self.stabilize_on_request == True: self.my_statustext_send("Mode STABILIZE retry")
                        self.stabilize_on_request = True
                        self.stabilize_on_request_time = time.time()
                        self.mymode("STABILIZE")
                        msg = "MyRC%sRaw %s LOW range RC_low_mark-100 to RC_low_mark : request on %s : current on %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.stabilize_on_request,self.stabilize_on)
-                       print ("%s" % msg)
                        self.my_write_log("INFO",msg)
                else:
                    if self.stabilize_on_prev != self.stabilize_on: self.my_statustext_send("Mode STABILIZE")
@@ -437,7 +431,7 @@ class MyPiModule(mp_module.MPModule):
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcnet] > self.RC_high_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < (self.RC_high_mark[self.settings.myrcnet]+100) :
                ''' MANAGE mode RTL : RC8 HIGH range RC_high_mark to RC_high_mark+100 '''
-               my_mode_status()
+               self.my_mode_status()
                if self.rtl_on == False:
                    if (self.rtl_on_request == False or (self.rtl_on == False and self.rtl_on_request == True and (time.time() > self.rtl_on_request_time + self.rtl_on_request_retry))):
                        if self.rtl_on_request == True: self.my_statustext_send("Mode RTL retry")
