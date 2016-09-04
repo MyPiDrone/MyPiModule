@@ -142,7 +142,7 @@ class MyPiModule(mp_module.MPModule):
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
-        outpipe = open(pipein, 'w')
+        outpipe = open(pipein, 'a')
         outpipe.write("%s %s %s %s\n" % (date,level,prefix,msg))
         outpipe.close()
 
