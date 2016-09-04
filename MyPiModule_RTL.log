@@ -1,0 +1,60 @@
+
+Log MyPiModule : Change mode STABILIZE (3m) to RTL (14m) :
+
+ 
+2016-08-21 15:00:41 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=56 Volt=10295 Current=2384 Remaining=59 INFO request change mode to RTL modenum 6 : current flightmode STABILIZE altitude 2.94
+2016-08-21 15:00:41 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=56 Volt=10295 Current=2384 Remaining=59 MyRC8Raw 1816 HIGH range RC_high_mark to RC_high_mark+150 : request on True : current on False
+Got MAVLink msg: COMMAND_ACK {command : 11, result : 0}
+RTL> Mode RTL
+2016-08-21 15:00:41 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=62 Volt=10244 Current=2386 Remaining=59 LowVolt >10000 or LowRemain >10 : Good status
+Mode RTL
+2016-08-21 15:00:45 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=71 Volt=9865 Current=2979 Remaining=58 Mode RTL
+INFO 06 Mode RTL
+APM:  06 Mode RTL
+2016-08-21 15:00:45 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=71 Volt=9865 Current=2979 Remaining=58 MySeverity 1 MyStatusText  06 Mode RTL
+2016-08-21 15:00:46 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=72 Volt=9865 Current=2979 Remaining=58 INFO HEARTBEAT sequence 647 : recheck status : network False>False, video True>True, mode RTL True>True, mode STABILIZE: True>False params: 558
+2016-08-21 15:00:46 WARNING Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=74 Volt=9882 Current=3026 Remaining=58 LowVolt <=10000 or LowRemain <=10 : Shutdown ByLowBat needed
+Shutdown ByLowBat needed
+2016-08-21 15:00:46 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=74 Volt=9882 Current=3026 Remaining=58 Shutdown ByLowBat needed
+INFO 07 Shutdown ByLowBat needed
+APM:  07 Shutdown ByLowBat needed
+2016-08-21 15:00:46 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=72 Volt=9882 Current=3026 Remaining=58 MySeverity 1 MyStatusText  07 Shutdown ByLowBat needed
+APM: SIMPLE mode off
+2016-08-21 15:00:51 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=65 Volt=9958 Current=2372 Remaining=57 MySeverity 6 MyStatusText SIMPLE mode off
+2016-08-21 15:00:52 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=57 Volt=10147 Current=2465 Remaining=57 LowVolt >10000 or LowRemain >10 : Good status
+2016-08-21 15:00:53 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=57 Volt=10121 Current=2493 Remaining=57 MyRC8Raw 988 LOW : request DOWN : interface wlan0 is up : False
+2016-08-21 15:00:56 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=61 Volt=10184 Current=2360 Remaining=57 INFO HEARTBEAT sequence 658 : recheck status : network False>False, video True>True, mode RTL True>True, mode STABILIZE: False>False params: 558
+2016-08-21 15:00:57 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=58 Volt=10126 Current=2545 Remaining=57 LowVolt >10000 or LowRemain >10 : Good status
+2016-08-21 15:00:57 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=60 Volt=10146 Current=2494 Remaining=57 MyRC8Raw 988 LOW : request DOWN : interface wlan0 is up : False
+2016-08-21 15:01:01 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=60 Volt=10150 Current=2504 Remaining=56 MyRC8Raw 986 LOW : request DOWN : interface wlan0 is up : False
+2016-08-21 15:01:02 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=59 Volt=10101 Current=2504 Remaining=56 LowVolt >10000 or LowRemain >10 : Good status
+2016-08-21 15:01:05 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=59 Volt=10255 Current=2053 Remaining=56 INFO request mode STABILIZE : current flightmode RTL altitude 13.84
+2016-08-21 15:01:05 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=59 Volt=10255 Current=2053 Remaining=56 INFO request change mode to STABILIZE modenum 0 : current flightmode RTL altitude 13.84
+2016-08-21 15:01:05 INFO Armed=True State=ACTIVE Mode=RTL NetUP=False VideoON=True MyRTL=True Stabilize=False Throttle=59 Volt=10255 Current=2053 Remaining=56 MyRC8Raw 1128 LOW range RC_low_mark-150 to RC_low_mark : request on True : current on False
+Got MAVLink msg: COMMAND_ACK {command : 11, result : 0}
+STABILIZE> Mode STABILIZE
+2016-08-21 15:01:06 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11377 Current=490 Remaining=56 INFO HEARTBEAT sequence 668 : recheck status : network False>False, video True>True, mode RTL True>False, mode STABILIZE: False>True params: 558
+Mode STABILIZE.
+2016-08-21 15:01:06 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11377 Current=490 Remaining=56 Mode STABILIZE.
+INFO 08 Mode STABILIZE.
+APM:  08 Mode STABILIZE.
+2016-08-21 15:01:07 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=100 Volt=11377 Current=490 Remaining=56 MySeverity 1 MyStatusText  08 Mode STABILIZE.
+2016-08-21 15:01:07 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=100 Volt=11317 Current=1173 Remaining=56 LowVolt >10000 or LowRemain >10 : Good status
+height 0
+2016-08-21 15:01:10 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11345 Current=494 Remaining=55 MyRC8Raw 1088 LOW : request DOWN : interface wlan0 is up : False
+height -10
+2016-08-21 15:01:12 INFO Armed=True State=ACTIVE Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11530 Current=450 Remaining=55 LowVolt >10000 or LowRemain >10 : Good status
+2016-08-21 15:01:14 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11590 Current=391 Remaining=55 MyRC8Raw 1088 LOW : request DOWN : interface wlan0 is up : False
+2016-08-21 15:01:16 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11601 Current=457 Remaining=55 INFO HEARTBEAT sequence 678 : recheck status : network False>False, video True>True, mode RTL False>False, mode STABILIZE: True>True params: 558
+2016-08-21 15:01:17 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11618 Current=403 Remaining=55 LowVolt >10000 or LowRemain >10 : Good status
+2016-08-21 15:01:18 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11632 Current=420 Remaining=55 MyRC8Raw 1088 LOW : request DOWN : interface wlan0 is up : False
+height 0
+2016-08-21 15:01:16 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11601 Current=457 Remaining=55 INFO HEARTBEAT sequence 678 : recheck status : network False>False, video True>True, mode RTL False>False, mode STABILIZE: True>True params: 558
+2016-08-21 15:01:17 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11618 Current=403 Remaining=55 LowVolt >10000 or LowRemain >10 : Good status
+2016-08-21 15:01:18 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11632 Current=420 Remaining=55 MyRC8Raw 1088 LOW : request DOWN : interface wlan0 is up : False
+height 0
+2016-08-21 15:01:22 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11680 Current=389 Remaining=55 MyRC8Raw 1088 LOW : request DOWN : interface wlan0 is up : False
+2016-08-21 15:01:22 INFO Armed=True State=STANDBY Mode=STABILIZE NetUP=False VideoON=True MyRTL=False Stabilize=True Throttle=0 Volt=11680 Current=393 Remaining=55 LowVolt >10000 or LowRemain >10 : Good status
+DISARMED
+Video off
+                            
