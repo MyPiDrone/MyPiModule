@@ -134,6 +134,11 @@ class MyPiModule(mp_module.MPModule):
             fo = open(self.settings.mylog, "a")
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
+        # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
+        outpipe = open('/tmp/Mypicamera.pipein', "a")
+        outpipe.write("%s %s %s %s\n" % (date,level,prefix,msg))
+        outpipe.close()
+      
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
