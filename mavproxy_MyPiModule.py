@@ -7,7 +7,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
-''' Version 2.2 : May 18 2016                                                            '''
+''' Version 2.3 : September 4 2016                                                            '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
 ''' ----------------------------------------------------------------------------------- '''
@@ -47,7 +47,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myinterface', str, "wlan0", 'Wlan interface name'))
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
-        self.myversion = "2.2"
+        self.myversion = "2.3"
         self.myinit = False
         self.mylogverbose = self.settings.mylogverbose
         self.mydebug = self.settings.mydebug
@@ -129,7 +129,6 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(self.pipein)
         except OSError:
             pass
-        self.outpipe = open(self.pipein, 'w')
 
 
     def my_write_log(self,level,msg):
@@ -143,9 +142,9 @@ class MyPiModule(mp_module.MPModule):
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
             # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
-            #self.outpipe = open(self.pipein, 'a')
+            self.outpipe = open(self.pipein, 'a')
             self.outpipe.write("%s %s %s %s\n" % (date,level,prefix,msg))
-            #self.outpipe.close()
+            self.outpipe.close()
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
