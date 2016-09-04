@@ -123,6 +123,12 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
+        pipein = '/tmp/Mypicamera.pipein'
+        try:
+            os.mkfifo(pipein)
+        except OSError:
+            pass
+
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
