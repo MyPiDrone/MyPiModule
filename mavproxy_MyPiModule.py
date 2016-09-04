@@ -13,6 +13,7 @@
 ''' ----------------------------------------------------------------------------------- '''
 
 import time
+import os
 from pymavlink import mavutil
 from datetime import datetime
 
