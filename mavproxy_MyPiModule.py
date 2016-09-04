@@ -124,11 +124,12 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
-        pipein = '/tmp/Mypicamera.pipein'
+        self.pipein = '/tmp/Mypicamera.pipein'
         try:
-            os.mkfifo(pipein)
+            os.mkfifo(self.pipein)
         except OSError:
             pass
+        self.outpipe = open(self.pipein, 'a')
 
 
     def my_write_log(self,level,msg):
@@ -142,9 +143,9 @@ class MyPiModule(mp_module.MPModule):
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
-        outpipe = open(pipein, 'a')
-        outpipe.write("%s %s %s %s\n" % (date,level,prefix,msg))
-        outpipe.close()
+        #self.outpipe = open(self.pipein, 'a')
+        self.outpipe.write("%s %s %s %s\n" % (date,level,prefix,msg))
+        #self.outpipe.close()
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
