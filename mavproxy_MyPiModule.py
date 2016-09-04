@@ -129,7 +129,7 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(self.pipein)
         except OSError:
             pass
-        self.outpipe = open(self.pipein, 'a')
+        self.outpipe = open(self.pipein, 'w')
 
 
     def my_write_log(self,level,msg):
