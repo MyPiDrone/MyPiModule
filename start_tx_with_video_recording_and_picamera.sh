@@ -5,13 +5,15 @@
 #####################################################################
 
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-pipeout='/tmp/Mypicamera.pipeout'
 
 env
 
 VIDDIR="/root/fpv/videos"
 WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx"
 WifiBroadcast_TX="/root/wifibroadcast/tx"
+Mypicamera="/usr/bin/python /usr/local/bin/Mypicamera.py"
+pipein='/tmp/Mypicamera.pipein'
+mkfifo $pipein
 
 DATE=`date`
 PREFIX="#---- $DATE"
@@ -161,14 +163,17 @@ then
                 if [ "$OPTION" = "--vr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
-                        cat $VIDEO < $pipeout 
+			echo 'Welcome Mypicamera' > $pipein &
+                        $Mypicamera > $VIDEO
                 elif [ "$OPTION" = "--vbr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
-                        tee $VIDEO < $pipeout | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
+			echo 'Welcome Mypicamera' > $pipein &
+                        $Mypicamera | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
-                        $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN < $pipeout
+			echo 'Welcome Mypicamera' > $pipein &
+                        $Mypicamera | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
                 fi
         fi
 else
