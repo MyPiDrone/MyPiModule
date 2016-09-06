@@ -52,7 +52,7 @@ with picamera.PiCamera() as camera:
         if intext != "":
              telemetry_text = (intext[:234] + '..') if len(intext) > 234 else intext
              #print "%s" % telemetry_text
-        msg = "%s %s" % (dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),telemetry_text)
+        msg = "%s %s" % (dt.datetime.now().strftime('%d/%m %H:%M:%S'),telemetry_text)
         camera.annotate_text = msg
         camera.wait_recording(0.2)
     camera.stop_recording()
