@@ -141,7 +141,7 @@ class MyPiModule(mp_module.MPModule):
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
-        prefix = "A=%s S=%s M=%s N=%s V=%s R=%s S=%s T=%s V=%s C=%s R=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s %s%" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         outpipe = open('/tmp/Mypicamera.pipein', 'w')
         outpipe.write("%s %s %s\n" % (date,prefix,msg))
         outpipe.close()
