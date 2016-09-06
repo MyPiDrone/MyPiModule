@@ -19,6 +19,8 @@ cp MyPiModule/rc.local                                           /etc/
 cp MyPiModule/start_MAVProxy_MyPiModule.sh                       /usr/local/bin/
 cp MyPiModule/start_ArduCopter-quad.sh                           /usr/local/bin/
 cp MyPiModule/start_tx_with_video_recording.sh                   /usr/local/bin/
+cp MyPiModule/start_tx_with_video_recording_and_picamera.sh      /usr/local/bin/
+cp MyPiModule/Mypicamera.py                                      /usr/local/bin/
 cp MyPiModule/manage_video.sh                                    /usr/local/bin/
 cp MyPiModule/manage_network.sh                                  /usr/local/bin/
 cp MyPiModule/start_tx_with_video_recording_broadcast_over_ap.sh /usr/local/bin/
