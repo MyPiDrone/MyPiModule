@@ -89,11 +89,11 @@ fi
 echo "$PREFIX WLAN=$WLAN CHANNEL=$CHANNEL OPTION=$OPTION"
 
 
-C=`ps -ef|grep -v "grep"|grep -ci "raspivid"`
+C=`ps -ef|grep -v "grep"|grep -ci "$Mypicamera"`
 if [ $C -ne 0 ]; then
-        echo "$PREFIX _____________________ stop raspivid _______________________________"
-        killall raspivid
-        echo "$PREFIX killall raspivid RC=$?" 
+        echo "$PREFIX _____________________ stop $Mypicamera _______________________________"
+        ps -ef|grep -v grep|grep "$Mypicamera"|awk '{print $2}'|xargs kill
+        echo "$PREFIX killall $Mypicamera RC=$?" 
         sleep 1
 fi
 C=`ps -ef|grep -v "grep"|grep -v "start_tx.sh"|grep -ci "tx "`
@@ -170,7 +170,6 @@ then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
 			echo 'Welcome Mypicamera' > $pipein &
-                        #$MyPiModule |tee -a /tmp/trace1 |$Mypicamera | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
                         $Mypicamera | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
