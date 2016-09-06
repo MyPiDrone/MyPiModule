@@ -143,8 +143,8 @@ class MyPiModule(mp_module.MPModule):
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
         telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s %s%" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         outpipe = open('/tmp/Mypicamera.pipein', 'w')
-        time = datetime.now().strftime('%H:%M:%S')
-        outpipe.write("%s %s\n" % (time,telemetry_text))
+        #time = datetime.now().strftime('%H:%M:%S')
+        outpipe.write("%s %s\n" % (date,telemetry_text))
         outpipe.close()
 
     def my_network_status(self):
