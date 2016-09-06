@@ -17,7 +17,7 @@
 
 case "$1" in
   start)
-        nohup /usr/local/bin/start_tx_with_video_recording.sh wlan1 -19 --vbr 1>>/var/log/start_tx_with_video_recording.log 2>&1 &
+        nohup /usr/local/bin/start_tx_with_video_recording_and_picamera.sh wlan1 -19 --vbr 1>>/var/log/start_tx_with_video_recording.log 2>&1 &
         echo "Video is started"
         ;;
   stop)
