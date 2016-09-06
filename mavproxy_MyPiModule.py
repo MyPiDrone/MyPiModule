@@ -142,10 +142,11 @@ class MyPiModule(mp_module.MPModule):
             fo.close()
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
         #telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s %s%" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
-        #telemetry_text = "Mypicamera"
+        telemetry_text = "Mypicamera"
         #outpipe = open('/tmp/Mypicamera.pipein', 'w')
         #outpipe.write("%s %s\n" % (dt.datetime.now().strftime('%H:%M:%S'),telemetry_text))
-        #outpipe.close()
+        outpipe.write("%s %s\n" % (date,telemetry_text))
+        outpipe.close()
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
