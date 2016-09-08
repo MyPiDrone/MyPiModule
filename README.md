@@ -16,7 +16,7 @@
 
         - Add picamera python module into mavproxy_MyPiModule.py to broadcast video
           and telemetry text writed to a pipe named for tx Wifibroadcasting
-          - Seei chapter : Overlaying text on the output here :
+          - See chapter : Overlaying text on the output here :
             https://picamera.readthedocs.io/en/release-1.12/recipes1.html#overlaying-text-on-the-output
           - mavproxy_MyPiModule.py controle video and photo snapshot with telemetry text (255 chars max)
           - start_MAVProxy_MyPiModule.sh execute mavproxy.py and start_tx_with_video_recording_and_picamera.sh
