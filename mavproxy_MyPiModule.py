@@ -206,7 +206,7 @@ class MyPiModule(mp_module.MPModule):
             #rc = p.returncode
             rc = self.camera.wait_recording(0.1)
             print("Video RC=%s" % rc)
-            if rc == 0: self.video_on = True
+            if rc == None: self.video_on = True
             else: self.video_on = False
 
     def my_mode_status(self):
