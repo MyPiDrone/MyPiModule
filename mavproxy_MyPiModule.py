@@ -207,7 +207,7 @@ class MyPiModule(mp_module.MPModule):
         if time != self.snapshottime:
 	    self.snapshottime = time
             jpgname=self.settings.myvideopath + "/Photo-Tarot-" + time + ".jpg"
-            print("jpgname=%s" % jpgname)
+            #print("jpgname=%s" % jpgname)
             self.camera.capture(jpgname, use_video_port=True)
 
     def my_network_status(self):
