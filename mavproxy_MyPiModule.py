@@ -206,7 +206,7 @@ class MyPiModule(mp_module.MPModule):
         time = datetime.now().strftime('%Y-%m-%d_%H:%M')
         if time != self.snapshottime:
 	    self.snapshottime = time
-            jpgname=self.settings.myvideopath + "/Snapshot-Tarot-" + time + ".jpg"
+            jpgname=self.settings.myvideopath + "/Photo-Tarot-" + time + ".jpg"
             print("jpgname=%s" % jpgname)
             self.camera.capture(jpgname, use_video_port=True)
 
