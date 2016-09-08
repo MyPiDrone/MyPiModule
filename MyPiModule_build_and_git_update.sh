@@ -58,8 +58,12 @@ git push -f
 #git push
 cd ${MY_DIR_MYPIMODULE}
 systemctl stop mavproxy
+nohup /usr/local/bin/start_tx_with_video_recording_and_picamera.sh wlan1 -19 --vbr 1>>/var/log/start_tx_with_video_recording.log 2>&1 &
+MSG="TX video started PID $!"
+echo "TX Video is started"
 echo "/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"
 ### load only MyPiModule and mode
+killall 
 /usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors 
 ### load all modules
 ###/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --show-errors
