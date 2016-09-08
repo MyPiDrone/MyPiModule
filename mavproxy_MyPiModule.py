@@ -155,7 +155,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.awb_mode = 'auto'
         # image_effect  'none' 'negative' 'solarize' 'sketch' 'denoise' 'emboss' 'oilpaint' 'hatch' 'gpen' 'pastel' 'watercolor' 'film' 'blur' 'saturation' 'colorswap' 'washedout' 'posterise' 'colorpoint' 'colorbalance' 'cartoon' 'deinterlace1' 'deinterlace2'
         #self.camera.image_effect = 'negative'
-        self.camera.image_effect = 'emboss'
+        self.camera.image_effect = 'blur'
         #self.camera.image_effect = 'none'
         self.camera.color_effects = None
         self.camera.rotation = 0
@@ -197,9 +197,10 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_status(self):
-            p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            (stdoutData, stderrData) = p.communicate()
-            rc = p.returncode
+            #p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            #(stdoutData, stderrData) = p.communicate()
+            #rc = p.returncode
+            rc = self.camera.wait_recording(0.1)
             if rc == 0: self.video_on = True
             else: self.video_on = False
 
@@ -521,7 +522,8 @@ class MyPiModule(mp_module.MPModule):
                    msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
-                   self.my_subprocess(["/usr/local/bin/manage_video.sh","stop"])
+                   #self.my_subprocess(["/usr/local/bin/manage_video.sh","stop"])
+                   self.camera.stop_recording()
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                self.my_video_status()
@@ -530,7 +532,8 @@ class MyPiModule(mp_module.MPModule):
                        if self.video_on_request == True: self.my_statustext_send("Video ON retry")
                        self.video_on_request = True
                        self.video_on_request_time = time.time()
-                       self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
+                       #self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
+                       self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000)
                        msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on)
                        self.my_write_log("INFO",msg)
                else:
