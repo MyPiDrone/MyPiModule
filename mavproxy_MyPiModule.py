@@ -204,7 +204,7 @@ class MyPiModule(mp_module.MPModule):
             #p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             #(stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
-            rc = self.camera.wait_recording(0.1)
+            rc = self.camera._check_recording_stopped()
             print("Video RC=%s" % rc)
             if rc == None: self.video_on = True
             else: self.video_on = False
