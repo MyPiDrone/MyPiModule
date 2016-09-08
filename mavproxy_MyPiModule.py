@@ -191,8 +191,8 @@ class MyPiModule(mp_module.MPModule):
             self.camera.annotate_background = picamera.Color('red')
         else:
             self.camera.annotate_background = picamera.Color('grey')
-        self.camera.annotate_text = "%s %s\n" % (time,telemetry_text)
-        #time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+        self.camera.annotate_text = "%s %s" % (time,telemetry_text)
+        time = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
         #jpgname="/root/fpv/videos/Photo_%s.jpg" % time
         #print "jpgname=%" % jpgname
         self.camera.capture('photo.jpg', use_video_port=True)
