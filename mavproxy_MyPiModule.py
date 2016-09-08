@@ -164,6 +164,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.crop = (0.0, 0.0, 1.0, 1.0)
         self.camera.resolution = (1296, 730)
         self.camera.framerate = 49
+        self.camera.led = True
         #self.camera.start_preview()
         self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text_size = 20
@@ -201,15 +202,11 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_status(self):
-            #p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            #(stdoutData, stderrData) = p.communicate()
-            #rc = p.returncode
             self.video_on = False
             try:
                self.camera._check_recording_stopped()
             except:
                self.video_on = True
-            print("self.video_on=%s" % self.video_on)
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
@@ -529,7 +526,7 @@ class MyPiModule(mp_module.MPModule):
                    msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
-                   #self.my_subprocess(["/usr/local/bin/manage_video.sh","stop"])
+                   self.camera.led = False
                    self.camera.stop_recording()
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
@@ -539,7 +536,7 @@ class MyPiModule(mp_module.MPModule):
                        if self.video_on_request == True: self.my_statustext_send("Video ON retry")
                        self.video_on_request = True
                        self.video_on_request_time = time.time()
-                       #self.my_subprocess(["/usr/local/bin/manage_video.sh","start"])
+                       self.camera.led = True
                        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000)
                        msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on)
                        self.my_write_log("INFO",msg)
