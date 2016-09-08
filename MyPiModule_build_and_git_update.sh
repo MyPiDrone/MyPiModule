@@ -38,7 +38,7 @@ cp /usr/local/bin/start_wlan1_mode_managed.sh                        MyPiModule/
 cd ${MY_DIR_MYPIMODULE}
 VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print "v"$2}'`
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
-LIST="mav.parm mavproxy_MyPiModule.py rc.local ArduCopter-quad.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording.sh start_tx_with_video_recording_broadcast_over_ap.sh start_tx_with_video_recording_and_picamera.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf manage_network.sh MyPiModule_build_and_git_update.sh MyPiDrone_drone_install.sh MyPiDrone_gcs_install.sh telem1.lua telem2.lua"
+LIST="mav.parm mavproxy_MyPiModule.py rc.local ArduCopter-quad.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh start_tx_with_video_recording_broadcast_over_ap.sh start_tx_with_video_recording_and_picamera.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf manage_network.sh MyPiModule_build_and_git_update.sh MyPiDrone_drone_install.sh MyPiDrone_gcs_install.sh telem1.lua telem2.lua"
 git config --global status.showUntrackedFiles no
 git add $LIST
 #git commit -i $LIST
