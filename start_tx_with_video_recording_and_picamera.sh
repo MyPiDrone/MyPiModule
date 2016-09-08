@@ -21,49 +21,10 @@ clear
 echo "$PREFIX ##################TX Script#################"
 echo "$PREFIX Start this script with root authority"
 
-#Mode 	Size 	Aspect Ratio 	Frame rates 	FOV 	Binning
-#0    	automatic selection
-#1 	1920x1080 	16:9 	1-30fps 	Partial None
-#2 	2592x1944 	4:3 	1-15fps 	Full 	None
-#3 	2592x1944 	4:3 	0.1666-1fps 	Full 	None
-#4 	1296x972 	4:3 	1-42fps 	Full 	2x2
-#5 	1296x730 	16:9 	1-49fps 	Full 	2x2
-#6 	640x480 	4:3 	42.1-60fps 	Full 	2x2 plus skip
-#7 	640x480 	4:3 	60.1-90fps 	Full 	2x2 plus skip
-#---------------------
-#WIDTH=640
-#HEIGHT=480
-#FPS=90
-#---------------------
-#WIDTH=1920
-#HEIGHT=1080
-#FPS=30
-#---------------------
-WIDTH=1296
-HEIGHT=730
-FPS=49
-#FPS=60
-#---------------------
-#WIDTH=1296
-#HEIGHT=972
-#FPS=42
-#---------------------
-BITRATE=2000000
-BITRATE=4000000
-#BITRATE=2000000
-KEYFRAMERATE=60
 BLOCK_SIZE=8
 FECS=4
 PACKET_LENGTH=1024
 PORT=0
-# 10 minutes
-#TIMEOUT=60000
-# 10 minutes
-#TIMEOUT=600000
-# 20 minutes
-TIMEOUT=1200000
-# 40 minutes
-#TIMEOUT=2400000
 
 if [ "$1" = "-h" -o "$1" = "--help" ]; then
         WLAN=""
@@ -86,14 +47,6 @@ else
 fi
 echo "$PREFIX WLAN=$WLAN CHANNEL=$CHANNEL OPTION=$OPTION"
 
-
-C=`ps -ef|grep -v "grep"|grep -ci "$Mypicamera"`
-if [ $C -ne 0 ]; then
-        echo "$PREFIX _____________________ stop $Mypicamera _______________________________"
-        ps -ef|grep -v grep|grep "$Mypicamera"|awk '{print $2}'|xargs kill
-        echo "$PREFIX killall $Mypicamera RC=$?" 
-        sleep 1
-fi
 C=`ps -ef|grep -v "grep"|grep -v "start_tx.sh"|grep -ci "tx "`
 if [ $C -ne 0 ]; then
         echo "$PREFIX _____________________ stop $WifiBroadcast_TX _______________________________"
