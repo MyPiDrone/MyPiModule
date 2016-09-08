@@ -183,7 +183,10 @@ class MyPiModule(mp_module.MPModule):
             fo.close()
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
         time = datetime.now().strftime('%H:%M:%S')
-        telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%s ALt=%sm" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        intext = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%s ALt=%sm" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        intext = intext.rstrip()
+        if intext != "":
+             telemetry_text = (intext[:234] + '..') if len(intext) > 234 else intext
         if level == "WARNING" or level == "ERROR":
             self.camera.annotate_background = picamera.Color('red')
         else:
@@ -192,7 +195,7 @@ class MyPiModule(mp_module.MPModule):
         time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
         jpgname="/root/fpv/videos/Photo_%s.jpg" % time
         print "jpgname=%" % jpgname
-        self.camera.capture(jpgname, use_video_port=True)
+        #self.camera.capture(jpgname, use_video_port=True)
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
