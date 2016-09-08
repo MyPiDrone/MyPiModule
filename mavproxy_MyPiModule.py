@@ -125,6 +125,7 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
+        # pipe with tx
         pipein = '/tmp/Mypicamera.pipein'
         try:
             os.mkfifo(pipein)
@@ -141,6 +142,23 @@ class MyPiModule(mp_module.MPModule):
         #7      640x480         4:3     60.1-90fps      Full    2x2 plus skip
         self.outpipe = open('/tmp/Mypicamera.pipein', 'w')
         self.camera=picamera.PiCamera()
+        self.camera.sharpness = 0
+        self.camera.contrast = 0
+        self.camera.brightness = 50
+        self.camera.saturation = 0
+        self.camera.ISO = 0
+        self.camera.video_stabilization = True
+        self.camera.exposure_compensation = 0
+        self.camera.exposure_mode = 'auto'
+        self.camera.meter_mode = 'average'
+        self.camera.awb_mode = 'auto'
+        self.camera.image_effect = 'negative'
+        #self.camera.image_effect = 'none'
+        self.camera.color_effects = None
+        self.camera.rotation = 0
+        self.camera.hflip = False
+        self.camera.vflip = False
+        self.camera.crop = (0.0, 0.0, 1.0, 1.0)
         self.camera.resolution = (1296, 730)
         self.camera.framerate = 49
         #self.camera.start_preview()
