@@ -101,7 +101,7 @@ then
                 cat $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
         else
                 echo "$PREFIX Starting HD Video transmission and recording..."
-                VIDEO="$VIDDIR/Video-Tarot-h264-`date +%Y-%m-%d:%H:%M`"
+                VIDEO="$VIDDIR/Video-Tarot-`date +%Y-%m-%d_%H:%M`.h264"
                 # creation du lien sur la derniere video
                 [ ! -d $VIDDIR ] && mkdir -p $VIDDIR
                 touch $VIDEO
