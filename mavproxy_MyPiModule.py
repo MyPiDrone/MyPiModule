@@ -207,7 +207,7 @@ class MyPiModule(mp_module.MPModule):
             self.video_on = False
             try:
                self.camera._check_recording_stopped()
-            except ValueError:
+            except:
                self.video_on = True
             print("self.video_on=%s" % self.video_on)
 
