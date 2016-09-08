@@ -191,7 +191,7 @@ class MyPiModule(mp_module.MPModule):
         # overlay telemetry text with camera.annotate_text image 255 chars max
         ##################################################################################
         time = datetime.now().strftime('%H:%M:%S')
-        intext = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%sp ALt=%sm H=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude,self.status.heading)
+        intext = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%s% ALt=%sm" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         #intext = intext.rstrip()
         if intext != "":
              telemetry_text = (intext[:254] + '..') if len(intext) > 254 else intext
