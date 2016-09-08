@@ -131,7 +131,7 @@ class MyPiModule(mp_module.MPModule):
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_with_video_recording_and_picamera.sh wlan1 -19 --vbr
         # convert to mp4 sample :
-        # avconv -stats -y -r 49 -i Video-Tarot-h264-2016Sep08-1833 -vcodec copy Video-Tarot-h264-2016Sep08-1833.mp4
+        # avconv -stats -y -r 49 -i Video-Tarot-2016-09-08_21:15.h264 -vcodec copy  Video-Tarot-2016-09-08_21:15.mp4
         ##########################################################################################################
         try:
             os.mkfifo(self.settings.mypipein)
