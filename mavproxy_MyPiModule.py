@@ -155,7 +155,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.awb_mode = 'auto'
         # image_effect  'none' 'negative' 'solarize' 'sketch' 'denoise' 'emboss' 'oilpaint' 'hatch' 'gpen' 'pastel' 'watercolor' 'film' 'blur' 'saturation' 'colorswap' 'washedout' 'posterise' 'colorpoint' 'colorbalance' 'cartoon' 'deinterlace1' 'deinterlace2'
         #self.camera.image_effect = 'negative'
-        self.camera.image_effect = 'blur'
+        self.camera.image_effect = 'carton'
         #self.camera.image_effect = 'none'
         self.camera.color_effects = None
         self.camera.rotation = 0
@@ -173,7 +173,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed=%s State=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s Stabilize=%s Throttle=%s Volt=%s Current=%s Remaining=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        prefix = "Armed=%s State=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s Stabilize=%s Throttle=%s Volt=%s Current=%s Remaining=%s Altitude=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         date = datetime.now().strftime(self.FORMAT)
         if self.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
@@ -183,11 +183,11 @@ class MyPiModule(mp_module.MPModule):
             fo.close()
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
         time = datetime.now().strftime('%H:%M:%S')
-        telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s %s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+        telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%s ALt=%sm" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         if level == "WARNING" or level == "ERROR":
             self.camera.annotate_background = picamera.Color('red')
         else:
-            self.camera.annotate_background = picamera.Color('black')
+            self.camera.annotate_background = picamera.Color('grey')
         self.camera.annotate_text = "%s %s\n" % (time,telemetry_text)
 
     def my_network_status(self):
