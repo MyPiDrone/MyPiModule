@@ -153,7 +153,9 @@ class MyPiModule(mp_module.MPModule):
         self.camera.exposure_mode = 'auto'
         self.camera.meter_mode = 'average'
         self.camera.awb_mode = 'auto'
-        self.camera.image_effect = 'negative'
+        # image_effect  'none' 'negative' 'solarize' 'sketch' 'denoise' 'emboss' 'oilpaint' 'hatch' 'gpen' 'pastel' 'watercolor' 'film' 'blur' 'saturation' 'colorswap' 'washedout' 'posterise' 'colorpoint' 'colorbalance' 'cartoon' 'deinterlace1' 'deinterlace2'
+        #self.camera.image_effect = 'negative'
+        self.camera.image_effect = 'emboss'
         #self.camera.image_effect = 'none'
         self.camera.color_effects = None
         self.camera.rotation = 0
