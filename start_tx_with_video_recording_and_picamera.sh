@@ -11,8 +11,6 @@ env
 VIDDIR="/root/fpv/videos"
 WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx"
 WifiBroadcast_TX="/root/wifibroadcast/tx"
-Mypicamera="/usr/bin/python /usr/local/bin/Mypicamera.py"
-MyPiModule="/usr/bin/python /usr/local/bin/mavproxy.py --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"
 pipein='/tmp/Mypicamera.pipein'
 mkfifo $pipein
 
@@ -165,16 +163,16 @@ then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
 			echo 'Welcome Mypicamera' > $pipein &
-                        $Mypicamera > $VIDEO
+                        cat $pipein > $VIDEO
                 elif [ "$OPTION" = "--vbr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
 			echo 'Welcome Mypicamera' > $pipein &
-                        $Mypicamera | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
+                        cat $pipein | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
 			echo 'Welcome Mypicamera' > $pipein &
-                        $Mypicamera | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
+                        cat $pipein | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 
                 fi
         fi
 else
