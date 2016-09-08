@@ -155,7 +155,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.awb_mode = 'auto'
         # image_effect  'none' 'negative' 'solarize' 'sketch' 'denoise' 'emboss' 'oilpaint' 'hatch' 'gpen' 'pastel' 'watercolor' 'film' 'blur' 'saturation' 'colorswap' 'washedout' 'posterise' 'colorpoint' 'colorbalance' 'cartoon' 'deinterlace1' 'deinterlace2'
         #self.camera.image_effect = 'negative'
-        self.camera.image_effect = 'cartoon'
+        self.camera.image_effect = 'watercolor'
         #self.camera.image_effect = 'none'
         self.camera.color_effects = None
         self.camera.rotation = 0
@@ -189,6 +189,8 @@ class MyPiModule(mp_module.MPModule):
         else:
             self.camera.annotate_background = picamera.Color('grey')
         self.camera.annotate_text = "%s %s\n" % (time,telemetry_text)
+        jpgname="Photo_%.jpg' % datetime.now().strftime('%Y-%m-%d_%H:%M:%S'))
+        self.camera.capture(outjpg, use_video_port=True)
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
