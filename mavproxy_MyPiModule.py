@@ -47,6 +47,8 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myinterface', str, "wlan0", 'Wlan interface name'))
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
+        self.settings.append(MPSetting('myvideopath', str, "/root/fpv/videos", 'output video directory'))
+        self.settings.append(MPSetting('mypipein', str, "/tmp/Mypicamera.pipein", 'video input named pipe for tx'))
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.3"
         self.myinit = False
@@ -127,9 +129,8 @@ class MyPiModule(mp_module.MPModule):
         self.mytext = "nulltext"
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_with_video_recording_and_picamera.sh wlan1 -19 --vbr
-        pipein = '/tmp/Mypicamera.pipein'
         try:
-            os.mkfifo(pipein)
+            os.mkfifo(self.settings.mypipein)
         except OSError:
             pass
         #Mode   Size    Aspect Ratio    Frame rates     FOV     Binning
@@ -141,7 +142,7 @@ class MyPiModule(mp_module.MPModule):
         #5      1296x730        16:9    1-49fps         Full    2x2
         #6      640x480         4:3     42.1-60fps      Full    2x2 plus skip
         #7      640x480         4:3     60.1-90fps      Full    2x2 plus skip
-        self.outpipe = open('/tmp/Mypicamera.pipein', 'w')
+        self.outpipe = open(self.settings.mypipein, 'w')
         self.camera=picamera.PiCamera()
         self.camera.sharpness = 0
         self.camera.contrast = 0
@@ -193,9 +194,9 @@ class MyPiModule(mp_module.MPModule):
             self.camera.annotate_background = picamera.Color('grey')
         self.camera.annotate_text = "%s %s" % (time,telemetry_text)
         time = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-        jpgname="/root/fpv/videos/Photo_" + time + ".jpg"
+        jpgname=self.settings.myvideopath + "/Snapshot_" + time + ".jpg"
         print("jpgname=%s" % jpgname)
-        #self.camera.capture(jpgname, use_video_port=True)
+        self.camera.capture(jpgname, use_video_port=True)
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
