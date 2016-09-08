@@ -171,6 +171,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.annotate_text_size = 20
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000)
+        self.snapshottime = datetime.now().strftime('%Y-%m-%d-%H:%M')
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -193,10 +194,13 @@ class MyPiModule(mp_module.MPModule):
         else:
             self.camera.annotate_background = picamera.Color('grey')
         self.camera.annotate_text = "%s %s" % (time,telemetry_text)
-        time = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-        jpgname=self.settings.myvideopath + "/Snapshot_" + time + ".jpg"
-        print("jpgname=%s" % jpgname)
-        self.camera.capture(jpgname, use_video_port=True)
+        # snapshot each minute
+        time = datetime.now().strftime('%Y-%m-%d-%H:%M')
+        if time != self.snapshottime:
+	    self.snapshottime = time
+            jpgname=self.settings.myvideopath + "/Snapshot_" + time + ".jpg"
+            print("jpgname=%s" % jpgname)
+            self.camera.capture(jpgname, use_video_port=True)
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
