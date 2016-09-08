@@ -14,6 +14,7 @@
 
 import time
 import os
+import picamera
 from pymavlink import mavutil
 from datetime import datetime
 
@@ -129,6 +130,14 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(self.pipein)
         except OSError:
             pass
+        camera=picamera.PiCamera()
+        camera.resolution = (1296, 730)
+        camera.framerate = 49
+        #camera.start_preview()
+        camera.annotate_background = picamera.Color('black')
+        camera.annotate_text_size = 20
+        camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        camera.start_recording(pin, format='h264', quality=23, bitrate=4000000)
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
