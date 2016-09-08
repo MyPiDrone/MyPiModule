@@ -125,9 +125,9 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
-        self.pipein = '/tmp/Mypicamera.pipein'
+        pipein = '/tmp/Mypicamera.pipein'
         try:
-            os.mkfifo(self.pipein)
+            os.mkfifo(pipein)
         except OSError:
             pass
         camera=picamera.PiCamera()
