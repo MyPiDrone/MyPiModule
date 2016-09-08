@@ -204,10 +204,12 @@ class MyPiModule(mp_module.MPModule):
             #p = subprocess.Popen(["/usr/local/bin/manage_video.sh","status"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             #(stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
-            rc = self.camera._check_recording_stopped()
-            print("Video RC=%s" % rc)
-            if rc == None: self.video_on = True
-            else: self.video_on = False
+            self.video_on = False
+            try:
+               self.camera._check_recording_stopped()
+            except ValueError:
+               self.video_on = True
+            print("self.video_on=%s" % self.video_on)
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
