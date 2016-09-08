@@ -131,7 +131,7 @@ class MyPiModule(mp_module.MPModule):
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_with_video_recording_and_picamera.sh wlan1 -19 --vbr
         # convert to mp4 sample :
-        # avconv -stats -y -r 49 Video-Tarot-h264-2016Sep08-1833 -vcodec copy Video-Tarot-h264-2016Sep08-1833.mp4
+        # avconv -stats -y -r 49 -i Video-Tarot-h264-2016Sep08-1833 -vcodec copy Video-Tarot-h264-2016Sep08-1833.mp4
         ##########################################################################################################
         try:
             os.mkfifo(self.settings.mypipein)
@@ -187,16 +187,20 @@ class MyPiModule(mp_module.MPModule):
             fo = open(self.settings.mylog, "a")
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
-        # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
+        ##################################################################################
+        # overlay telemetry text with camera.annotate_text image 255 chars max
+        ##################################################################################
         time = datetime.now().strftime('%H:%M:%S')
-        intext = "%s A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%s ALt=%sm" % (level,self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        intext = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%s ALt=%sm" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         #intext = intext.rstrip()
         if intext != "":
              telemetry_text = (intext[:254] + '..') if len(intext) > 254 else intext
-        if level == "WARNING" or level == "ERROR":
+        if self.shutdown_by_lowbat == True:
             self.camera.annotate_background = picamera.Color('red')
-        else:
+        elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
             self.camera.annotate_background = picamera.Color('grey')
+        else:
+            self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text = "%s %s" % (time,telemetry_text)
         # snapshot each minute
         time = datetime.now().strftime('%Y-%m-%d-%H:%M')
