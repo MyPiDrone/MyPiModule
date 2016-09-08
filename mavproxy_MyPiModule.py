@@ -130,7 +130,7 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(pipein)
         except OSError:
             pass
-        outpipe = open('/tmp/Mypicamera.pipein', 'w')
+        self.outpipe = open('/tmp/Mypicamera.pipein', 'w')
         self.camera=picamera.PiCamera()
         self.camera.resolution = (1296, 730)
         self.camera.framerate = 49
@@ -138,7 +138,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text_size = 20
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.camera.start_recording(outpipe, format='h264', quality=23, bitrate=4000000)
+        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000)
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
