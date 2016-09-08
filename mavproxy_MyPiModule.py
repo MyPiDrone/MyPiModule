@@ -181,9 +181,8 @@ class MyPiModule(mp_module.MPModule):
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
-        telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s %s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         time = datetime.now().strftime('%H:%M:%S')
-        if self.mylogverbose or level == "" or level == "ERROR":
+        telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s %s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         if level == "WARNING" or level == "ERROR":
             self.camera.annotate_background = picamera.Color('red')
         else:
