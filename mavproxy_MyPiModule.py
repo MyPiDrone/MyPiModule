@@ -125,7 +125,8 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
-        # pipe with tx
+        # pipe with tx start with this script :
+        # /usr/local/bin/start_tx_with_video_recording_and_picamera.sh wlan1 -19 --vbr
         pipein = '/tmp/Mypicamera.pipein'
         try:
             os.mkfifo(pipein)
