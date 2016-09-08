@@ -192,9 +192,9 @@ class MyPiModule(mp_module.MPModule):
         else:
             self.camera.annotate_background = picamera.Color('grey')
         self.camera.annotate_text = "%s %s" % (time,telemetry_text)
-        time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        time = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
         jpgname="/root/fpv/videos/Photo_" + time + ".jpg"
-        print("jpgname=s%" % jpgname)
+        print("jpgname=%s" % jpgname)
         #self.camera.capture(jpgname, use_video_port=True)
 
     def my_network_status(self):
