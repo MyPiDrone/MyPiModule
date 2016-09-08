@@ -5,12 +5,25 @@
 - raspian Kernel 4.4.y 
 - www.MyPiDrone.com MyPiDrone kev&phil Project
 - https://github.com/MyPiDrone/MyPiModule 
-- Version 2.0 : May 1 2016 
+- Version 2.3 : September 2016 
 - https://github.com/MyPiDrone/MyPiModule/blob/master/mavproxy_MyPiModule.py
 - README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md
 ###########################################################################################
 
  Changelog :
+
+      version 2.3 :
+
+        - Add picamera python module into mavproxy_MyPiModule.py to broadcast video
+          and telemetry text writed to a pipe named for tx Wifibroadcasting
+          - Seei chapter : Overlaying text on the output here :
+            https://picamera.readthedocs.io/en/release-1.12/recipes1.html#overlaying-text-on-the-output
+          - mavproxy_MyPiModule.py controle video and photo snapshot with telemetry text (255 chars max)
+          - start_MAVProxy_MyPiModule.sh execute mavproxy.py and start_tx_with_video_recording_and_picamera.sh
+          - start_tx_with_video_recording_and_picamera.sh replace start_tx_with_video_recording.sh
+          - manage_video.sh and myvideo.service not used anymore         
+
+###########################################################################################
 
       version 2.2 :
 
