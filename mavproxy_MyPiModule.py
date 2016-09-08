@@ -183,6 +183,11 @@ class MyPiModule(mp_module.MPModule):
         # pipe message to Mypicamera camera.annotate_text image overlay 255 chars max
         telemetry_text = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s %s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
         time = datetime.now().strftime('%H:%M:%S')
+        if self.mylogverbose or level == "" or level == "ERROR":
+        if level == "WARNING" or level == "ERROR":
+            self.camera.annotate_background = picamera.Color('red')
+        else:
+            self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text = "%s %s\n" % (time,telemetry_text)
 
     def my_network_status(self):
@@ -201,6 +206,7 @@ class MyPiModule(mp_module.MPModule):
             #(stdoutData, stderrData) = p.communicate()
             #rc = p.returncode
             rc = self.camera.wait_recording(0.1)
+            print("Video RC=%s" % rc)
             if rc == 0: self.video_on = True
             else: self.video_on = False
 
