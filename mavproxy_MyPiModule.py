@@ -203,10 +203,10 @@ class MyPiModule(mp_module.MPModule):
             self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text = "%s %s" % (time,telemetry_text)
         # snapshot each minute
-        time = datetime.now().strftime('%Y-%m-%d-%H:%M')
+        time = datetime.now().strftime('%Y-%m-%d_%H:%M')
         if time != self.snapshottime:
 	    self.snapshottime = time
-            jpgname=self.settings.myvideopath + "/Snapshot-Tarot" + time + ".jpg"
+            jpgname=self.settings.myvideopath + "/Snapshot-Tarot-" + time + ".jpg"
             print("jpgname=%s" % jpgname)
             self.camera.capture(jpgname, use_video_port=True)
 
