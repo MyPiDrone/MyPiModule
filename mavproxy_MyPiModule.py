@@ -202,8 +202,7 @@ class MyPiModule(mp_module.MPModule):
         else:
             color='black'
             level='N'
-        armed = ["Armed", "Disarmed"][self.armed == True]        
-        intext = "%s A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (level,armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        intext = "%s %s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         # minus time length hh:mm:ss 255 - 10 = 245 
         new_telemetry_text = (intext[:245] + '..') if len(intext) > 245 else intext
         # new telemetry text
