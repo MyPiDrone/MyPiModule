@@ -1,7 +1,7 @@
 ###########################################################################################
 #TITLE# DRONE MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2
-- Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler
-- Project 2 : Racer 30cm Copter QUAD with Raspberry PI3 & Navio2 controler
+- Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler (status finished)
+- Project 2 : Racer 30cm Copter QUAD with Raspberry PI3 & Navio2 controler (under construction)
 - raspian Kernel 4.4.y 
 - www.MyPiDrone.com MyPiDrone kev&phil Project
 - https://github.com/MyPiDrone/MyPiModule 
@@ -12,19 +12,19 @@
 
  Changelog :
 
-      version 2.3 :
+      version 2.3 : Overlaying telemetry text on video before Wifibroadcast
 
-        - Add picamera python module inside mavproxy_MyPiModule.py to broadcast video
-          and telemetry text overlaying with tx Wifibroadcasting (instead of raspivid) (1)
-          - See chapter : Overlaying text on the output here :
-            https://picamera.readthedocs.io/en/release-1.12/recipes1.html#overlaying-text-on-the-output
-          - Now mavproxy_MyPiModule.py controle video and photo snapshot with telemetry text (255 chars max) :
-            - picamera python module used instead of raspivid (1)
-            - start_MAVProxy_MyPiModule.sh execute mavproxy.py
-            - Now mavproxy.py and start_tx_with_video_recording_and_picamera.sh (2)
-
-          - (1) See this MyPiCamera_sample.py python sample : 
+       - Added picamera python module inside mavproxy_MyPiModule.py to broadcast video and telemetry text 
+         overlayed before transmit with tx Wifibroadcasting (instead of raspivid) (1)
+         - See chapter : "Overlaying text on the output" here : https://picamera.readthedocs.io/en/release-1.12/recipes1.html#overlaying-text-on-the-output
+         - Now mavproxy_MyPiModule.py is controling video and photos snapshot with telemetry text overlayed (255 chars max) :
+            - Used picamera python module instead of raspivid (1)
+            - Now start_MAVProxy_MyPiModule.sh execute mavproxy.py and mavproxy.py execute start_tx_and_recording_with_picamera_video_input.sh (2)
+        
+          - (1) Here a python sample with a named pipe MyPiCamera_sample.py and command execution with  tx :
+              - mkfifo /tmp/MyPiCamera.pipein
               - MyPiCamera_sample.py | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
+              - sleep 3
               - echo 'My telemetry text' > /tmp/MyPiCamera.pipein
 
           - (2) manage_video.sh and myvideo.service not used anymore
