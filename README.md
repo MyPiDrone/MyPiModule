@@ -14,14 +14,19 @@
 
       version 2.3 :
 
-        - Add picamera python module into mavproxy_MyPiModule.py to broadcast video
-          and telemetry text writed to a named pipe for tx Wifibroadcasting
+        - Add picamera python module inside mavproxy_MyPiModule.py to broadcast video
+          and telemetry text overlaying with tx Wifibroadcasting (instead of raspivid) (1)
           - See chapter : Overlaying text on the output here :
             https://picamera.readthedocs.io/en/release-1.12/recipes1.html#overlaying-text-on-the-output
-          - mavproxy_MyPiModule.py controle video and photo snapshot with telemetry text (255 chars max)
-          - start_MAVProxy_MyPiModule.sh execute mavproxy.py and start_tx_with_video_recording_and_picamera.sh
-          - start_tx_with_video_recording_and_picamera.sh replace start_tx_with_video_recording.sh
-          - manage_video.sh and myvideo.service not used anymore         
+          - Now mavproxy_MyPiModule.py controle video and photo snapshot with telemetry text (255 chars max) :
+            - picamera python module used instead of raspivid (1)
+            - manage_video.sh and myvideo.service not used anymore
+            - start_MAVProxy_MyPiModule.sh execute mavproxy.py and start_tx_with_video_recording_and_picamera.sh
+            - start_tx_and_recording_with_picamera_video_input.sh replace start_tx_with_video_recording.sh
+
+          - (1) See this MyPiCamera_sample.py python sample : 
+              - MyPiCamera_sample.py | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
+              - echo 'My telemetry text' > /tmp/MyPiCamera.pipein
 
 ###########################################################################################
 
