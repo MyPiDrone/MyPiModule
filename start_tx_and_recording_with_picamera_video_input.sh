@@ -88,7 +88,6 @@ then
                 du -hs $VIDDIR
                 du -hs $VIDDIR/*
                 echo "$PREFIX -----------------------------------------------------------------------------"
-                sleep 3
                 # lecture du lien sur la derniere video
                 if [ "_$4" = "_" ]; then
                         VIDEO="$VIDDIR/Video-Tarot-h264"
@@ -110,7 +109,6 @@ then
                 du -hs $VIDDIR
                 du -hs $VIDDIR/*
                 echo "$PREFIX -----------------------------------------------------------------------------"
-                sleep 3
                 ## pour renverser l image option --vflip
                 if [ "$OPTION" = "--vr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
