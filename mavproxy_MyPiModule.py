@@ -208,7 +208,8 @@ class MyPiModule(mp_module.MPModule):
         # new telemetry text
         if self.current_telemetry_text != new_telemetry_text:
            self.camera.annotate_background = picamera.Color(color)
-           print("%s %s\n" % (time,new_telemetry_text))
+           #if self.mydebug:
+           print("Telemetry text : %s %s\n" % (time,new_telemetry_text))
            self.camera.annotate_text = "%s %s" % (time,new_telemetry_text)
            self.current_telemetry_text = new_telemetry_text
         ##################################
