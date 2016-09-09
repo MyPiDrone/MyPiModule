@@ -196,10 +196,14 @@ class MyPiModule(mp_module.MPModule):
              telemetry_text = (intext[:254] + '..') if len(intext) > 254 else intext
         if self.shutdown_by_lowbat == True:
             self.camera.annotate_background = picamera.Color('red')
+            color='R'
         elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
             self.camera.annotate_background = picamera.Color('grey')
+            color='G'
         else:
             self.camera.annotate_background = picamera.Color('black')
+            color='B'
+        print("%s %s %s\" % (color,time,telemetry_text))
         self.camera.annotate_text = "%s %s" % (time,telemetry_text)
         # snapshot each minute
         time = datetime.now().strftime('%Y-%m-%d_%H:%M')
