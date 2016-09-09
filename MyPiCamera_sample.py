@@ -1,9 +1,12 @@
 #!/usr/bin/python
-########################################################################################
+##############################################################################################################################
 ####### www.MyPiDrone.com
-#TITLE# MyPiCamera sample write telemetry text over video with camera.annotate_text
+#TITLE# DRONE MyPiCamera sample write telemetry text over video with camera.annotate_text
 ####### www.MyPiDrone.com
-########################################################################################
+####### How to used : 
+#######  MyPiCamera_sample.py | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
+#######  echo 'My telemetry text' > /tmp/MyPiCamera.pipein
+##############################################################################################################################
 import os
 import sys
 import picamera
