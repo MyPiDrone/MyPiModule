@@ -203,7 +203,7 @@ class MyPiModule(mp_module.MPModule):
         else:
             self.camera.annotate_background = picamera.Color('black')
             color='B'
-        print("%s %s %s\" % (color,time,telemetry_text))
+        print("%s %s %s\n" % (color,time,telemetry_text))
         self.camera.annotate_text = "%s %s" % (time,telemetry_text)
         # snapshot each minute
         time = datetime.now().strftime('%Y-%m-%d_%H:%M')
