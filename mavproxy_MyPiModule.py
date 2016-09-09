@@ -191,7 +191,7 @@ class MyPiModule(mp_module.MPModule):
         # overlay telemetry text with camera.annotate_text image 255 chars max
         ##################################################################################
         time = datetime.now().strftime('%H:%M:%S')
-        if self.shutdown_by_lowbat == True:
+        if self.shutdown_by_lowbat == True or self.mystate == 5 or self.mystate == 6:
             color='red'
             level='E'
         elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
