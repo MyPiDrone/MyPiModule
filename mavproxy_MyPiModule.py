@@ -181,7 +181,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.annotate_text_size = 20
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, intra_period=60)
-        self.camera.start_recording(self.outpipe)
+        self.camera.start_recording(self.outpipe , format='h264')
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
         self.current_telemetry_text = "Welcome PiCamera"
 
