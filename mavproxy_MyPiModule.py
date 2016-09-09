@@ -175,6 +175,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000)
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
+        self.current_telemetry_text = "Welcome PiCamera"
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -190,24 +191,29 @@ class MyPiModule(mp_module.MPModule):
         # overlay telemetry text with camera.annotate_text image 255 chars max
         ##################################################################################
         time = datetime.now().strftime('%H:%M:%S')
-        intext = "A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
-        #intext = intext.rstrip()
-        if intext != "":
-             telemetry_text = (intext[:254] + '..') if len(intext) > 254 else intext
         if self.shutdown_by_lowbat == True:
-            self.camera.annotate_background = picamera.Color('red')
-            color='R'
+            color='red'
+            level='E'
         elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
-            self.camera.annotate_background = picamera.Color('grey')
-            color='G'
+            color='grey'
+            level='W'
         else:
-            self.camera.annotate_background = picamera.Color('black')
-            color='B'
-        print("%s %s %s\n" % (color,time,telemetry_text))
-        self.camera.annotate_text = "%s %s" % (time,telemetry_text)
+            color='black'
+            level='N'
+        intext = "%s A=%s %s %s IP=%s Vid=%s RTL=%s STAB=%s Thr=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (level,self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        # minus time length hh:mm:ss 255 - 10 = 245 
+        new_telemetry_text = (intext[:245] + '..') if len(intext) > 245 else intext
+        # new telemetry text
+        if self.current_telemetry_text != new_telemetry_text:
+           self.camera.annotate_background = picamera.Color(color)
+           print("%s %s\n" % (time,new_telemetry_text))
+           self.camera.annotate_text = "%s %s" % (time,new_telemetry_text)
+           self.current_telemetry_text = new_telemetry_text
+        ##################################
         # snapshot each minute
-        time = datetime.now().strftime('%Y-%m-%d_%H:%M')
+        ##################################
         if time != self.snapshottime:
+            time = datetime.now().strftime('%Y-%m-%d_%H:%M')
 	    self.snapshottime = time
             jpgname=self.settings.myvideopath + "/Photo-Tarot-" + time + ".jpg"
             #print("jpgname=%s" % jpgname)
