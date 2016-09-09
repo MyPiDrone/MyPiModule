@@ -14,7 +14,8 @@
 
       version 2.3 : Overlaying telemetry text on video before Wifibroadcast
 
-       - Added picamera python module inside mavproxy_MyPiModule.py to broadcast video and telemetry text overlayed before      transmit with tx Wifibroadcasting (instead of raspivid) (1)
+       - Added picamera python module inside mavproxy_MyPiModule.py to broadcast video and telemetry text 
+         overlayed before transmit with tx Wifibroadcasting (instead of raspivid) (1)
          - See chapter : "Overlaying text on the output" here : picamera-overlaying-text-on-the-output
          - Now mavproxy_MyPiModule.py is controling video and photos snapshot with telemetry text overlayed (255 chars max) :
             - Used picamera python module instead of raspivid (1)
