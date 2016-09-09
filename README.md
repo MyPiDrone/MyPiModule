@@ -20,13 +20,14 @@
             https://picamera.readthedocs.io/en/release-1.12/recipes1.html#overlaying-text-on-the-output
           - Now mavproxy_MyPiModule.py controle video and photo snapshot with telemetry text (255 chars max) :
             - picamera python module used instead of raspivid (1)
-            - manage_video.sh and myvideo.service not used anymore
-            - start_MAVProxy_MyPiModule.sh execute mavproxy.py and start_tx_with_video_recording_and_picamera.sh
-            - start_tx_and_recording_with_picamera_video_input.sh replace start_tx_with_video_recording.sh
+            - start_MAVProxy_MyPiModule.sh execute mavproxy.py
+            - Now mavproxy.py and start_tx_with_video_recording_and_picamera.sh (2)
 
           - (1) See this MyPiCamera_sample.py python sample : 
               - MyPiCamera_sample.py | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
               - echo 'My telemetry text' > /tmp/MyPiCamera.pipein
+
+          - (2) manage_video.sh and myvideo.service not used anymore
 
 ###########################################################################################
 
@@ -40,25 +41,23 @@
 
 ###########################################################################################
 
-        - MyPiDrone_drone_install.sh                          DRONE : to install MyPiModule
-        - MyPiDrone_gcs_install.sh                            GCS   : to install start_rx and wifiap
-        - MyPiModule_build_and_git_update.sh                  DRONE : build MyPiModule and update github
-        - mavproxy_MyPiModule.py                              DRONE : module MAVProxy
-        - rc.local                                            DRONE : exec StartArduCopter-quad.sh
-        - ArduCopter-quad.service                             DRONE : systemd call /usr/local/bin/start_ArduCopter-quad.sh
-        - myvideo.service                                     DRONE : systemd call /usr/local/bin/start_video.sh /usr/local/bin/stop_video.sh
-        - mavproxy.service                                    DRONE : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
-        - wifiap.service                                      GCS   : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
-        - manage_video.sh                                     DRONE : start/stop /usr/local/bin/start_tx_with_video_recording.sh called by MyPiModule
-        - maanage_network.sh                                  DRONE : ifup/ifdown/status wlan0 called by MyPiModule 
-        - start_tx_with_video_recording.sh                    DRONE : start Video Wifibroadcast
-        - start_tx_with_video_recording_broadcast_over_ap.sh  DRONE : start Video Broadcast over Wifi AP : Beta test
-        - start_ap.sh                                         GCS   : start Wifi AP on GCS
-        - start_rx.sh                                         GCS   : view Video on GCS
-        - start_rx_and_broadcast_over_ap.sh                   GCS   : rx and streamin video over AP to Android QtGStreamerHUD emlid
-        - hostapd.conf                                        GCS   : Wifi Access Point configuration
-        - dnsmasq.conf                                        GCS   : dnsmasq configuration
-        - show_modules.sh                                     DRONE : tools show params modules
+        - MyPiDrone_drone_install.sh                                     DRONE : to install MyPiModule
+        - MyPiDrone_gcs_install.sh                                       GCS   : to install start_rx and wifiap
+        - MyPiModule_build_and_git_update.sh                             DRONE : build MyPiModule and update github
+        - mavproxy_MyPiModule.py                                         DRONE : module MAVProxy
+        - rc.local                                                       DRONE : exec StartArduCopter-quad.sh
+        - ArduCopter-quad.service                                        DRONE : systemd call /usr/local/bin/start_ArduCopter-quad.sh
+        - mavproxy.service                                               DRONE : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
+        - wifiap.service                                                 GCS   : systemd call /usr/local/bin/start_MAVProxy_MyPiModule.sh
+        - maanage_network.sh                                             DRONE : ifup/ifdown/status wlan0 called by MyPiModule 
+        - start_tx_and_recording_with_picamera_video_input.sh            DRONE : start Video Wifibroadcast
+        - start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh  DRONE : start Video Broadcast over Wifi AP : Beta test
+        - start_ap.sh                                                    GCS   : start Wifi AP on GCS
+        - start_rx.sh                                                    GCS   : view Video on GCS
+        - start_rx_and_broadcast_over_ap.sh                              GCS   : rx and streamin video over AP to Android QtGStreamerHUD emlid
+        - hostapd.conf                                                   GCS   : Wifi Access Point configuration
+        - dnsmasq.conf                                                   GCS   : dnsmasq configuration
+        - show_modules.sh                                                DRONE : tools show params modules
 
 ###########################################################################################
 
@@ -104,8 +103,19 @@ The main functions of MyPiModule (MAVProxy module):
     - mytimebat : 5sec interval data mesurement of the battery voltage.
     - mytimerc : 5sec interval data mesurement of the radio channels.
     - myrcvideo : channel to control video on / off, default 6.
-    - myrcwlan0 : channel to control the AP wifi on / off, default 8.
     - myrcyaw and myrcroll : the two channels to control the shutdown or reboot, default 4 and 1.
+    - myrcnet : channel to control wlan0 on/off, default 8
+    - mychanneltx : Wifibroadcast 2.4Ghz (CH 11) or 2.3Ghz (CH -19)
+    - mydebug : True or False
+    - myinterfaceadmin : wlan0
+    - myinterfacetx : wlan1
+    - mylog : /var/log/mavproxy_MyPiModule.log
+    - mylogverbose : True or False
+    - mypipeout : /tmp/MyPiCamera.pipeout : see start_tx_and_recording_with_raspivid_video_input.sh
+    - myseqinit : delay to start 15s
+    - myseqpoll : polling sequence 10
+    - myvideopath : /root/fpv/videos
+
 
 * Console mode functions:
 
@@ -132,7 +142,7 @@ The main functions of MyPiModule (MAVProxy module):
     -4- Execute ArduPilot:
       /usr/bin/ArduCopter-quad -A /dev/ttyAMA0 -C udp:127.0.0.1:14550
       
-    -5- Execute MAVProxy (in console mode remove --deamon) /usr/local/bin/mavproxy.py –master=udp:127.0.0.1:14550 –quadcopter –out=/dev/ttyUSB0,57600 –default-modules=’MyPiModule’ –daemon
+    -5- Execute MAVProxy (in console mode remove --deamon) /usr/local/bin/mavproxy.py --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors --daemon 
 
      You can also load the module when MAVProxy is already started with the command module load MyPiModule or module reload MyPiModule
      You can add this self-loading in file /.mavinit.scr or /root/.mavinit.scr by adding the line module load MyPiModule
