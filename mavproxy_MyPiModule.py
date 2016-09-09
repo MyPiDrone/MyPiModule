@@ -46,7 +46,9 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcnet', int, 8, 'Radio channel to change network on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.settings.append(MPSetting('myinterface', str, "wlan0", 'Wlan interface name'))
+        self.settings.append(MPSetting('myinterfaceadmin', str, "wlan0", 'Network admin interface name'))
+        self.settings.append(MPSetting('myinterfacetx', str, "wlan1", 'Wifibroadcast interface name'))
+        self.settings.append(MPSetting('mychanneltx', str, "-19", 'Channel wifibroadcast interface name'))
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
         self.settings.append(MPSetting('myvideopath', str, "/root/fpv/videos", 'output video directory'))
         self.settings.append(MPSetting('mypipeout', str, "/tmp/MyPiCamera.pipeout", 'Named pipe for tx'))
@@ -139,8 +141,8 @@ class MyPiModule(mp_module.MPModule):
         except OSError:
             pass
         with open("/var/log/start_tx_with_video_recording.log","wb") as out, open("/var/log/start_tx_with_video_recording.log","wb") as err:
-           subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh","wlan1","-19","--vbr"],stdout=out,stderr=err)
-        print "/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vbr is starting : waiting pipeout opening..."
+           subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh",self.settings.myinterfacetx,self.settings.mychanneltx,"--vbr"],stdout=out,stderr=err)
+        print ("/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh %s %s --vbr is starting : waiting %s opening..." % (self.settings.myinterfacetx,self.settings.mychanneltx,self.settings.mypipeout)
         self.outpipe = open(self.settings.mypipeout, 'w')
         ###############################################################################
         #Mode   Size    Aspect Ratio    Frame rates     FOV     Binning
@@ -226,7 +228,7 @@ class MyPiModule(mp_module.MPModule):
             self.camera.capture(jpgname, use_video_port=True)
 
     def my_network_status(self):
-            p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterface], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterfaceadmin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             rc = p.returncode
             if rc == 0:
@@ -262,8 +264,8 @@ class MyPiModule(mp_module.MPModule):
             # init var net_ip
             ####################################################
             self.my_network_status()
-            if self.net_up == True: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
-            else: self.my_statustext_send("%s down" % self.settings.myinterface)
+            if self.net_up == True: self.my_statustext_send("%s up %s" % (self.settings.myinterfaceadmin,self.net_ip_current))
+            else: self.my_statustext_send("%s down" % self.settings.myinterfaceadmin)
             ####################################################
             # video status
             ####################################################
@@ -501,9 +503,9 @@ class MyPiModule(mp_module.MPModule):
                    self.net_up = False
                    self.net_up_prev = self.net_up
                    self.net_ip_current = "null"
-                   self.my_statustext_send("%s down" % self.settings.myinterface)
-                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
-               msg = "MyRC%sRaw %s LOW : request DOWN : interface %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
+                   self.my_statustext_send("%s down" % self.settings.myinterfaceadmin)
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterfaceadmin])
+               msg = "MyRC%sRaw %s LOW : request DOWN : interface %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcnet] > self.RC_low_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < self.RC_high_mark[self.settings.myrcnet]:
                ''' MANAGE WLAN0 DOWN : RC8 MIDDLE '''
@@ -513,9 +515,9 @@ class MyPiModule(mp_module.MPModule):
                    self.net_up = False
                    self.net_up_prev = self.net_up
                    self.net_ip_current = "null"
-                   self.my_statustext_send("%s down" % self.settings.myinterface)
-                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterface])
-               msg = "MyRC%sRaw %s MIDDLE : request DOWN : interface %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up)
+                   self.my_statustext_send("%s down" % self.settings.myinterfaceadmin)
+                   self.my_subprocess(["/usr/local/bin/manage_network.sh","stop",self.settings.myinterfaceadmin])
+               msg = "MyRC%sRaw %s MIDDLE : request DOWN : interface %s is up : %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up)
                self.my_write_log("INFO",msg)
            elif self.myrcraw[self.settings.myrcnet] > self.RC_high_mark[self.settings.myrcnet] and self.myrcraw[self.settings.myrcnet] < (self.RC_high_mark[self.settings.myrcnet]+150) :
                ''' MANAGE mode RTL : RC8 HIGH range RC_high_mark to RC_high_mark+150 '''
@@ -539,13 +541,13 @@ class MyPiModule(mp_module.MPModule):
                        if self.net_up_request == True: self.my_statustext_send("Net up retry")
                        self.net_up_request = True
                        self.net_up_request_time = time.time()
-                       self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.myinterface])
-                       msg = "MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
+                       self.my_subprocess(["/usr/local/bin/manage_network.sh","start",self.settings.myinterfaceadmin])
+                       msg = "MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                        self.my_write_log("INFO",msg)
                else:
-                   if self.net_up_prev != self.net_up: self.my_statustext_send("%s up %s" % (self.settings.myinterface,self.net_ip_current))
+                   if self.net_up_prev != self.net_up: self.my_statustext_send("%s up %s" % (self.settings.myinterfaceadmin,self.net_ip_current))
                    self.net_up_prev = self.net_up
-               msg = "MyRC%sRaw %s LOW : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterface,self.net_up_request,self.net_up)
+               msg = "MyRC%sRaw %s LOW : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
            else:
                msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s unknown RC value" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
@@ -683,8 +685,8 @@ class MyPiModule(mp_module.MPModule):
                     msg = "INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s params: %s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on,self.myparamcount)
                     self.my_write_log("INFO",msg)
                     if self.net_up != self.net_up_prev:
-                        if self.net_up == True: self.my_statustext_send("%s up. %s" % (self.settings.myinterface,self.net_ip_current))
-                        else: self.my_statustext_send("%s down." % self.settings.myinterface)
+                        if self.net_up == True: self.my_statustext_send("%s up. %s" % (self.settings.myinterfaceadmin,self.net_ip_current))
+                        else: self.my_statustext_send("%s down." % self.settings.myinterfaceadmin)
                         self.net_up_prev = self.net_up
                     if self.video_on != self.video_on_prev:
                         if self.video_on == True: self.my_statustext_send("Video on.")
