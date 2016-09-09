@@ -19,7 +19,7 @@
          - See chapter : "Overlaying text on the output" here : picamera-overlaying-text-on-the-output
          - Now mavproxy_MyPiModule.py is controling video and photos snapshot with telemetry text overlayed (255 chars max) :
             - Used picamera python module instead of raspivid (1)
-            - Now start_MAVProxy_MyPiModule.sh execute mavproxy.py and mavproxy.py execute              start_tx_and_recording_with_picamera_video_input.sh (2)
+            - Now start_MAVProxy_MyPiModule.sh execute mavproxy.py and mavproxy.py execute start_tx_and_recording_with_picamera_video_input.sh (2)
         
           - (1) See this MyPiCamera_sample.py python sample : 
               - mkfifo /tmp/MyPiCamera.pipein
