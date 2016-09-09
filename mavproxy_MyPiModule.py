@@ -128,9 +128,6 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
-        with open("/var/log/start_tx_with_video_recording.log","wb") as out, open("/var/log/start_tx_with_video_recording.log","wb") as err:
-           subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh","wlan1","-19","--vbr"],stdout=out,stderr=err)
-        print "/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vbr is starting..."
         ##########################################################################################################
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vbr
@@ -141,6 +138,11 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(self.settings.mypipeout)
         except OSError:
             pass
+        with open("/var/log/start_tx_with_video_recording.log","wb") as out, open("/var/log/start_tx_with_video_recording.log","wb") as err:
+           subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh","wlan1","-19","--vbr"],stdout=out,stderr=err)
+        print "/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vbr is starting : waiting pipeout opening..."
+        self.outpipe = open(self.settings.mypipeout, 'w')
+        ###############################################################################
         #Mode   Size    Aspect Ratio    Frame rates     FOV     Binning
         #0      automatic selection
         #1      1920x1080       16:9    1-30fps         Partial None
@@ -151,7 +153,7 @@ class MyPiModule(mp_module.MPModule):
         #6      640x480         4:3     42.1-60fps      Full    2x2 plus skip
         #7      640x480         4:3     60.1-90fps      Full    2x2 plus skip
         # image_effect  'none' 'negative' 'solarize' 'sketch' 'denoise' 'emboss' 'oilpaint' 'hatch' 'gpen' 'pastel' 'watercolor' 'film' 'blur' 'saturation' 'colorswap' 'washedout' 'posterise' 'colorpoint' 'colorbalance' 'cartoon' 'deinterlace1' 'deinterlace2'
-        self.outpipe = open(self.settings.mypipeout, 'w')
+        ###############################################################################
         self.camera=picamera.PiCamera()
         self.camera.sharpness = 0
         self.camera.contrast = 0
