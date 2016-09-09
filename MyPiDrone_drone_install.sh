@@ -12,16 +12,14 @@ cd ${MY_DIR_MYPIDRONE}
 cp MyPiModule/mavproxy_MyPiModule.py  ${MY_MAVPROXY_DIR}/MAVProxy/modules/mavproxy_MyPiModule.py
 #
 cp MyPiModule/ArduCopter-quad.service                            /lib/systemd/system/
-#cp MyPiModule/myvideo.service                                    /lib/systemd/system/
 cp MyPiModule/mavproxy.service                                   /lib/systemd/system/
 cp MyPiModule/rc.local                                           /etc/
 #
 cp MyPiModule/start_MAVProxy_MyPiModule.sh                       /usr/local/bin/
 cp MyPiModule/start_ArduCopter-quad.sh                           /usr/local/bin/
-cp MyPiModule/start_tx_with_video_recording.sh                   /usr/local/bin/
-cp MyPiModule/start_tx_with_video_recording_and_picamera.sh      /usr/local/bin/
-#cp MyPiModule/Mypicamera.py                                      /usr/local/bin/
-#cp MyPiModule/manage_video.sh                                    /usr/local/bin/
+cp MyPiModule/start_tx_and_recording_with_picamera_video_input.sh                /usr/local/bin/
+cp MyPiModule/start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh      /usr/local/bin/
+cp MyPiModule/start_tx_and_recording_with_raspivid_video_input.sh                /usr/local/bin/
 cp MyPiModule/manage_network.sh                                  /usr/local/bin/
 cp MyPiModule/start_tx_with_video_recording_broadcast_over_ap.sh /usr/local/bin/
 cp MyPiModule/show_modules.sh                                    /usr/local/bin/
