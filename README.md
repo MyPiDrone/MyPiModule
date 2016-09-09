@@ -21,7 +21,7 @@
             - Used picamera python module instead of raspivid (1)
             - Now start_MAVProxy_MyPiModule.sh execute mavproxy.py and mavproxy.py execute start_tx_and_recording_with_picamera_video_input.sh (2)
         
-          - (1) See this MyPiCamera_sample.py python sample : 
+          - (1) (1) Here a python sample with a named pipe MyPiCamera_sample.py and command execution with  tx :
               - mkfifo /tmp/MyPiCamera.pipein
               - MyPiCamera_sample.py | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
               - sleep 3
