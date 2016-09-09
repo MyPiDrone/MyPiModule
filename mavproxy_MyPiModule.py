@@ -128,7 +128,7 @@ class MyPiModule(mp_module.MPModule):
         self.myparamcount_prev = 0
         self.myseverity = 0
         self.mytext = "nulltext"
-        self.my_subprocess(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh","wlan1","-19","--vbr","1>>/var/log/start_tx_with_video_recording.log","2>&1"])
+        subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh","wlan1","-19","--vbr","1>>/var/log/start_tx_with_video_recording.log","2>&1"])
         ##########################################################################################################
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vbr
