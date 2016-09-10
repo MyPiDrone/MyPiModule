@@ -113,19 +113,13 @@ then
                 if [ "$OPTION" = "--vr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
-			#echo 'Welcome MyPiCamera' > $pipeout &
-			set -x
                         tee $VIDEO < $pipeout
                 elif [ "$OPTION" = "--vbr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
-			#echo 'Welcome MyPiCamera' > $pipeout &
-			set -x
                         tee $VIDEO < $pipeout | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
-			#echo 'Welcome MyPiCamera' > $pipeout &
-			set -x
                         $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN < $pipeout
                 fi
         fi
