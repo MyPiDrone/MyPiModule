@@ -21,7 +21,6 @@ except OSError:
     pass
 pin = open(pipein, 'r')
 
-pout.write("How are you?")
 telemetry_text = "" 
 
 with picamera.PiCamera() as camera:
