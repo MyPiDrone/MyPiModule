@@ -185,6 +185,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, intra_period=60)
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
         self.current_telemetry_text = "Welcome PiCamera"
+        self.s=0
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -217,7 +218,8 @@ class MyPiModule(mp_module.MPModule):
            self.camera.annotate_background = picamera.Color(color)
            #if self.mydebug:
            print("Telemetry text : %s %s\n" % (time,new_telemetry_text))
-           self.camera.annotate_text = "%s %s %s" % (time,new_telemetry_text,chr(97))
+           self.s += 1
+           self.camera.annotate_text = "%s %s %s" % (time,new_telemetry_text,chr(self.s))
            self.current_telemetry_text = new_telemetry_text
         ##################################
         # snapshot each minute
