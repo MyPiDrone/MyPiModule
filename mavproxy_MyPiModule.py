@@ -185,7 +185,6 @@ class MyPiModule(mp_module.MPModule):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, intra_period=60)
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
         self.current_telemetry_text = "Welcome PiCamera"
-        self.s=120
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -210,7 +209,7 @@ class MyPiModule(mp_module.MPModule):
         else:
             color='black'
             level='N'
-        intext = "%s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["...","RTL"][self.rtl_on == True],[".........","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        intext = "%s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct ALt=%sm ____________________________________________________________--------------------#########" % (level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["...","RTL"][self.rtl_on == True],[".........","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         # minus time length hh:mm:ss 255 - 10 = 245 
         new_telemetry_text = (intext[:245] + '..') if len(intext) > 245 else intext
         # new telemetry text
@@ -218,9 +217,7 @@ class MyPiModule(mp_module.MPModule):
            self.camera.annotate_background = picamera.Color(color)
            #if self.mydebug:
            print("Telemetry text : %s %s\n" % (time,new_telemetry_text))
-           self.s += 1
-           ch = unichr(self.s)
-           self.camera.annotate_text = "%s %s %s %s" % (time,new_telemetry_text,self.s,ch)
+           self.camera.annotate_text = "%s %s" % (time,new_telemetry_text)
            self.current_telemetry_text = new_telemetry_text
         ##################################
         # snapshot each minute
