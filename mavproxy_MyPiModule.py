@@ -173,12 +173,14 @@ class MyPiModule(mp_module.MPModule):
         self.camera.hflip = False
         self.camera.vflip = False
         self.camera.crop = (0.0, 0.0, 1.0, 1.0)
-        self.camera.resolution = (1296, 730)
-        self.camera.framerate = 49
+        #self.camera.resolution = (1296, 730)
+        #self.camera.framerate = 49
+        self.camera.resolution = (1296, 972)
+        self.camera.framerate = 42
         self.camera.led = True
         #self.camera.start_preview()
         self.camera.annotate_background = picamera.Color('black')
-        self.camera.annotate_text_size = 20
+        self.camera.annotate_text_size = 32
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, intra_period=60)
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
