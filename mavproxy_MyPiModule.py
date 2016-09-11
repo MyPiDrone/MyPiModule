@@ -219,7 +219,7 @@ class MyPiModule(mp_module.MPModule):
            #if self.mydebug:
            print("Telemetry text : %s %s\n" % (time,new_telemetry_text))
            self.s += 1
-           ch = " ascii: {0} char: {1}".format(self.s, chr(self.s))
+           ch = chr(self.s, encoding='iso-8859-1')
            self.camera.annotate_text = "%s %s %s %s" % (time,new_telemetry_text,self.s,ch)
            self.current_telemetry_text = new_telemetry_text
         ##################################
