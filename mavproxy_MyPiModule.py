@@ -185,7 +185,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, intra_period=60)
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
         self.current_telemetry_text = "Welcome PiCamera"
-        self.s=0
+        self.s=120
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
