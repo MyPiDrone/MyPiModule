@@ -217,7 +217,7 @@ class MyPiModule(mp_module.MPModule):
            self.camera.annotate_background = picamera.Color(color)
            #if self.mydebug:
            print("Telemetry text : %s %s\n" % (time,new_telemetry_text))
-           self.camera.annotate_text = "%s %s" % (time,new_telemetry_text)
+           self.camera.annotate_text = "%s %s %s" % (time,new_telemetry_text,chr(97))
            self.current_telemetry_text = new_telemetry_text
         ##################################
         # snapshot each minute
