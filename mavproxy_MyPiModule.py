@@ -173,12 +173,12 @@ class MyPiModule(mp_module.MPModule):
         self.camera.hflip = False
         self.camera.vflip = False
         self.camera.crop = (0.0, 0.0, 1.0, 1.0)
-        self.camera.resolution = (640,480)
-        self.camera.framerate = 60
+        #self.camera.resolution = (640,480)
+        #self.camera.framerate = 60
         #self.camera.resolution = (1296, 730)
         #self.camera.framerate = 49
-        #self.camera.resolution = (1296, 972)
-        #self.camera.framerate = 42
+        self.camera.resolution = (1296, 972)
+        self.camera.framerate = 25
         self.camera.led = True
         #self.camera.start_preview()
         self.camera.annotate_background = picamera.Color('black')
