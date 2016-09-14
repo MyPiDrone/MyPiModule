@@ -14,6 +14,17 @@ echo "           2.4Ghz channel 1 to 13"
 echo "           2.3ghz channel -1 to -19"
 echo "           channel default -19"
 
+## mandatory to run cvlc with root user
+strings /usr/bin/vlc|egrep "getppid|geteuid"
+C=`strings /usr/bin/vlc|grep -c getppid`
+if [ $C -eq 1 ]; then
+	echo "VLC getppid already set"
+else
+	cp /usr/bin/vlc /usr/bin/vlc.ori
+	sed -i 's/geteuid/getppid/' /usr/bin/vlc
+fi
+strings /usr/bin/vlc|egrep "getppid|geteuid"
+
 WifiBroadcast_RX="/root/wifibroadcast/rx"
 WifiBroadcast_RX="/root/WifiBroadcast/wifibroadcast/rx"
 
@@ -68,8 +79,20 @@ then
 		#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN > /tmp/myvideo
         	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-1.0 -v fdsrc ! h264parse ! avdec_h264 ! xvimagesink sync=false
         	#$WifiBroadcast_RX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN | gst-launch-0.10 -v fdsrc ! h264parse ! ffdec_h264 ! xvimagesink sync=false
+		# to Android Tower
 		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=9000 host=10.0.0.12
-		$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=5000 host=127.0.0.1
+		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=9000 host=192.168.1.60
+		#to qrroundcontrol port 5000 or 5600?
+		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=5600 host=127.0.0.1
+		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink port=5000 host=10.0.0.12
+		# vlc http
+		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |cvlc -vvv stream:///dev/stdin --sout '#standard{access=http,mux=ts,dst=:5000}' :demux=h264
+		# vlc rtsp
+		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |cvlc -vvv stream:///dev/stdin --sout '#rtp{sdp=rtsp://:5000/}' :demux=h264
+		# socat
+                mkfifo /tmp/mypipe 
+		gst-launch-1.0 -v fdsrc ! h264parse ! avdec_h264 ! xvimagesink sync=false < /tmp/mypipe &
+		$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |tee -a /tmp/mypipe |socat -b 1024 - UDP4-SENDTO:10.0.0.18:5000
 	fi
 
 else
