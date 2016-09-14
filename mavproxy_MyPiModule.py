@@ -198,19 +198,19 @@ class MyPiModule(mp_module.MPModule):
             fo = open(self.settings.mylog, "a")
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
+        my_telemetry_text(level,msg)
+
+    def my_telemetry_text(self,level,msg):
         ##################################################################################
         # overlay telemetry text with camera.annotate_text image 255 chars max
         ##################################################################################
         time = datetime.now().strftime('%H:%M:%S')
         if self.shutdown_by_lowbat == True or self.mystate == 5 or self.mystate == 6:
             color='red'
-            level='E'
         elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
             color='grey'
-            level='W'
         else:
             color='black'
-            level='N'
         intext = "%s %s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                                                         ALt=%sm  " % (time,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         # max 255
         new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
