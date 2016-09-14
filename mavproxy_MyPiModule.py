@@ -198,7 +198,7 @@ class MyPiModule(mp_module.MPModule):
             fo = open(self.settings.mylog, "a")
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
-        my_telemetry_text(level,msg)
+        self.my_telemetry_text(level,msg)
 
     def my_telemetry_text(self,level,msg):
         ##################################################################################
