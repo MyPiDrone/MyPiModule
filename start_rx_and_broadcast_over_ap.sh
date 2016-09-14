@@ -89,7 +89,7 @@ then
 		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |cvlc -vvv stream:///dev/stdin --sout '#standard{access=http,mux=ts,dst=:5000}' :demux=h264
 		# vlc rtsp
 		#$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |cvlc -vvv stream:///dev/stdin --sout '#rtp{sdp=rtsp://:5000/}' :demux=h264
-		# socat
+		# socat with https://github.com/Consti10/myMediaCodecPlayer-for-FPV
                 mkfifo /tmp/mypipe 
 		gst-launch-1.0 -v fdsrc ! h264parse ! avdec_h264 ! xvimagesink sync=false < /tmp/mypipe &
 		$WifiBroadcast_RX  -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN |tee -a /tmp/mypipe |socat -b 1024 - UDP4-SENDTO:10.0.0.18:5000
