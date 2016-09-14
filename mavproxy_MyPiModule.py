@@ -211,15 +211,15 @@ class MyPiModule(mp_module.MPModule):
         else:
             color='black'
             level='N'
-        intext = "%s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                                                         ALt=%sm  " % (level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
-        # minus time length hh:mm:ss 255 - 10 = 245 
-        new_telemetry_text = (intext[:245] + '.') if len(intext) > 245 else intext
+        intext = "%s %s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                                                         ALt=%sm  " % (time,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        # max 255
+        new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
         # new telemetry text
         if self.current_telemetry_text != new_telemetry_text:
            self.camera.annotate_background = picamera.Color(color)
-           #if self.mydebug:
-           print("Telemetry text : %s %s\n" % (time,new_telemetry_text))
-           self.camera.annotate_text = "%s %s" % (time,new_telemetry_text)
+           if self.mydebug:
+               print("Telemetry text : %s\n" % (new_telemetry_text))
+           self.camera.annotate_text = "%s" % (new_telemetry_text)
            self.current_telemetry_text = new_telemetry_text
         ##################################
         # snapshot each minute
