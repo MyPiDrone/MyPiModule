@@ -709,7 +709,7 @@ class MyPiModule(mp_module.MPModule):
             self.VFR_HUD += 1
             self.armed = self.master.motors_armed()
             self.mythrottle = msg.throttle
-            selt.mygroundspeed = msg.groundspeed
+            self.mygroundspeed = msg.groundspeed
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
