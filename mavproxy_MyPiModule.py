@@ -184,7 +184,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text_size = 32
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
+        self.start_camera()
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
         self.current_telemetry_text = "Welcome PiCamera"
 
@@ -199,6 +199,10 @@ class MyPiModule(mp_module.MPModule):
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
         self.my_telemetry_text()
+
+    def start_camera()
+        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
+	
 
     def my_telemetry_text(self):
         ##################################################################################
@@ -582,7 +586,7 @@ class MyPiModule(mp_module.MPModule):
                        self.video_on_request = True
                        self.video_on_request_time = time.time()
                        self.camera.led = True
-                       self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000)
+                       self.start_camera()
                        msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on)
                        self.my_write_log("INFO",msg)
                else:
