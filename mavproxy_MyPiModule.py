@@ -59,6 +59,8 @@ class MyPiModule(mp_module.MPModule):
         self.mylogverbose = self.settings.mylogverbose
         self.mydebug = self.settings.mydebug
         # stats
+        self.GPS_RAW = 0
+        self.GPS_RAW_INT = 0
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
         self.HEARTBEAT = 0
@@ -388,11 +390,13 @@ class MyPiModule(mp_module.MPModule):
         current_time = time.time()
         elapse_time = int(current_time - self.start_time) + 1
         rate_VFR_HUD = int(self.VFR_HUD / elapse_time)
+        rate_GPS_RAW = int(self.GPS_RAW / elapse_time)
+        rate_GPS_RAW_INT = int(self.GPS_RAW_INT / elapse_time)
         rate_SYS_STATUS = int(self.SYS_STATUS / elapse_time)
         rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
         rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
-        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
+        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
        
@@ -646,7 +650,7 @@ class MyPiModule(mp_module.MPModule):
            # check init 0 or 6
            self.my_manage_init()
 
-    def mavlink_packet(self, m):
+    def mavlink_packet(self, msg):
         '''  handle a mavlink packet      '''
         '''  HEARTBEAT system_status      '''
         '''  0: System Status UNINIT      '''
@@ -657,25 +661,57 @@ class MyPiModule(mp_module.MPModule):
         '''  5: System Status CRITICAL    '''
         '''  6: System Status EMERGENCY   '''
         '''  7: System Status POWEROFF    '''
-        mtype = m.get_type()
+        mtype = msg.get_type()
         #print("System Status %s" % mtype)
-        if mtype == "VFR_HUD":
+        ###########################################
+        # Start re-used code mavproxy_console.py
+        ###########################################
+        if mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
+            if mtype == "GPS_RAW":
+                self.GPS_RAW += 1
+                num_sats1 = self.master.field('GPS_STATUS', 'satellites_visible', 0)
+            else:
+                self.GPS_RAW_INT += 1
+                num_sats1 = msg.satellites_visible
+            num_sats2 = self.master.field('GPS2_RAW', 'satellites_visible', -1)
+            if num_sats2 == -1:
+                sats_string = "%u" % num_sats1
+            else:
+                sats_string = "%u/%u" % (num_sats1, num_sats2)
+            if ((msg.fix_type >= 3 and self.master.mavlink10()) or
+                (msg.fix_type == 2 and not self.master.mavlink10())):
+                if (msg.fix_type >= 4):
+                    fix_type = "%u" % msg.fix_type
+                else:
+                    fix_type = ""
+                print('GPS', 'GPS: OK%s (%s)' % (fix_type, sats_string), fg='green')
+            else:
+                print('GPS', 'GPS: %u (%s)' % (msg.fix_type, sats_string), fg='red')
+            if self.master.mavlink10():
+                gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
+            else:
+                gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
+            print('Heading', 'Hdg %s/%u' % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading))
+        ###########################################
+        # End re-used code mavproxy_console.py
+        ###########################################
+        elif mtype == "VFR_HUD":
             self.VFR_HUD += 1
             self.armed = self.master.motors_armed()
-            self.mythrottle = m.throttle
+            self.mythrottle = msg.throttle
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
             self.my_telemetry_text()
-        if mtype == "SYS_STATUS":
+        elif mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
-            self.myvolt = m.voltage_battery
-            self.mycurrent = m.current_battery
-            self.myremaining = m.battery_remaining
+            self.myvolt = msg.voltage_battery
+            self.mycurrent = msg.current_battery
+            self.myremaining = msg.battery_remaining
             self.my_battery_check()
-        if mtype == "HEARTBEAT":
+        elif mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
-            self.mystate = m.system_status
+            self.mystate = msg.system_status
             if (self.myinit == False and (time.time() > self.last_init_time + self.settings.myseqinit)):
                 self.last_init_time = time.time()
                 self.last_seq_time = time.time()
@@ -721,22 +757,22 @@ class MyPiModule(mp_module.MPModule):
                         print ("MAX  : %s" % self.RC_MAX)
                         print ("low  : %s" % self.RC_low_mark)
                         print ("high : %s" % self.RC_high_mark)
-        if mtype == "RC_CHANNELS_RAW":
+        elif mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
-            self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
-            self.myrcraw[5] = m.chan5_raw ; self.myrcraw[6] = m.chan6_raw ; self.myrcraw[7] = m.chan7_raw ; self.myrcraw[8] = m.chan8_raw
+            self.myrcraw[1] = msg.chan1_raw ; self.myrcraw[2] = msg.chan2_raw ; self.myrcraw[3] = msg.chan3_raw ; self.myrcraw[4] = msg.chan4_raw
+            self.myrcraw[5] = msg.chan5_raw ; self.myrcraw[6] = msg.chan6_raw ; self.myrcraw[7] = msg.chan7_raw ; self.myrcraw[8] = msg.chan8_raw
             self.my_rc_check()
-        if mtype == "STATUSTEXT":
-            self.myseverity = m.severity
-            self.mytext = m.text
+        elif mtype == "STATUSTEXT":
+            self.myseverity = msg.severity
+            self.mytext = msg.text
             self.my_statustext_check()
-        if mtype == "PARAM_VALUE":
-            #print("PARAM_VALUE %s %s" % (m.param_id,m.param_value))
-            self.myparamcount = m.param_count
+        elif mtype == "PARAM_VALUE":
+            #print("PARAM_VALUE %s %s" % (msg.param_id,msg.param_value))
+            self.myparamcount = msg.param_count
             for i in range(1,17):
-                if (m.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i] = m.param_value
-                if (m.param_id == "RC%s_MIN" % i):  self.RC_MIN[i] = m.param_value
-                if (m.param_id == "RC%s_MAX" % i):  self.RC_MAX[i] = m.param_value
+                if (msg.param_id == "RC%s_TRIM" % i): self.RC_TRIM[i] = msg.param_value
+                if (msg.param_id == "RC%s_MIN" % i):  self.RC_MIN[i] = msg.param_value
+                if (msg.param_id == "RC%s_MAX" % i):  self.RC_MAX[i] = msg.param_value
                 self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
                 self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
 #not used
