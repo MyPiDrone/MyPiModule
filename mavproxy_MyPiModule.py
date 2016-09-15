@@ -672,7 +672,7 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         # Start re-used code mavproxy_console.py
         ###########################################
-        if type == 'ATTITUDE':
+        if mtype == 'ATTITUDE':
             self.ATTITUDE += 1
             self.myTText_Roll="Roll %u" % math.degrees(msg.roll)
             self.myTText_Pitch="Pitch %u" % math.degrees(msg.pitch)
