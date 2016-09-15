@@ -227,7 +227,7 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='black'
                 level='_'
-            intext = "{0:8} {1:1} {2:8} {3:8} {4:8} {5} {6} Net{7:4} Video{8:3} {9:3} {10:8} Thr={11} {12} {13} GPSSpeed={14} {15}V {16}A {17}% ALt={18}m".format(mytime,level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["Down","UP"][self.net_up == True],["OFF","ON"][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.status.altitude)
+            intext = "{0:8} {1:1} {2:8} {3:8} {4:8} {5} {6} Net{7:4} Video{8:3} Ask={9:8} Thr={10} {11} {12} GPSSpeed={13} {14}V {15}A {16}% ALt={17}m".format(mytime,level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["Down","UP"][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.status.altitude)
             # max 255
             new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
             # new telemetry text
