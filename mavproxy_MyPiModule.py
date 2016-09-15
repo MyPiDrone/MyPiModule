@@ -667,6 +667,7 @@ class MyPiModule(mp_module.MPModule):
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
+            print("%s" % time.time())
             self.my_telemetry_text()
         if mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
