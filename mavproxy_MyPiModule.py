@@ -693,7 +693,7 @@ class MyPiModule(mp_module.MPModule):
                 gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
             else:
                 gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
-            self_myTText_heading="Hdg %s/%u" % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading))
+            self_myTText_heading="Hdg %s/%u" % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
