@@ -197,14 +197,6 @@ class MyPiModule(mp_module.MPModule):
         self.myTText_Roll = ""
         self.myTText_Pitch = ""
 
-    def arrondi(nb):
-        nb=str(nb).split('.')
-        if len(nb[1])>2:
-            decimal=int(nb[1][:2])+1
-        else:
-            decimal=int(nb[1])
-        return nb[0]+'.'+str(decimal)
-
     def my_write_log(self,level,msg):
         #OUTPUT FILE
         prefix = "Armed=%s State=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s Stabilize=%s Throttle=%s Volt=%s Current=%s Remaining=%s Altitude=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
@@ -235,7 +227,7 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='black'
                 level='_'
-            intext = "%s %s %s %s %s %s %s %s %s %s %s Thr=%s %s %s GPSSpeed=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (mytime,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,arrondi(self.myvolt/1000),self.mycurrent,self.myremaining,self.status.altitude)
+            intext = "%s %s %s %s %s %s %s %s %s %s %s Thr=%s %s %s GPSSpeed=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (mytime,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,str(round(self.myvolt/1000,2)),self.mycurrent,self.myremaining,self.status.altitude)
             # max 255
             new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
             # new telemetry text
