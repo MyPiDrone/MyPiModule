@@ -204,8 +204,8 @@ class MyPiModule(mp_module.MPModule):
     def my_start_camera(self):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
 
-    def my_telemetry_text(self):
-        print("OOO %s" % time.time())
+    def my_telemetry_text(self,T):
+        print("OOO %s" % T)
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
             print("%s %s" % (self.last_TText_check_time,self.settings.mytimeTText))
             self.last_TText_check_time = time.time()
@@ -668,8 +668,7 @@ class MyPiModule(mp_module.MPModule):
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
-            print("%s" % time.time())
-            self.my_telemetry_text()
+            self.my_telemetry_text(time.time())
         if mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
             self.myvolt = m.voltage_battery
