@@ -684,14 +684,14 @@ class MyPiModule(mp_module.MPModule):
                     fix_type = "%u" % msg.fix_type
                 else:
                     fix_type = ""
-                print('GPS', 'GPS: OK%s (%s)' % (fix_type, sats_string), fg='green')
+                print("GPS: OK%s (%s) %s' % (fix_type, sats_string,'green'))
             else:
-                print('GPS', 'GPS: %u (%s)' % (msg.fix_type, sats_string), fg='red')
+                print("GPS: %u (%s) %s" % (msg.fix_type, sats_string,'red'))
             if self.master.mavlink10():
                 gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
             else:
                 gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
-            print('Heading', 'Hdg %s/%u' % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading))
+            print("Hdg %s/%u" % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading))
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
