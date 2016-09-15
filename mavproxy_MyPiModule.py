@@ -13,8 +13,7 @@
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
 ''' ----------------------------------------------------------------------------------- '''
 
-import time
-import os
+import os, sys, math, time
 import picamera
 from pymavlink import mavutil
 from datetime import datetime
