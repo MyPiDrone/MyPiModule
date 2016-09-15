@@ -211,7 +211,7 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             # overlay telemetry text with camera.annotate_text image 255 chars max
             ##################################################################################
-            time = datetime.now().strftime('%H:%M:%S')
+            mytime = datetime.now().strftime('%H:%M:%S')
             if self.shutdown_by_lowbat == True or self.mystate == 5 or self.mystate == 6:
                 color='red'
                 level='E'
@@ -221,11 +221,12 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='black'
                 level='_'
-            intext = "%s %s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                                                         ALt=%sm  " % (time,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+            intext = "%s %s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                                                         ALt=%sm  " % (mytime,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
             # max 255
             new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
             # new telemetry text
             if self.current_telemetry_text != new_telemetry_text:
+               print("UUUU %s" % current_time)
                self.camera.annotate_background = picamera.Color(color)
                if self.mydebug:
                    print("Telemetry text : %s\n" % (new_telemetry_text))
@@ -234,10 +235,10 @@ class MyPiModule(mp_module.MPModule):
             ##################################
             # snapshot each minute
             ##################################
-            if time != self.snapshottime:
-                time = datetime.now().strftime('%Y-%m-%d_%H:%M')
+            if mytime != self.snapshottime:
+                mytime2 = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 self.snapshottime = time
-                jpgname=self.settings.myvideopath + "/Photo-Tarot-" + time + ".jpg"
+                jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mytime2 + ".jpg"
                 #print("jpgname=%s" % jpgname)
                 self.camera.capture(jpgname, use_video_port=True)
 
