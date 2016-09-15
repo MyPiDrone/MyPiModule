@@ -666,6 +666,7 @@ class MyPiModule(mp_module.MPModule):
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
+            self.my_telemetry_text()
         if mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
             self.myvolt = m.voltage_battery
@@ -720,7 +721,6 @@ class MyPiModule(mp_module.MPModule):
                         print ("MAX  : %s" % self.RC_MAX)
                         print ("low  : %s" % self.RC_low_mark)
                         print ("high : %s" % self.RC_high_mark)
-                    self.my_telemetry_text()
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
