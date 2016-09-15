@@ -34,8 +34,9 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('myrtl', self.cmd_myrtl, "change flight mode to tTL")
         self.add_command('mystabilize', self.cmd_mystabilize, "change flight mode to STABILIZE")
         # my settings
-        self.settings.append(MPSetting('mytimebat', int, 5, 'Battery Interval Time sec', tab='my'))
-        self.settings.append(MPSetting('mytimerc', int, 4, 'RC Interval Time sec'))
+        self.settings.append(MPSetting('mytimebat', int, 5, 'Battery refresh Interval Time sec', tab='my'))
+        self.settings.append(MPSetting('mytimeTText', int, 1, 'Telemetry text refresh Interval Time sec'))
+        self.settings.append(MPSetting('mytimerc', int, 4, 'RC refresh Interval Time sec'))
         self.settings.append(MPSetting('myseqinit', int, 15, 'Time sec before init var and start polling'))
         self.settings.append(MPSetting('myseqpoll', int, 10, 'Time sec between poll status Network, Video, mode'))
         self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
@@ -113,6 +114,7 @@ class MyPiModule(mp_module.MPModule):
         self.stabilize_on_prev = False
         #
         self.last_battery_check_time = time.time()
+        self.last_TText_check_time = time.time()
         self.last_rc_check_time = time.time()
         self.last_seq_time = time.time()
         self.last_init_time = time.time()
@@ -198,45 +200,45 @@ class MyPiModule(mp_module.MPModule):
             fo = open(self.settings.mylog, "a")
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
-        self.my_telemetry_text()
 
     def my_start_camera(self):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
-	
 
     def my_telemetry_text(self):
-        ##################################################################################
-        # overlay telemetry text with camera.annotate_text image 255 chars max
-        ##################################################################################
-        time = datetime.now().strftime('%H:%M:%S')
-        if self.shutdown_by_lowbat == True or self.mystate == 5 or self.mystate == 6:
-            color='red'
-            level='E'
-        elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
-            color='grey'
-            level='W'
-        else:
-            color='black'
-            level='_'
-        intext = "%s %s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                                                         ALt=%sm  " % (time,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
-        # max 255
-        new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
-        # new telemetry text
-        if self.current_telemetry_text != new_telemetry_text:
-           self.camera.annotate_background = picamera.Color(color)
-           if self.mydebug:
-               print("Telemetry text : %s\n" % (new_telemetry_text))
-           self.camera.annotate_text = "%s" % (new_telemetry_text)
-           self.current_telemetry_text = new_telemetry_text
-        ##################################
-        # snapshot each minute
-        ##################################
-        if time != self.snapshottime:
-            time = datetime.now().strftime('%Y-%m-%d_%H:%M')
-	    self.snapshottime = time
-            jpgname=self.settings.myvideopath + "/Photo-Tarot-" + time + ".jpg"
-            #print("jpgname=%s" % jpgname)
-            self.camera.capture(jpgname, use_video_port=True)
+       if time.time() > self.last_TText_check_time + self.settings.mytimeTText:
+            self.last_TText_check_time = time.time()
+            ##################################################################################
+            # overlay telemetry text with camera.annotate_text image 255 chars max
+             ##################################################################################
+            time = datetime.now().strftime('%H:%M:%S')
+            if self.shutdown_by_lowbat == True or self.mystate == 5 or self.mystate == 6:
+                color='red'
+                level='E'
+            elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
+                color='grey'
+                level='W'
+            else:
+                color='black'
+                level='_'
+            intext = "%s %s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                                                         ALt=%sm  " % (time,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+            # max 255
+            new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
+            # new telemetry text
+            if self.current_telemetry_text != new_telemetry_text:
+               self.camera.annotate_background = picamera.Color(color)
+               if self.mydebug:
+                   print("Telemetry text : %s\n" % (new_telemetry_text))
+               self.camera.annotate_text = "%s" % (new_telemetry_text)
+               self.current_telemetry_text = new_telemetry_text
+            ##################################
+            # snapshot each minute
+            ##################################
+            if time != self.snapshottime:
+                time = datetime.now().strftime('%Y-%m-%d_%H:%M')
+                self.snapshottime = time
+                jpgname=self.settings.myvideopath + "/Photo-Tarot-" + time + ".jpg"
+                #print("jpgname=%s" % jpgname)
+                self.camera.capture(jpgname, use_video_port=True)
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterfaceadmin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -723,6 +725,7 @@ class MyPiModule(mp_module.MPModule):
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
             self.myrcraw[5] = m.chan5_raw ; self.myrcraw[6] = m.chan6_raw ; self.myrcraw[7] = m.chan7_raw ; self.myrcraw[8] = m.chan8_raw
             self.my_rc_check()
+            self.my_telemetry_text()
         if mtype == "STATUSTEXT":
             self.myseverity = m.severity
             self.mytext = m.text
