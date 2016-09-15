@@ -4,34 +4,31 @@
 #TITLE# DRONE build MAVProxy module MyPiModule
 ###########################################################
 date=`date +'%Y-%m-%d'`
-MY_MAVPROXY_DIR="/root/MyPiDrone/MAVProxy-1.4.43"
-MY_DIR_MYPIDRONE="/root/MyPiDrone"
 MY_DIR_MYPIMODULE="/root/MyPiDrone/MyPiModule"
-#MAVPROXY="${MY_MAVPROXY_DIR}/MAVProxy/mavproxy.py"
 MAVPROXY="/usr/local/bin/mavproxy.py"
-vi ${MY_MAVPROXY_DIR}/MAVProxy/modules/mavproxy_MyPiModule.py
-cd ${MY_MAVPROXY_DIR}
-python setup.py build install
-[ $? -ne 0 ] && exit 1
-cd ${MY_DIR_MYPIDRONE}
-cp ${MY_MAVPROXY_DIR}/MAVProxy/modules/mavproxy_MyPiModule.py        MyPiModule/
+if [ ! -f /usr/local/lib/python2.7/dist-packages/MAVProxy/modules/mavproxy_MyPiModule.py ]; then
+	cp ${MY_DIR_MYPIMODULE}/mavproxy_MyPiModule.py /usr/local/lib/python2.7/dist-packages/MAVProxy/modules
+fi
+vi /usr/local/lib/python2.7/dist-packages/MAVProxy/modules/mavproxy_MyPiModule.py
 #
-cp /lib/systemd/system/ArduCopter-quad.service                       MyPiModule/
-cp /lib/systemd/system/mavproxy.service                              MyPiModule/
-cp /etc/rc.local                                                     MyPiModule/
+cp /usr/local/lib/python2.7/dist-packages/MAVProxy/modules/mavproxy_MyPiModule.py ${MY_DIR_MYPIMODULE}
 #
-cp /var/APM/ArduCopter.stg                                           MyPiModule/
+cp /lib/systemd/system/ArduCopter-quad.service                       ${MY_DIR_MYPIMODULE}
+cp /lib/systemd/system/mavproxy.service                              ${MY_DIR_MYPIMODULE}
+cp /etc/rc.local                                                     ${MY_DIR_MYPIMODULE}
 #
-cp /usr/local/bin/start_MAVProxy_MyPiModule.sh                       MyPiModule/
-cp /usr/local/bin/start_ArduCopter-quad.sh                           MyPiModule/
-cp /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh                MyPiModule/
-cp /usr/local/bin/start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh      MyPiModule/
-cp /usr/local/bin/start_tx_and_recording_with_raspivid_video_input.sh                MyPiModule/
-cp /usr/local/bin/MyPiCamera_sample.py                                               MyPiModule/
-cp /usr/local/bin/manage_network.sh                                  MyPiModule/
-cp /usr/local/bin/show_modules.sh                                    MyPiModule/
-cp /usr/local/bin/start_wlan1_mode_monitor.sh                        MyPiModule/
-cp /usr/local/bin/start_wlan1_mode_managed.sh                        MyPiModule/
+cp /var/APM/ArduCopter.stg                                           ${MY_DIR_MYPIMODULE}
+#
+cp /usr/local/bin/start_MAVProxy_MyPiModule.sh                       ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/start_ArduCopter-quad.sh                           ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh                ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh      ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/start_tx_and_recording_with_raspivid_video_input.sh                ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/MyPiCamera_sample.py                                               ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/manage_network.sh                                  ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/show_modules.sh                                    ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/start_wlan1_mode_monitor.sh                        ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/start_wlan1_mode_managed.sh                        ${MY_DIR_MYPIMODULE}
 #
 cd ${MY_DIR_MYPIMODULE}
 VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print "v"$2}'`
