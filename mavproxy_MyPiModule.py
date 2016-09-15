@@ -684,7 +684,7 @@ class MyPiModule(mp_module.MPModule):
                     fix_type = "%u" % msg.fix_type
                 else:
                     fix_type = ""
-                print("GPS: OK%s (%s) %s' % (fix_type, sats_string,'green'))
+                print("GPS: OK%s (%s) %s" % (fix_type, sats_string,'green'))
             else:
                 print("GPS: %u (%s) %s" % (msg.fix_type, sats_string,'red'))
             if self.master.mavlink10():
