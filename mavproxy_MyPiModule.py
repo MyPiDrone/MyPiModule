@@ -720,12 +720,12 @@ class MyPiModule(mp_module.MPModule):
                         print ("MAX  : %s" % self.RC_MAX)
                         print ("low  : %s" % self.RC_low_mark)
                         print ("high : %s" % self.RC_high_mark)
+                    self.my_telemetry_text()
         if mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = m.chan1_raw ; self.myrcraw[2] = m.chan2_raw ; self.myrcraw[3] = m.chan3_raw ; self.myrcraw[4] = m.chan4_raw
             self.myrcraw[5] = m.chan5_raw ; self.myrcraw[6] = m.chan6_raw ; self.myrcraw[7] = m.chan7_raw ; self.myrcraw[8] = m.chan8_raw
             self.my_rc_check()
-            self.my_telemetry_text()
         if mtype == "STATUSTEXT":
             self.myseverity = m.severity
             self.mytext = m.text
