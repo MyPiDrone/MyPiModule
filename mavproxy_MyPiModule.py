@@ -200,7 +200,7 @@ class MyPiModule(mp_module.MPModule):
             fo.close()
         self.my_telemetry_text()
 
-    def my_start_camera(self)
+    def my_start_camera(self):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
 	
 
