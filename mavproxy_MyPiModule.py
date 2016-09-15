@@ -205,13 +205,12 @@ class MyPiModule(mp_module.MPModule):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
 
     def my_telemetry_text(self,current_time):
-        print("OOO %s" % current_time)
         if (current_time > self.last_TText_check_time + self.settings.mytimeTText):
-            print("%s %s" % (self.last_TText_check_time,self.settings.mytimeTText))
+            print("OOO %s" % current_time)
             self.last_TText_check_time = time.time()
             ##################################################################################
             # overlay telemetry text with camera.annotate_text image 255 chars max
-             ##################################################################################
+            ##################################################################################
             time = datetime.now().strftime('%H:%M:%S')
             if self.shutdown_by_lowbat == True or self.mystate == 5 or self.mystate == 6:
                 color='red'
