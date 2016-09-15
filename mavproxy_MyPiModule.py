@@ -204,9 +204,8 @@ class MyPiModule(mp_module.MPModule):
     def my_start_camera(self):
         self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
 
-    def my_telemetry_text(self,current_time):
-        if (current_time > self.last_TText_check_time + self.settings.mytimeTText):
-            print("OOO %s" % current_time)
+    def my_telemetry_text(self):
+        if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
             self.last_TText_check_time = time.time()
             ##################################################################################
             # overlay telemetry text with camera.annotate_text image 255 chars max
@@ -226,7 +225,6 @@ class MyPiModule(mp_module.MPModule):
             new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
             # new telemetry text
             if self.current_telemetry_text != new_telemetry_text:
-               print("UUUU %s" % current_time)
                self.camera.annotate_background = picamera.Color(color)
                if self.mydebug:
                    print("Telemetry text : %s\n" % (new_telemetry_text))
@@ -236,9 +234,9 @@ class MyPiModule(mp_module.MPModule):
             # snapshot each minute
             ##################################
             if mytime != self.snapshottime:
-                mytime2 = datetime.now().strftime('%Y-%m-%d_%H:%M')
-                self.snapshottime = time
-                jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mytime2 + ".jpg"
+                self.snapshottime = mytime
+                mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
+                jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
                 #print("jpgname=%s" % jpgname)
                 self.camera.capture(jpgname, use_video_port=True)
 
@@ -668,7 +666,7 @@ class MyPiModule(mp_module.MPModule):
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
-            self.my_telemetry_text(time.time())
+            self.my_telemetry_text()
         if mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
             self.myvolt = m.voltage_battery
