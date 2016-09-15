@@ -669,10 +669,25 @@ class MyPiModule(mp_module.MPModule):
         '''  7: System Status POWEROFF    '''
         mtype = msg.get_type()
         #print("System Status %s" % mtype)
+        if mtype == "VFR_HUD":
+            self.VFR_HUD += 1
+            self.armed = self.master.motors_armed()
+            self.mythrottle = msg.throttle
+            self.mygroundspeed = msg.groundspeed
+            if self.armed == True: self.mylogverbose = True
+            else: self.mylogverbose = self.settings.mylogverbose
+            self.mydebug = self.settings.mydebug
+            self.my_telemetry_text()
+        elif mtype == "SYS_STATUS":
+            self.SYS_STATUS += 1
+            self.myvolt = msg.voltage_battery
+            self.mycurrent = msg.current_battery
+            self.myremaining = msg.battery_remaining
+            self.my_battery_check()
         ###########################################
         # Start re-used code mavproxy_console.py
         ###########################################
-        if mtype == 'ATTITUDE':
+        elif mtype == 'ATTITUDE':
             self.ATTITUDE += 1
             self.myTText_Roll="Roll=%u" % math.degrees(msg.roll)
             self.myTText_Pitch="Pitch=%u" % math.degrees(msg.pitch)
@@ -705,21 +720,6 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
-        elif mtype == "VFR_HUD":
-            self.VFR_HUD += 1
-            self.armed = self.master.motors_armed()
-            self.mythrottle = msg.throttle
-            self.mygroundspeed = msg.groundspeed
-            if self.armed == True: self.mylogverbose = True
-            else: self.mylogverbose = self.settings.mylogverbose
-            self.mydebug = self.settings.mydebug
-            self.my_telemetry_text()
-        elif mtype == "SYS_STATUS":
-            self.SYS_STATUS += 1
-            self.myvolt = msg.voltage_battery
-            self.mycurrent = msg.current_battery
-            self.myremaining = msg.battery_remaining
-            self.my_battery_check()
         elif mtype == "RC_CHANNELS_RAW":
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = msg.chan1_raw ; self.myrcraw[2] = msg.chan2_raw ; self.myrcraw[3] = msg.chan3_raw ; self.myrcraw[4] = msg.chan4_raw
