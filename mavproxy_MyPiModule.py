@@ -720,6 +720,11 @@ class MyPiModule(mp_module.MPModule):
             self.mycurrent = msg.current_battery
             self.myremaining = msg.battery_remaining
             self.my_battery_check()
+        elif mtype == "RC_CHANNELS_RAW":
+            self.RC_CHANNELS_RAW += 1
+            self.myrcraw[1] = msg.chan1_raw ; self.myrcraw[2] = msg.chan2_raw ; self.myrcraw[3] = msg.chan3_raw ; self.myrcraw[4] = msg.chan4_raw
+            self.myrcraw[5] = msg.chan5_raw ; self.myrcraw[6] = msg.chan6_raw ; self.myrcraw[7] = msg.chan7_raw ; self.myrcraw[8] = msg.chan8_raw
+            self.my_rc_check()
         elif mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
             self.mystate = msg.system_status
@@ -768,11 +773,6 @@ class MyPiModule(mp_module.MPModule):
                         print ("MAX  : %s" % self.RC_MAX)
                         print ("low  : %s" % self.RC_low_mark)
                         print ("high : %s" % self.RC_high_mark)
-        elif mtype == "RC_CHANNELS_RAW":
-            self.RC_CHANNELS_RAW += 1
-            self.myrcraw[1] = msg.chan1_raw ; self.myrcraw[2] = msg.chan2_raw ; self.myrcraw[3] = msg.chan3_raw ; self.myrcraw[4] = msg.chan4_raw
-            self.myrcraw[5] = msg.chan5_raw ; self.myrcraw[6] = msg.chan6_raw ; self.myrcraw[7] = msg.chan7_raw ; self.myrcraw[8] = msg.chan8_raw
-            self.my_rc_check()
         elif mtype == "STATUSTEXT":
             self.myseverity = msg.severity
             self.mytext = msg.text
