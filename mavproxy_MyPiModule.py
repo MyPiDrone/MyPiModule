@@ -61,6 +61,7 @@ class MyPiModule(mp_module.MPModule):
         # stats
         self.GPS_RAW = 0
         self.GPS_RAW_INT = 0
+        self.ATTITUDE = 0
         self.VFR_HUD = 0
         self.SYS_STATUS = 0
         self.HEARTBEAT = 0
@@ -193,6 +194,8 @@ class MyPiModule(mp_module.MPModule):
         self.current_telemetry_text = "Welcome PiCamera"
         self.myTText_gps = ""
         self.myTText_heading = ""
+        self.myTText_Roll = ""
+        self.myTText_Pitch = ""
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -224,7 +227,7 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='black'
                 level='_'
-            intext = "%s %s %s %s %s %s %s %s %s %s %s Thr=%s Volt=%s Cur=%s Remain=%spct                                                                                                        ALt=%sm  " % (mytime,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+            intext = "%s %s %s %s %s %s %s %s %s %s %s Thr=%s %s %s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (mytime,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
             # max 255
             new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
             # new telemetry text
@@ -394,11 +397,12 @@ class MyPiModule(mp_module.MPModule):
         rate_VFR_HUD = int(self.VFR_HUD / elapse_time)
         rate_GPS_RAW = int(self.GPS_RAW / elapse_time)
         rate_GPS_RAW_INT = int(self.GPS_RAW_INT / elapse_time)
+        rate_ATTITUDE = int(self.ATTITUDE / elapse_time)
         rate_SYS_STATUS = int(self.SYS_STATUS / elapse_time)
         rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
         rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
-        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
+        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_ATTITUDE %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.ATTITUDE,rate_ATTITUDE,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
        
@@ -668,7 +672,11 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         # Start re-used code mavproxy_console.py
         ###########################################
-        if mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
+        if type == 'ATTITUDE':
+            self.ATTITUDE += 1
+            self.myTText_Roll="Roll %u" % math.degrees(msg.roll)
+            self.myTText_Pitch="Pitch %u" % math.degrees(msg.pitch)
+        elif mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
             if mtype == "GPS_RAW":
                 self.GPS_RAW += 1
                 num_sats1 = self.master.field('GPS_STATUS', 'satellites_visible', 0)
