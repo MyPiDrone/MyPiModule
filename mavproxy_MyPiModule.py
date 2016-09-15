@@ -86,6 +86,7 @@ class MyPiModule(mp_module.MPModule):
         self.mystatename = ["UNINIT","BOOT","CALIBRATING","STANDBY","ACTIVE","CRITICAL","EMERGENCY","POWEROFF"]
         self.myvolt = 0
         self.mythrottle = 0
+        self.mygroundspeed = 0
         self.mycurrent = 0
         self.myremaining = 0
         self.myrcraw = [0,0,0,0,0,0,0,0,0]
@@ -226,7 +227,7 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='black'
                 level='_'
-            intext = "%s %s %s %s %s %s %s %s %s %s %s Thr=%s %s %s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (mytime,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+            intext = "%s %s %s %s %s %s %s %s %s %s %s Thr=%s %s %s GPSSpeed=%s Volt=%s Cur=%s Remain=%spct ALt=%sm" % (mytime,level,["Disarmed","Armed   "][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["NetDown","NetUP  "][self.net_up == True],["VideoOFF","VideoON "][self.video_on == True],["___","RTL"][self.rtl_on == True],["_________","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitchi,self.mygroundspeed,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
             # max 255
             new_telemetry_text = (intext[:254] + '.') if len(intext) > 254 else intext
             # new telemetry text
@@ -673,8 +674,8 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         if mtype == 'ATTITUDE':
             self.ATTITUDE += 1
-            self.myTText_Roll="Roll %u" % math.degrees(msg.roll)
-            self.myTText_Pitch="Pitch %u" % math.degrees(msg.pitch)
+            self.myTText_Roll="Roll=%u" % math.degrees(msg.roll)
+            self.myTText_Pitch="Pitch=%u" % math.degrees(msg.pitch)
         elif mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
             if mtype == "GPS_RAW":
                 self.GPS_RAW += 1
@@ -693,14 +694,14 @@ class MyPiModule(mp_module.MPModule):
                     fix_type = "%u" % msg.fix_type
                 else:
                     fix_type = ""
-                self.myTText_gps="GPS: OK%s (%s)" % (fix_type, sats_string)
+                self.myTText_gps="GPS=OK%s (%s)" % (fix_type, sats_string)
             else:
-                self.myTText_gps="GPS: %u (%s) !" % (msg.fix_type, sats_string)
+                self.myTText_gps="GPS=%u (%s) !" % (msg.fix_type, sats_string)
             if self.master.mavlink10():
                 gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
             else:
                 gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
-            self.myTText_heading="Hdg %s/%u" % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading)
+            self.myTText_heading="Hdg=%s/%u" % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
@@ -708,6 +709,7 @@ class MyPiModule(mp_module.MPModule):
             self.VFR_HUD += 1
             self.armed = self.master.motors_armed()
             self.mythrottle = msg.throttle
+            selt.mygroundspeed = msg.groundspeed
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
