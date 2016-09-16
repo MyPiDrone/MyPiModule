@@ -202,6 +202,10 @@ class MyPiModule(mp_module.MPModule):
         self.myTText_Roll = ""
         self.myTText_Pitch = ""
         self.myTText_Radio = ""
+        self.myTText_FlightTime = ""
+        self.in_air = False
+        self.start_time = 0.0
+        self.total_time = 0.0
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -233,7 +237,7 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='black'
                 level='_'
-            intext = "{0:1} {1:8} {2:8} {3:8} {4} {5} Net{6:4} Video{7:3} Ask={8:8} Thr={9} {10} {11} GPSSpeed={12} {13}V {14}A {15}% {16} ALt={17}m".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["Down","UP"][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_Radio,self.status.altitude)
+            intext = "{0:1} {1:8} {2:8} {3:8} {4} {5} Net{6:4} Video{7:3} Ask={8:8} Thr={9} {10} {11} GPSSpeed={12} {13}V {14}A {15}% {16} {17} ALt={18}m".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["Down","UP"][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_Radio,self.myTText_FlightTime,self.status.altitude)
             #if self.mydebug and self.current_intext != intext:
             if self.current_intext != intext:            
                 self.current_intext = intext            
@@ -692,6 +696,28 @@ class MyPiModule(mp_module.MPModule):
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
             self.my_telemetry_text()
+            ###########################################
+            # Start re-used code mavproxy_console.py
+            ###########################################
+            t = time.localtime(msg._timestamp)
+            flying = False
+            if self.mpstate.vehicle_type == 'copter':
+                flying = self.master.motors_armed()
+            else:
+                flying = msg.groundspeed > 3
+            if flying and not self.in_air:
+                self.in_air = True
+                self.start_time = time.mktime(t)
+            elif flying and self.in_air:
+                self.total_time = time.mktime(t) - self.start_time
+                self.myTText_FlightTime="FlightTime %u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
+            elif not flying and self.in_air:
+                self.in_air = False
+                self.total_time = time.mktime(t) - self.start_time
+                self.myTText_FlightTime="FlightTime %u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
+            ###########################################
+            # End re-used code mavproxy_console.py
+            ###########################################
         elif mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
             self.myvolt = msg.voltage_battery
@@ -787,6 +813,18 @@ class MyPiModule(mp_module.MPModule):
                         print ("MAX  : %s" % self.RC_MAX)
                         print ("low  : %s" % self.RC_low_mark)
                         print ("high : %s" % self.RC_high_mark)
+        ###########################################
+        # Start re-used code mavproxy_console.py
+        ###########################################
+        elif mtype in ['RADIO', 'RADIO_STATUS']:
+            self.RADIO += 1
+            if msg.rssi < msg.noise+10 or msg.remrssi < msg.remnoise+10:
+                self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+            else:
+                self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+        ###########################################
+        # End re-used code mavproxy_console.py
+        ###########################################
         elif mtype == "STATUSTEXT":
             self.STATUSTEXT += 1
             self.myseverity = msg.severity
@@ -802,12 +840,6 @@ class MyPiModule(mp_module.MPModule):
                 if (msg.param_id == "RC%s_MAX" % i):  self.RC_MAX[i] = msg.param_value
                 self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
                 self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
-        elif mtype in ['RADIO', 'RADIO_STATUS']:
-            self.RADIO += 1
-            if msg.rssi < msg.noise+10 or msg.remrssi < msg.remnoise+10:
-                self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
-            else:
-                self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
         else:
             ######################################
             # AHRS
