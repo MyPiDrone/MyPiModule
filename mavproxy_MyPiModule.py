@@ -715,7 +715,7 @@ class MyPiModule(mp_module.MPModule):
                 self.total_time = time.mktime(t) - self.start_time
                 self.myTText_FlightTime="FlightTime %u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
             else:
-                self.myTText_FlightTime="FlightTime waiting"
+                self.myTText_FlightTime="FlightTime %u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
             ###########################################
             # End re-used code mavproxy_console.py
             ###########################################
