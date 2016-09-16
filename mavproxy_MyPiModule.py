@@ -65,6 +65,7 @@ class MyPiModule(mp_module.MPModule):
         self.SYS_STATUS = 0
         self.HEARTBEAT = 0
         self.RC_CHANNELS_RAW = 0
+        self.RADIO = 0
         self.PARAM_VALUE = 0
         self.STATUSTEXT = 0
         self.OTHER = 0
@@ -200,6 +201,7 @@ class MyPiModule(mp_module.MPModule):
         self.myTText_heading = ""
         self.myTText_Roll = ""
         self.myTText_Pitch = ""
+        self.myTText_Radio = ""
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -231,7 +233,7 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='black'
                 level='_'
-            intext = "{0:1} {1:8} {2:8} {3:8} {4} {5} Net{6:4} Video{7:3} Ask={8:8} Thr={9} {10} {11} GPSSpeed={12} {13}V {14}A {15}% ALt={16}m".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["Down","UP"][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.status.altitude)
+            intext = "{0:1} {1:8} {2:8} {3:8} {4} {5} Net{6:4} Video{7:3} Ask={8:8} Thr={9} {10} {11} GPSSpeed={12} {13}V {14}A {15}% {16} ALt={17}m".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,self.myTText_gps,self.myTText_heading,["Down","UP"][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.mygroundspeed,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_Radio,self.status.altitude)
             #if self.mydebug and self.current_intext != intext:
             if self.current_intext != intext:            
                 self.current_intext = intext            
@@ -408,11 +410,12 @@ class MyPiModule(mp_module.MPModule):
         rate_SYS_STATUS = int(self.SYS_STATUS / elapse_time)
         rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
         rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
+        rate_RADIO = int(self.RADIO / elapse_time)
         rate_PARAM_VALUE = int(self.PARAM_VALUE / elapse_time)
         rate_STATUSTEXT = int(self.STATUSTEXT / elapse_time)
         rate_OTHER = int(self.OTHER / elapse_time)
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
-        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_ATTITUDE %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_PARAM_VALUE %s=%s/sec rate_STATUSTEXT %s=%s/sec rate_OTHER %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.ATTITUDE,rate_ATTITUDE,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.PARAM_VALUE,rate_PARAM_VALUE,self.STATUSTEXT,rate_STATUSTEXT,self.OTHER,rate_OTHER,self.battery_period_trigger,rate_battery_period_trigger)
+        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_ATTITUDE %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_RADIO %s=%s/sec rate_PARAM_VALUE %s=%s/sec rate_STATUSTEXT %s=%s/sec rate_OTHER %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.ATTITUDE,rate_ATTITUDE,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.RADIO,rate_RADIO,self.PARAM_VALUE,rate_PARAM_VALUE,self.STATUSTEXT,rate_STATUSTEXT,self.OTHER,rate_OTHER,self.battery_period_trigger,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
        
@@ -799,28 +802,32 @@ class MyPiModule(mp_module.MPModule):
                 if (msg.param_id == "RC%s_MAX" % i):  self.RC_MAX[i] = msg.param_value
                 self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
                 self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
-                ######################################
-                # AHRS
-                # AHRS2
-                # AHRS3
-                # EKF_STATUS_REPORT
-                # GLOBAL_POSITION_INT
-                # HWSTATUS
-                # MEMINFO
-                # MISSION_CURRENT
-                # MOUNT_STATUS
-                # NAV_CONTROLLER_OUTPUT
-                # POWER_STATUS
-                # RADIO
-                # RADIO_STATUS
-                # RAW_IMU
-                # SCALED_PRESSURE
-                # SENSOR_OFFSETS
-                # SERVO_OUTPUT_RAW
-                # SYSTEM_TIME
-                # VIBRATION
-                ######################################
+        elif mtype in ['RADIO', 'RADIO_STATUS']:
+            self.RADIO += 1
+            if msg.rssi < msg.noise+10 or msg.remrssi < msg.remnoise+10:
+                self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+            else:
+                self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
         else:
+            ######################################
+            # AHRS
+            # AHRS2
+            # AHRS3
+            # EKF_STATUS_REPORT
+            # GLOBAL_POSITION_INT
+            # HWSTATUS
+            # MEMINFO
+            # MISSION_CURRENT
+            # MOUNT_STATUS
+            # NAV_CONTROLLER_OUTPUT
+            # POWER_STATUS
+            # RAW_IMU
+            # SCALED_PRESSURE
+            # SENSOR_OFFSETS
+            # SERVO_OUTPUT_RAW
+            # SYSTEM_TIME
+            # VIBRATION
+            ######################################
             self.OTHER += 1
            # print("OTHER type %s" % mtype)
 #not used
