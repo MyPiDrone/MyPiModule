@@ -662,6 +662,7 @@ class MyPiModule(mp_module.MPModule):
            # check init 0 or 6
            self.my_manage_init()
 
+    #  VFR_HUD 7/sec GPS_RAW 0=0/sec GPS_RAW_INT 4/sec ATTITUDE 3/sec SYS_STATUS 7/sec HEARTBEAT 0/sec RC_CHANNELS_RAW 3/sec PARAM_VALUE 9/sec STATUSTEXT 0/sec OTHER 83/sec battery_period_trigger 0=0/sec
     def mavlink_packet(self, msg):
         '''  handle a mavlink packet      '''
         '''  HEARTBEAT system_status      '''
