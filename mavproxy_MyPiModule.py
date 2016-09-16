@@ -622,6 +622,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_statustext_send("Video off")
                    self.camera.led = False
                    self.camera.wait_recording(0.5)
+                   self.my_telemetry_text()
                    self.camera.stop_recording()
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
@@ -837,10 +838,11 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         elif mtype in ['RADIO', 'RADIO_STATUS']:
             self.RADIO += 1
-            if msg.rssi < msg.noise+10 or msg.remrssi < msg.remnoise+10:
-                self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
-            else:
-                self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+            #if msg.rssi < msg.noise+10 or msg.remrssi < msg.remnoise+10:
+            #    self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+            #else:
+            #    self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+            self.myTText_Radio="Radio %u" % (msg.rssi)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
