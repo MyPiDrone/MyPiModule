@@ -417,7 +417,7 @@ class MyPiModule(mp_module.MPModule):
         rate_PARAM_VALUE = int(self.PARAM_VALUE / elapse_time)
         rate_STATUSTEXT = int(self.STATUSTEXT / elapse_time)
         rate_OTHER = int(self.OTHER / elapse_time)
-print("%s %s %s" % (rate_OTHER,self.OTHER,elapse_time))
+        print("%s %s %s" % (rate_OTHER,self.OTHER,elapse_time))
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
         msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_ATTITUDE %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_RADIO %s=%s/sec rate_PARAM_VALUE %s=%s/sec rate_STATUSTEXT %s=%s/sec rate_OTHER %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.ATTITUDE,rate_ATTITUDE,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.RADIO,rate_RADIO,self.PARAM_VALUE,rate_PARAM_VALUE,self.STATUSTEXT,rate_STATUSTEXT,self.OTHER,rate_OTHER,self.battery_period_trigger,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
