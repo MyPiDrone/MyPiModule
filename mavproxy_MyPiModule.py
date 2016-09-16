@@ -154,15 +154,27 @@ class MyPiModule(mp_module.MPModule):
         print ("/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh %s %s --vbr is starting : waiting %s opening..." % (self.settings.myinterfacetx,self.settings.mychanneltx,self.settings.mypipeout))
         self.outpipe = open(self.settings.mypipeout, 'w')
         ###############################################################################
-        #Mode   Size    Aspect Ratio    Frame rates     FOV     Binning
+        # V1 camera
+        #Mode   Size    Aspect Ratio    Frame rates     Video Image  FOV     Binning
         #0      automatic selection
-        #1      1920x1080       16:9    1-30fps         Partial None
-        #2      2592x1944       4:3     1-15fps         Full    None
-        #3      2592x1944       4:3     0.1666-1fps     Full    None
-        #4      1296x972        4:3     1-42fps         Full    2x2
-        #5      1296x730        16:9    1-49fps         Full    2x2
-        #6      640x480         4:3     42.1-60fps      Full    2x2 plus skip
-        #7      640x480         4:3     60.1-90fps      Full    2x2 plus skip
+        #1      1920x1080       16:9    1-30fps         x            Partial None
+        #2      2592x1944       4:3     1-15fps         x      x     Full    None
+        #3      2592x1944       4:3     0.1666-1fps     x      x     Full    None
+        #4      1296x972        4:3     1-42fps         x            Full    2x2
+        #5      1296x730        16:9    1-49fps         x            Full    2x2
+        #6      640x480         4:3     42.1-60fps      x            Full    2x2 plus skip
+        #7      640x480         4:3     60.1-90fps      x          Full    2x2 plus skip
+        ###############################################################################
+        # V2 camera
+        # Mode Resolution Aspect Ratio Framerates Video Image FoV     Binning
+        # 1    1920x1080        16:9    0.1-30fps  x        Partial   None 
+        # 2    3280x2464        4:3     0.1-15fps  x    x   Full      None 
+        # 3    3280x2464        4:3     0.1-15fps  x    x   Full      None 
+        # 4    1640x1232        4:3     0.1-40fps  x        Full      2x2 
+        # 5    1640x922         16:9    0.1-40fps  x        Full      2x2 
+        # 6    1280x720         16:9    40-90fps   x        Partial   2x2 
+        # 7    640x480          4:3     40-90fps   x        Partial   2x2 
+        ###############################################################################
         # image_effect  'none' 'negative' 'solarize' 'sketch' 'denoise' 'emboss' 'oilpaint' 'hatch' 'gpen' 'pastel' 'watercolor' 'film' 'blur' 'saturation' 'colorswap' 'washedout' 'posterise' 'colorpoint' 'colorbalance' 'cartoon' 'deinterlace1' 'deinterlace2'
         ###############################################################################
         self.camera=picamera.PiCamera()
@@ -187,7 +199,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.resolution = (1296, 730)
         #self.camera.framerate = 49
         self.camera.resolution = (1296, 972)
-        self.camera.framerate = 30
+        self.camera.framerate = 25
         self.camera.led = True
         #self.camera.start_preview()
         self.camera.annotate_background = picamera.Color('black')
