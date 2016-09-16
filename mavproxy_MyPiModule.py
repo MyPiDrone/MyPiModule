@@ -794,9 +794,30 @@ class MyPiModule(mp_module.MPModule):
                 if (msg.param_id == "RC%s_MAX" % i):  self.RC_MAX[i] = msg.param_value
                 self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
                 self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
+                ######################################
+                # AHRS
+                # AHRS2
+                # AHRS3
+                # EKF_STATUS_REPORT
+                # GLOBAL_POSITION_INT
+                # HWSTATUS
+                # MEMINFO
+                # MISSION_CURRENT
+                # MOUNT_STATUS
+                # NAV_CONTROLLER_OUTPUT
+                # POWER_STATUS
+                # RADIO
+                # RADIO_STATUS
+                # RAW_IMU
+                # SCALED_PRESSURE
+                # SENSOR_OFFSETS
+                # SERVO_OUTPUT_RAW
+                # SYSTEM_TIME
+                # VIBRATION
+                ######################################
         else:
             self.OTHER += 1
-            print("OTHER type %s" % mtype)
+           # print("OTHER type %s" % mtype)
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
