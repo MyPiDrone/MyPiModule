@@ -70,7 +70,7 @@ class MyPiModule(mp_module.MPModule):
         self.STATUSTEXT = 0
         self.OTHER = 0
         self.battery_period_trigger = 0
-        self.start_time = time.time()
+        self.my_start_time = time.time()
         ### battery low :
         self.shutdown_by_lowbat = False
         self.shutdown_by_lowbat_time = 0
@@ -197,6 +197,9 @@ class MyPiModule(mp_module.MPModule):
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
         self.current_telemetry_text = "Welcome PiCamera"
         self.current_intext = "" 
+        ###########################################
+        # Start re-used code mavproxy_console.py
+        ###########################################
         self.myTText_gps = ""
         self.myTText_heading = ""
         self.myTText_Roll = ""
@@ -206,6 +209,9 @@ class MyPiModule(mp_module.MPModule):
         self.in_air = False
         self.start_time = 0.0
         self.total_time = 0.0
+        ###########################################
+        # End re-used code mavproxy_console.py
+        ###########################################
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
@@ -405,7 +411,7 @@ class MyPiModule(mp_module.MPModule):
         print ("INFO %s" % (msg))
         # stats
         current_time = time.time()
-        elapse_time = int(current_time - self.start_time) + 1
+        elapse_time = int(current_time - self.my_start_time) + 1
         rate_VFR_HUD = int(self.VFR_HUD / elapse_time)
         rate_GPS_RAW = int(self.GPS_RAW / elapse_time)
         rate_GPS_RAW_INT = int(self.GPS_RAW_INT / elapse_time)
