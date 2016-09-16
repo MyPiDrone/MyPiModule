@@ -253,10 +253,10 @@ class MyPiModule(mp_module.MPModule):
                 level='E'
             elif self.shutdown_by_cmd == True or self.shutdown_by_radio == True:
                 color='orange'
-                level='R'
+                level='S'
             elif self.reboot_by_cmd == True or self.reboot_by_radio == True:
                 color='grey'
-                level='S'
+                level='R'
             elif self.armed == True:
                 color='black'
                 level='A'
