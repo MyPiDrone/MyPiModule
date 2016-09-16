@@ -65,6 +65,9 @@ class MyPiModule(mp_module.MPModule):
         self.SYS_STATUS = 0
         self.HEARTBEAT = 0
         self.RC_CHANNELS_RAW = 0
+        self.PARAM_VALUE = 0
+        self.STATUSTEXT = 0
+        self.OTHER = 0
         self.battery_period_trigger = 0
         self.start_time = time.time()
         ### battery low :
@@ -401,8 +404,11 @@ class MyPiModule(mp_module.MPModule):
         rate_SYS_STATUS = int(self.SYS_STATUS / elapse_time)
         rate_HEARTBEAT = int(self.HEARTBEAT / elapse_time)
         rate_RC_CHANNELS_RAW = int(self.RC_CHANNELS_RAW / elapse_time)
+        rate_PARAM_VALUE = int(self.PARAM_VALUE / elapse_time)
+        rate_STATUSTEXT = int(self.STATUSTEXT / elapse_time)
+        rate_OTHER = int(self.OTHER / elapse_time)
         rate_battery_period_trigger = int(self.battery_period_trigger / elapse_time)
-        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_ATTITUDE %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.ATTITUDE,rate_ATTITUDE,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.battery_period_trigger,rate_battery_period_trigger)
+        msg = "INFO elapse_time %ssec rate_VFR_HUD %s=%s/sec rate_GPS_RAW %s=%s/sec rate_GPS_RAW_INT %s=%s/sec rate_ATTITUDE %s=%s/sec rate_SYS_STATUS %s=%s/sec rate_HEARTBEAT %s=%s/sec rate_RC_CHANNELS_RAW %s=%s/sec rate_PARAM_VALUE %s=%s/sec rate_STATUSTEXT %s=%s/sec rate_OTHER %s=%s/sec rate_battery_period_trigger %s=%s/sec" % (elapse_time,self.VFR_HUD,rate_VFR_HUD,self.GPS_RAW,rate_GPS_RAW,self.GPS_RAW_INT,rate_GPS_RAW_INT,self.ATTITUDE,rate_ATTITUDE,self.SYS_STATUS,rate_SYS_STATUS,self.HEARTBEAT,rate_HEARTBEAT,self.RC_CHANNELS_RAW,rate_RC_CHANNELS_RAW,self.PARAM_VALUE,rate_PARAM_VALUE,self.STATUSTEXT,rate_STATUSTEXT,self.OTHER,rate_OTHER,self.battery_period_trigger,rate_battery_period_trigger)
         self.my_write_log("INFO",msg)
         print ("INFO %s" % (msg))
        
@@ -774,10 +780,12 @@ class MyPiModule(mp_module.MPModule):
                         print ("low  : %s" % self.RC_low_mark)
                         print ("high : %s" % self.RC_high_mark)
         elif mtype == "STATUSTEXT":
+            self.STATUSTEXT += 1
             self.myseverity = msg.severity
             self.mytext = msg.text
             self.my_statustext_check()
         elif mtype == "PARAM_VALUE":
+            self.PARAM_VALUE += 1
             #print("PARAM_VALUE %s %s" % (msg.param_id,msg.param_value))
             self.myparamcount = msg.param_count
             for i in range(1,17):
@@ -786,6 +794,9 @@ class MyPiModule(mp_module.MPModule):
                 if (msg.param_id == "RC%s_MAX" % i):  self.RC_MAX[i] = msg.param_value
                 self.RC_low_mark[i] = ((self.RC_TRIM[i] - self.RC_MIN[i]) // 2) + self.RC_MIN[i]
                 self.RC_high_mark[i] = self.RC_MAX[i] - ((self.RC_MAX[i] - self.RC_TRIM[i]) // 2)
+        else:
+            self.OTHER += 1
+            print("OTHER type %s" % mtype)
 #not used
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
