@@ -244,6 +244,14 @@ class MyPiModule(mp_module.MPModule):
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
             self.last_TText_check_time = time.time()
+            ############################################
+            # LED flashing
+            ############################################
+            if self.video_on == True:
+                if self.camera.led == True:
+                    self.camera.led = False
+                else:
+                    self.camera.led = True
             ##################################################################################
             # overlay telemetry text with camera.annotate_text image 255 chars max
             ##################################################################################
