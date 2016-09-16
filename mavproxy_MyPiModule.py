@@ -715,6 +715,8 @@ class MyPiModule(mp_module.MPModule):
                 self.in_air = False
                 self.total_time = time.mktime(t) - self.start_time
                 self.myTText_FlightTime="FlightTime %u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
+            else:
+                self.myTText_FlightTime="FlightTime not started"
             ###########################################
             # End re-used code mavproxy_console.py
             ###########################################
