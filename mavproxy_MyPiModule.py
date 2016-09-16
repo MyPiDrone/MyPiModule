@@ -195,13 +195,13 @@ class MyPiModule(mp_module.MPModule):
         self.camera.vflip = False
         self.camera.crop = (0.0, 0.0, 1.0, 1.0)
         #
-        self.camera.resolution = (640,480)
-        self.camera.framerate = 30
-        self.camera.annotate_text_size = 16
+        #self.camera.resolution = (640,480)
+        #self.camera.framerate = 30
+        #self.camera.annotate_text_size = 16
         #
-        #self.camera.resolution = (1296, 972)
-        #self.camera.framerate = 25
-        #self.camera.annotate_text_size = 32 
+        self.camera.resolution = (1296, 972)
+        self.camera.framerate = 25
+        self.camera.annotate_text_size = 32 
         #
         self.camera.led = True
         #self.camera.start_preview()
@@ -251,9 +251,12 @@ class MyPiModule(mp_module.MPModule):
             if self.shutdown_by_lowbat == True or self.mystate == 5 or self.mystate == 6:
                 color='red'
                 level='E'
-            elif self.reboot_by_cmd == True or self.shutdown_by_cmd == True or self.reboot_by_radio == True or self.shutdown_by_radio == True:
+            elif self.shutdown_by_cmd == True or self.shutdown_by_radio == True:
+                color='orange'
+                level='R'
+            elif self.reboot_by_cmd == True or self.reboot_by_radio == True:
                 color='grey'
-                level='W'
+                level='S'
             elif self.armed == True:
                 color='black'
                 level='A'
