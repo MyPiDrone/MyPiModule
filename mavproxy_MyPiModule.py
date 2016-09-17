@@ -203,7 +203,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.framerate = 25
         #self.camera.annotate_text_size = 32 
         #
-        self.camera.resolution = (2592, 1944)
+        self.camera.resolution = (1920, 1080)
         self.camera.framerate = 15
         self.camera.annotate_text_size = 32 
         #
