@@ -776,9 +776,9 @@ class MyPiModule(mp_module.MPModule):
             self.myTText_Roll="Roll=%u" % Roll
             self.myTText_Pitch="Pitch=%u" % Pitch
             if Roll > 10:
-                self.myTText_Attitude="_____+-----" 
-            elif Roll < -10:
                 self.myTText_Attitude="-----+_____"
+            elif Roll < -10:
+                self.myTText_Attitude="_____+-----" 
 	    else:
                 self.myTText_Attitude="-----+-----"
         elif mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
