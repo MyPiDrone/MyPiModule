@@ -203,6 +203,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.framerate = 25
         self.camera.annotate_text_size = 32 
         #
+        self.my_camera_led = True
         self.camera.led = True
         #self.camera.start_preview()
         self.camera.annotate_background = picamera.Color('black')
@@ -248,10 +249,12 @@ class MyPiModule(mp_module.MPModule):
             # LED flashing
             ############################################
             if self.video_on == True:
-                if self.camera.led == True:
+                if self.my_camera_led == True:
                     self.camera.led = False
+                    self.my_camera_led = False 
                 else:
                     self.camera.led = True
+                    self.my_camera_led = True
             ##################################################################################
             # overlay telemetry text with camera.annotate_text image 255 chars max
             ##################################################################################
