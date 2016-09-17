@@ -775,9 +775,9 @@ class MyPiModule(mp_module.MPModule):
             Pitch=math.degrees(msg.pitch)
             self.myTText_Roll="Roll=%u" % Roll
             self.myTText_Pitch="Pitch=%u" % Pitch
-            if Pitch > 10:
+            if Roll > 10:
                 self.myTText_Attitude="_____+-----" 
-            elif Pitch < -10:
+            elif Roll < -10:
                 self.myTText_Attitude="-----+_____"
 	    else:
                 self.myTText_Attitude="-----+-----"
