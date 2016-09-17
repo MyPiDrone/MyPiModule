@@ -777,7 +777,7 @@ class MyPiModule(mp_module.MPModule):
             self.myTText_Pitch="Pitch=%u" % Pitch
             if Pitch > 10:
                 self.myTText_Attitude="_____+-----" 
-            efif Pitch < -10:
+            elif Pitch < -10:
                 self.myTText_Attitude="-----+_____"
 	    else:
                 self.myTText_Attitude="-----+-----"
