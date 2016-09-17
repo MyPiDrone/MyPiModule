@@ -59,9 +59,8 @@ systemctl stop mavproxy
 echo "/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"
 ### load only MyPiModule and mode
 ##/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors 
-##/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --show-errors 
 ### load all modules
-/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --show-errors
+### /usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --show-errors
 ### to QtGstreamerHUD emlid over AP on ubuntu PC
 ###/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=udp:10.0.0.12:14550 --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors
 
