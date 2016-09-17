@@ -244,7 +244,7 @@ class MyPiModule(mp_module.MPModule):
             fo.close()
 
     def my_start_camera(self):
-        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(1296, 972))
+        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(640, 480))
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
