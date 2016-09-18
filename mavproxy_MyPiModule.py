@@ -281,16 +281,16 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             myTText_Roll="Roll=%u" % self.myRoll
             myTText_Pitch="Pitch=%u" % self.myPitch
-            if self.myRoll > 5 and self.myRoll < 10:
-                myTText_Attitude="   |``````---+---___|%u" % self.myRoll
-            elif self.myRoll > 10:
-                myTText_Attitude="   |````````````+______|%u" % self.myRoll 
-            elif self.myRoll < -5 and self.myRoll > -10:
-                myTText_Attitude= "%u|___---+---``````|   " % self.myRoll 
-            elif self.myRoll < -10:
-                myTText_Attitude= "%u|______+````````````|   " % self.myRoll 
+            if self.myRoll > 10 and self.myRoll < 20:
+                myTText_Attitude="    |``````---+---___| %u" % self.myRoll
+            elif self.myRoll > 20:
+                myTText_Attitude="    |````````````+______| %u" % self.myRoll 
+            elif self.myRoll < -20 and self.myRoll > -20:
+                myTText_Attitude="%u |___---+---``````|    " % self.myRoll 
+            elif self.myRoll < -20:
+                myTText_Attitude= "%u |______+````````````|    " % self.myRoll 
 	    else:
-                myTText_Attitude="   |------+------|   " 
+                myTText_Attitude="    |------+------|    " 
             intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14} {15} {16} ALt={17}m                                                  {18} ..........".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Roll,myTText_Pitch,self.status.altitude,myTText_Attitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
