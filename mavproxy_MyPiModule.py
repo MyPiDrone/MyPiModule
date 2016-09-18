@@ -833,7 +833,7 @@ class MyPiModule(mp_module.MPModule):
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = msg.chan1_raw ; self.myrcraw[2] = msg.chan2_raw ; self.myrcraw[3] = msg.chan3_raw ; self.myrcraw[4] = msg.chan4_raw
             self.myrcraw[5] = msg.chan5_raw ; self.myrcraw[6] = msg.chan6_raw ; self.myrcraw[7] = msg.chan7_raw ; self.myrcraw[8] = msg.chan8_raw
-            self.myTText_Radio="Radio=%s" % (msg.rssi)
+            #self.myTText_Radio="Radio=%s" % (msg.rssi)
             self.my_rc_check()
         elif mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
@@ -892,7 +892,7 @@ class MyPiModule(mp_module.MPModule):
             #    self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
             #else:
             #    self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
-            #self.myTText_Radio="Radio=%u" % (msg.rssi)
+            self.myTText_Radio="Radio=%u" % (msg.rssi)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
