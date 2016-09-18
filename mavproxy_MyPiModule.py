@@ -888,11 +888,11 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         elif mtype in ['RADIO', 'RADIO_STATUS']:
             self.RADIO += 1
-            #if msg.rssi < msg.noise+10 or msg.remrssi < msg.remnoise+10:
-            #    self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
-            #else:
-            #    self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
-            self.myTText_Radio="Radio=%u" % (msg.rssi)
+            if msg.rssi < msg.noise+10 or msg.remrssi < msg.remnoise+10:
+                self.myTText_Radio="Radio %u/%u %u/%u" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+            else:
+                self.myTText_Radio="Radio %u/%u %u/%u!" % (msg.rssi, msg.noise, msg.remrssi, msg.remnoise)
+            #self.myTText_Radio="Radio=%u" % (msg.rssi)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
