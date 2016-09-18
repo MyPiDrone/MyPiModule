@@ -785,7 +785,7 @@ class MyPiModule(mp_module.MPModule):
             elif Roll < -5 and Roll > -10:
                 self.myTText_Attitude= "%u|___---+---```|   " % Roll 
             elif Roll < -10:
-                self.myTText_Attitude= "%u|______+``````²|   " % Roll 
+                self.myTText_Attitude= "%u|______+``````|   " % Roll 
 	    else:
                 self.myTText_Attitude="   |------+------|   " % Roll 
         elif mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
