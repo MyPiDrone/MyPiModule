@@ -279,7 +279,6 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             # draww Roll and Pitch
             ##################################################################################
-            myTText_Roll="Roll=%u" % self.myRoll
             if self.myRoll > 5 and self.myRoll < 15:
                 myTText_Attitude_Roll="    |``````---+---___| %u" % self.myRoll
             elif self.myRoll > 15:
@@ -291,19 +290,18 @@ class MyPiModule(mp_module.MPModule):
 	    else:
                 myTText_Attitude_Roll="    |------+------| %u" % self.myRoll
             ##################################################################################
-            myTText_Pitch="Pitch=%u" % self.myPitch
             if self.myPitch > 5 and self.myPitch < 15:
-                myTText_Attitude_pitch="%u '_-_-_-_-_-_-_-'    " % self.myPitch 
+                myTText_Attitude_pitch="%u ^_-_-_-_-_-_-_-^    " % self.myPitch 
             elif self.myPitch > 15:
-                myTText_Attitude_pitch= "%u ^_____________'    " % self.myPitch 
+                myTText_Attitude_pitch= "%u ^_____________^    " % self.myPitch 
             elif self.myPitch < -5 and self.myPitch > -15:
                 myTText_Attitude_pitch="    V``-``-``-``-``-``-``V %u" % self.myPitch
             elif self.myPitch < -15:
                 myTText_Attitude_pitch="    V``````````````````````````V %u" % self.myPitch 
 	    else:
-                myTText_Attitude_pitch="    |------------| %u" % self.myPitch
+                myTText_Attitude_pitch="    -------------- %u" % self.myPitch
             ##################################################################################
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14}   {15} {16}     {17} {18}           ALt={19}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Pitch,myTText_Attitude_pitch,myTText_Roll,myTText_Attitude_Roll,self.status.altitude)
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12}\nGPSSpeed={13} Thr={14}   Pitch: {16}     Roll: {18}           ALt={19}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
