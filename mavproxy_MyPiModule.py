@@ -291,7 +291,7 @@ class MyPiModule(mp_module.MPModule):
 	    else:
                 myTText_Attitude_Roll="    |------+------|    " 
             ##################################################################################
-            myTText_Roll="Roll=%u" % self.myRoll
+            myTText_Pitch="Pitch=%u" % self.myPitch
             if self.myPitch > 5 and self.myPitch < 15:
                 myTText_Attitude_pitch="    |_____________| %u" % self.myPitch
             elif self.myRoll > 15:
