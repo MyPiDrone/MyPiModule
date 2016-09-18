@@ -277,13 +277,13 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='darkblue'
                 level='_'
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14} {15} {16} ALt={17}m                                                                   {18} _-_-_-_-_-_".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.status.altitude,self.myTText_Attitude)
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14} {15} {16} ALt={17}m                                                  {18} ..........".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.status.altitude,self.myTText_Attitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
             myintext = "{0:8} {1}".format(mytime,intext)
             # max 255
-            new_telemetry_text = (myintext[:254] + '.') if len(myintext) > 254 else myintext
+            new_telemetry_text = (myintext[:254] + '!') if len(myintext) > 254 else myintext
             # new telemetry text
             if self.current_telemetry_text != new_telemetry_text:
                self.camera.annotate_background = picamera.Color(color)
