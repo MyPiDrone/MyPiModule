@@ -281,13 +281,13 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             myTText_Roll="Roll=%u" % self.myRoll
             myTText_Pitch="Pitch=%u" % self.myPitch
-            if Roll > 5 and Roll < 10:
+            if self.myRoll > 5 and self.myRoll < 10:
                 myTText_Attitude="   |``````---+---___|%u" % self.myRoll
-            elif Roll > 10:
+            elif self.myRoll > 10:
                 myTText_Attitude="   |````````````+______|%u" % self.myRoll 
-            elif Roll < -5 and Roll > -10:
+            elif self.myRoll < -5 and self.myRoll > -10:
                 myTText_Attitude= "%u|___---+---``````|   " % self.myRoll 
-            elif Roll < -10:
+            elif self.myRoll < -10:
                 myTText_Attitude= "%u|______+````````````|   " % self.myRoll 
 	    else:
                 myTText_Attitude="   |------+------|   " % self.myRoll 
