@@ -219,7 +219,8 @@ class MyPiModule(mp_module.MPModule):
         self.myTText_heading = ""
         self.myTText_Roll = ""
         self.myTText_Pitch = ""
-        self.myTText_Attitude="   |-----+-----|   "
+        self.myRoll=0
+        self.myPitch=0
         self.myTText_Radio = ""
         self.myTText_FlightTime = ""
         self.in_air = False
@@ -277,7 +278,22 @@ class MyPiModule(mp_module.MPModule):
             else:
                 color='darkblue'
                 level='_'
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14} {15} {16} ALt={17}m                                                  {18} ..........".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.status.altitude,self.myTText_Attitude)
+            ##################################################################################
+            # draww Roll and Pitch
+            ##################################################################################
+            myTText_Roll="Roll=%u" % self.myRoll
+            myTText_Pitch="Pitch=%u" % self.myPitch
+            if Roll > 5 and Roll < 10:
+                myTText_Attitude="   |``````---+---___|%u" % self.myRoll
+            elif Roll > 10:
+                myTText_Attitude="   |````````````+______|%u" % self.myRoll 
+            elif Roll < -5 and Roll > -10:
+                myTText_Attitude= "%u|___---+---``````|   " % self.myRoll 
+            elif Roll < -10:
+                myTText_Attitude= "%u|______+````````````|   " % self.myRoll 
+	    else:
+                myTText_Attitude="   |------+------|   " % self.myRoll 
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14} {15} {16} ALt={17}m                                                  {18} ..........".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,self.myTText_Roll,self.myTText_Pitch,self.status.altitude,myTText_Attitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
@@ -774,20 +790,8 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         elif mtype == 'ATTITUDE':
             self.ATTITUDE += 1
-            Roll=math.degrees(msg.roll)
-            Pitch=math.degrees(msg.pitch)
-            self.myTText_Roll="Roll=%u" % Roll
-            self.myTText_Pitch="Pitch=%u" % Pitch
-            if Roll > 5 and Roll < 10:
-                self.myTText_Attitude="   |``````---+---___|%u" % Roll
-            elif Roll > 10:
-                self.myTText_Attitude="   |````````````+______|%u" % Roll 
-            elif Roll < -5 and Roll > -10:
-                self.myTText_Attitude= "%u|___---+---``````|   " % Roll 
-            elif Roll < -10:
-                self.myTText_Attitude= "%u|______+````````````|   " % Roll 
-	    else:
-                self.myTText_Attitude="   |------+------|   " % Roll 
+            self.myRoll=math.degrees(msg.roll)
+            self.myPitch=math.degrees(msg.pitch)
         elif mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
             if mtype == "GPS_RAW":
                 self.GPS_RAW += 1
