@@ -293,17 +293,17 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             myTText_Pitch="Pitch=%u" % self.myPitch
             if self.myPitch > 5 and self.myPitch < 15:
-                myTText_Attitude_pitch="    |``-``-``-``-``-``-``-``-``-``-``-``-| %u" % self.myPitch
-            elif self.myRoll > 15:
+                myTText_Attitude_pitch="    |``-``-``-``-``-``-``| %u" % self.myPitch
+            elif self.myPitch > 15:
                 myTText_Attitude_pitch="    |``````````````````````````| %u" % self.myPitch 
-            elif self.myRoll < -5 and self.myRoll > -15:
+            elif self.myPitch < -5 and self.myPitch > -15:
                 myTText_Attitude_pitch="%u |_-_-_-_-_-_-_-|    " % self.myPitch 
-            elif self.myRoll < -15:
+            elif self.myPitch < -15:
                 myTText_Attitude_pitch= "%u |_____________|    " % self.myPitch 
 	    else:
                 myTText_Attitude_pitch="    |------------|    " 
             ##################################################################################
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14} {15} {16} ALt={17}m    {18}    {19} ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Roll,myTText_Pitch,self.status.altitude,myTText_Attitude_pitch,myTText_Attitude_Roll)
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3}\nAsk={6:8} ({7}V,{8}A,{9}%) {10} {11} {12} GPSSpeed={13} Thr={14} {15} {16}     {17}    {18}                 ALt={19}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Roll,myTText_Pitche,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
