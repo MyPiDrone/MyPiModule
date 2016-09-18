@@ -219,7 +219,7 @@ class MyPiModule(mp_module.MPModule):
         self.myTText_heading = ""
         self.myTText_Roll = ""
         self.myTText_Pitch = ""
-        self.myTText_Attitude="|----+----|"
+        self.myTText_Attitude="   |----+----|   "
         self.myTText_Radio = ""
         self.myTText_FlightTime = ""
         self.in_air = False
@@ -779,10 +779,11 @@ class MyPiModule(mp_module.MPModule):
             self.myTText_Roll="Roll=%u" % Roll
             self.myTText_Pitch="Pitch=%u" % Pitch
             if Roll > 10:
-                self.myTText_Attitude="-----+_____"
+                self.myTText_Attitude="   |-----+_____|%s" % Roll
             elif Roll < -10:
-                self.myTText_Attitude="_____+-----" 
+                self.myTText_Attitude="%s|_____+-----|   " % Roll 
 	    else:
+                self.myTText_Attitude="   |-----+-----|   " % Roll 
                 self.myTText_Attitude="-----+-----"
         elif mtype in [ 'GPS_RAW', 'GPS_RAW_INT' ]:
             if mtype == "GPS_RAW":
