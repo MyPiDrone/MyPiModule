@@ -225,6 +225,7 @@ class MyPiModule(mp_module.MPModule):
         self.in_air = False
         self.start_time = 0.0
         self.total_time = 0.0
+        self.all_total_time = 0.0
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
@@ -750,13 +751,15 @@ class MyPiModule(mp_module.MPModule):
                 self.start_time = time.mktime(t)
             elif flying and self.in_air:
                 self.total_time = time.mktime(t) - self.start_time
-                self.myTText_FlightTime="FlightTime=%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
+                current_all_total_time = self.all_total_time + self.total_time
+                self.myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
             elif not flying and self.in_air:
                 self.in_air = False
                 self.total_time = time.mktime(t) - self.start_time
-                self.myTText_FlightTime="FlightTime=%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
+                self.all_total_time = self.all_total_time + self.total_time
+                self.myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             else:
-                self.myTText_FlightTime="FlightTime=%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60)
+                self.myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             ###########################################
             # End re-used code mavproxy_console.py
             ###########################################
