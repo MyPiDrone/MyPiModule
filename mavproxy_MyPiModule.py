@@ -225,8 +225,8 @@ class MyPiModule(mp_module.MPModule):
         self.start_time = 0.0
         self.total_time = 0.0
         self.all_total_time = 0.0
-        self.relativeHeading = 366
-        self.armingHeading = 0
+        self.relativeHeading =  0
+        self.armingHeading = -1
         self.Heading = 0
         ###########################################
         # End re-used code mavproxy_console.py
@@ -829,16 +829,15 @@ class MyPiModule(mp_module.MPModule):
             else:
                 gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
             self.Heading = self.master.field('VFR_HUD', 'heading', '-')
-            if self.armed == True and self.relativeHeading == 366:
+            if self.armed == True and self.armingHeading == -1:
                  self.armingHeading = self.Heading
-                 self.relativeHeading = 0
             else:
-                 self.relativeHeading = 366
-            if self.relativeHeading == 366:
+                 self.armingHeading = -1
+            if self.armingHeading == -1:
                  self.relativeHeading = self.Heading
             else:
                  self.relativeHeading = self.Heading - self.armingHeading
-            self.myTText_Heading="Hdg=%u/%u Rel=%u/%u" % (self.Heading, gps_heading,self.relativeHeadingi,self.armingHeading)
+            self.myTText_Heading="Hdg=%u/%u Rel=%u/%u" % (self.Heading, gps_heading,self.relativeHeading,self.armingHeading)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
