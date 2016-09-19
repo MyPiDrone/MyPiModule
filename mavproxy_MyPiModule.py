@@ -831,13 +831,14 @@ class MyPiModule(mp_module.MPModule):
             self.Heading = self.master.field('VFR_HUD', 'heading', '-')
             if self.armed == True and self.relativeHeading == 366:
                  self.armingHeading = self.Heading
+                 self.relativeHeading = 0
             else:
                  self.relativeHeading = 366
             if self.relativeHeading == 366:
                  self.relativeHeading = self.Heading
             else:
                  self.relativeHeading = self.Heading - self.armingHeading
-            self.myTText_Heading="Hdg=%s/%ui Rel=%s" % (self.Heading, gps_heading,self.relativeHeading)
+            self.myTText_Heading="Hdg=%s/%u Rel=%s" % (self.Heading, gps_heading,self.relativeHeading)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
