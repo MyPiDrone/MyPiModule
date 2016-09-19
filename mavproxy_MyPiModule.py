@@ -225,7 +225,7 @@ class MyPiModule(mp_module.MPModule):
         self.start_time = 0.0
         self.total_time = 0.0
         self.all_total_time = 0.0
-        self.relativeHeading =  0
+        self.relativeHeading = 0
         self.armingHeading = -1
         self.Heading = 0
         ###########################################
@@ -837,7 +837,7 @@ class MyPiModule(mp_module.MPModule):
                  self.relativeHeading = self.Heading
             else:
                  self.relativeHeading = self.Heading - self.armingHeading
-            self.myTText_Heading="Hdg=%u/%u Rel=%u" % (self.Heading, gps_heading,self.relativeHeading)
+            self.myTText_Heading="Hdg=%u/%u Rel=%u/%u" % (self.Heading, gps_heading,self.relativeHeading,self.armingHeading)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
