@@ -216,7 +216,7 @@ class MyPiModule(mp_module.MPModule):
         # Start re-used code mavproxy_console.py
         ###########################################
         self.myTText_gps = ""
-        self.myTText_heading = ""
+        self.myTText_Heading = ""
         self.myRoll=0
         self.myPitch=0
         self.myTText_Radio = ""
@@ -225,6 +225,9 @@ class MyPiModule(mp_module.MPModule):
         self.start_time = 0.0
         self.total_time = 0.0
         self.all_total_time = 0.0
+        self.relativeHeading = 366
+        self.armingHeading = 0
+        self.Heading = 0
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
@@ -301,7 +304,7 @@ class MyPiModule(mp_module.MPModule):
 	    else:
                 myTText_Attitude_pitch="%u --------------" % self.myPitch
             ##################################################################################
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\nGPSSpeed={14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\nGPSSpeed={14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_Heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
@@ -825,7 +828,16 @@ class MyPiModule(mp_module.MPModule):
                 gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
             else:
                 gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
-            self.myTText_heading="Hdg=%s/%u" % (self.master.field('VFR_HUD', 'heading', '-'), gps_heading)
+            self.Heading = self.master.field('VFR_HUD', 'heading', '-')
+            if self.armed == True and self.relativeHeading == 366:
+                 self.armingHeading = self.Heading
+            else:
+                 self.relativeHeading = 366
+            if self.relativeHeading == 366:
+                 self.relativeHeading = self.Heading
+            else:
+                 self.relativeHeading = self.Heading - self.armingHeading
+            self.myTText_Heading="Hdg=%s/%ui Rel=%s" % (self.Heading, gps_heading,self.relativeHeading)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
