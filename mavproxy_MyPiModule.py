@@ -836,7 +836,7 @@ class MyPiModule(mp_module.MPModule):
             if self.armingHeading == 366:
                  self.relativeHeading = self.Heading
             else:
-                 if self.Heading <= self.armingHeading:
+                 if self.armingHeading < self.Heading:
                      self.relativeHeading = self.Heading - self.armingHeading
                  else:
                      self.relativeHeading = 360 - self.armingHeading - self.Heading
