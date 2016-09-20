@@ -839,7 +839,7 @@ class MyPiModule(mp_module.MPModule):
                  if self.armingHeading <= self.Heading:
                      self.relativeHeading = self.Heading - self.armingHeading
                  else:
-                     self.relativeHeading = self.Heading - 360 - self.armingHeading
+                     self.relativeHeading = self.Heading + 360 - self.armingHeading
             self.myTText_Heading="Hdg=%u/%u Rel=%u/%u" % (self.Heading, gps_heading,self.relativeHeading,self.armingHeading)
         ###########################################
         # End re-used code mavproxy_console.py
