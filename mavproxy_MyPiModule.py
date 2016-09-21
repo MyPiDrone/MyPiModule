@@ -846,7 +846,7 @@ class MyPiModule(mp_module.MPModule):
             elif self.relativeHeading >=67 and self.relativeHeading <= 112:
                  direction="-->"
             elif self.relativeHeading >112 and self.relativeHeading < 157:
-                 direction=" \v"
+                 direction=" \\v"
             elif self.relativeHeading >=157 and self.relativeHeading <= 202:
                  direction=" v "
             elif self.relativeHeading >202 and self.relativeHeading < 247:
