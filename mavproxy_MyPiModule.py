@@ -839,7 +839,7 @@ class MyPiModule(mp_module.MPModule):
                  self.relativeHeading = self.Heading - self.armingHeading
                  if self.relativeHeading < 0:
                      self.relativeHeading += 360
-            if self.relativeHeading => 337 or self.relativeHeading <= 22:
+            if self.relativeHeading >= 337 or self.relativeHeading <= 22:
                  direction=" ^ "
             elif self.relativeHeading >22 and self.relativeHeading < 67:
                  direction=" /^"
