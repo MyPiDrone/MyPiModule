@@ -216,7 +216,6 @@ class MyPiModule(mp_module.MPModule):
         # Start re-used code mavproxy_console.py
         ###########################################
         self.myTText_gps = ""
-        self.myTText_Heading = ""
         self.myRoll=0
         self.myPitch=0
         self.myTText_Radio = ""
@@ -228,6 +227,7 @@ class MyPiModule(mp_module.MPModule):
         self.relativeHeading = 0
         self.armingHeading = 366
         self.Heading = 0
+        self.gps_heading = 0
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
@@ -280,7 +280,7 @@ class MyPiModule(mp_module.MPModule):
                 color='darkblue'
                 level='_'
             ##################################################################################
-            # draww Roll and Pitch
+            # myTText_Attitude_Roll draw Roll and Pitch
             ##################################################################################
             if self.myRoll > 5 and self.myRoll < 15:
                 myTText_Attitude_Roll="%u ^``````---+---___v" % self.myRoll
@@ -293,6 +293,8 @@ class MyPiModule(mp_module.MPModule):
 	    else:
                 myTText_Attitude_Roll="%u -------+------- " % self.myRoll
             ##################################################################################
+            # myTText_Attitude_pitch
+            ##################################################################################
             if self.myPitch > 5 and self.myPitch < 15:
                 myTText_Attitude_pitch="%u ^_-_-_-+-_-_-_-^    " % self.myPitch 
             elif self.myPitch > 15:
@@ -304,7 +306,37 @@ class MyPiModule(mp_module.MPModule):
 	    else:
                 myTText_Attitude_pitch="%u --------------" % self.myPitch
             ##################################################################################
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\nGPSSpeed={14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,self.myTText_Heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
+            # myTText_Heading=
+            ##################################################################################
+            if self.armed == True and self.armingHeading == 366:
+                 self.armingHeading = self.Heading
+            elif self.armed == False:
+                 self.armingHeading = 366
+            if self.armingHeading == 366:
+                 self.relativeHeading = self.Heading
+            else:
+                 self.relativeHeading = self.Heading - self.armingHeading
+                 if self.relativeHeading < 0:
+                     self.relativeHeading += 360
+            if self.relativeHeading >= 337 or self.relativeHeading <= 22:
+                 direction=" ^ "
+            elif self.relativeHeading >22 and self.relativeHeading < 67:
+                 direction=" /^"
+            elif self.relativeHeading >=67 and self.relativeHeading <= 112:
+                 direction="-->"
+            elif self.relativeHeading >112 and self.relativeHeading < 157:
+                 direction=" \\v"
+            elif self.relativeHeading >=157 and self.relativeHeading <= 202:
+                 direction=" v "
+            elif self.relativeHeading >202 and self.relativeHeading < 247:
+                 direction="v/ "
+            elif self.relativeHeading >=247 and self.relativeHeading <= 292:
+                 direction="<--"
+            elif self.relativeHeading >292 and self.relativeHeading <337:
+                 direction="^\ "
+            myTText_Heading="Hdg=%u/%u Rel=%u %s" % (self.Heading, self.gps_heading,self.relativeHeading,direction)
+            ##################################################################################
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\nGPSSpeed={14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,myTText_Heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
@@ -825,37 +857,10 @@ class MyPiModule(mp_module.MPModule):
             else:
                 self.myTText_gps="GPS=%u(%s)!" % (msg.fix_type, sats_string)
             if self.master.mavlink10():
-                gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
+                self.gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
             else:
-                gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
+                self.gps_heading = self.mpstate.status.msgs['GPS_RAW'].hdg
             self.Heading = self.master.field('VFR_HUD', 'heading', '-')
-            if self.armed == True and self.armingHeading == 366:
-                 self.armingHeading = self.Heading
-            elif self.armed == False:
-                 self.armingHeading = 366
-            if self.armingHeading == 366:
-                 self.relativeHeading = self.Heading
-            else:
-                 self.relativeHeading = self.Heading - self.armingHeading
-                 if self.relativeHeading < 0:
-                     self.relativeHeading += 360
-            if self.relativeHeading >= 337 or self.relativeHeading <= 22:
-                 direction=" ^ "
-            elif self.relativeHeading >22 and self.relativeHeading < 67:
-                 direction=" /^"
-            elif self.relativeHeading >=67 and self.relativeHeading <= 112:
-                 direction="-->"
-            elif self.relativeHeading >112 and self.relativeHeading < 157:
-                 direction=" \\v"
-            elif self.relativeHeading >=157 and self.relativeHeading <= 202:
-                 direction=" v "
-            elif self.relativeHeading >202 and self.relativeHeading < 247:
-                 direction="v/ "
-            elif self.relativeHeading >=247 and self.relativeHeading <= 292:
-                 direction="<--"
-            elif self.relativeHeading >292 and self.relativeHeading <337:
-                 direction="^\ "
-            self.myTText_Heading="Hdg=%u/%u Rel=%u %s" % (self.Heading, gps_heading,self.relativeHeading,direction)
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
