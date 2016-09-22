@@ -227,7 +227,7 @@ class MyPiModule(mp_module.MPModule):
         self.armingHeading = 366
         self.Heading = 0
         self.gps_heading = 0
-        self.timestamp = 0
+        self.timestamp = time.time()
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
