@@ -217,7 +217,6 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         self.myRoll=0
         self.myPitch=0
-        self.myTText_Radio = ""
         self.in_air = False
         self.start_time = 0.0
         self.total_time = 0.0
@@ -225,6 +224,7 @@ class MyPiModule(mp_module.MPModule):
         self.relativeHeading = 0
         self.armingHeading = 366
         self.Heading = 0
+        self.my_rssi = 0
         self.my_gps_ok = 0
         self.my_fix_type_string= ""
         self.my_sats_string = ""
@@ -306,7 +306,7 @@ class MyPiModule(mp_module.MPModule):
             elif self.myPitch < -15:
                 myTText_Attitude_pitch="%u v````````````+````````````v" % self.myPitch 
 	    else:
-                myTText_Attitude_pitch="%u --------------" % self.myPitch
+                myTText_Attitude_pitch="%u ------+-------" % self.myPitch
             ##################################################################################
             # re-used code mavproxy_console.py
             # myTText_Heading
@@ -353,7 +353,7 @@ class MyPiModule(mp_module.MPModule):
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
-                myTText_FlightTime="FlightT=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
+                myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
             elif not flying and self.in_air:
                 self.in_air = False
                 self.total_time = time.mktime(self.timestamp) - self.start_time
@@ -374,13 +374,20 @@ class MyPiModule(mp_module.MPModule):
                 myTText_GPS="GPS=OK%s(%s)" % (self.my_fix_type_string, self.my_sats_string)
             else:
                 myTText_GPS="GPS=%s(%s)!" % (self.my_fix_type_string, self.my_sats_string)
+            ##################################################################################
+            # myTText_Radio
+            ##################################################################################
+            myTText_Radio="Radio=%s" % (str(msg.rssi))
+            ##############################
+            # Final Telemetry text
+            ##############################
             myTText=level
             myTText="{0} {1:8}".format(myTText,["Disarmed","Armed"][self.armed == True])
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
             myTText="{0} Vid{1:3}".format(myTText,["OFF","ON"][self.video_on == True])
-            myTText="{0} {1}".format(myTText,self.myTText_Radio)
+            myTText="{0} {1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0}\nAsk={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
             myTText="{0} ({1}V,{2}A,{3}%)".format(myTText,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime)
@@ -899,7 +906,7 @@ class MyPiModule(mp_module.MPModule):
             self.RC_CHANNELS_RAW += 1
             self.myrcraw[1] = msg.chan1_raw ; self.myrcraw[2] = msg.chan2_raw ; self.myrcraw[3] = msg.chan3_raw ; self.myrcraw[4] = msg.chan4_raw
             self.myrcraw[5] = msg.chan5_raw ; self.myrcraw[6] = msg.chan6_raw ; self.myrcraw[7] = msg.chan7_raw ; self.myrcraw[8] = msg.chan8_raw
-            self.myTText_Radio="Radio=%s" % (str(msg.rssi))
+            self.my_rssi=msg.rssi
             self.my_rc_check()
         elif mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
