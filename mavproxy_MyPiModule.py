@@ -377,7 +377,7 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             # myTText_Radio
             ##################################################################################
-            myTText_Radio="Radio=%s" % (str(msg.rssi))
+            myTText_Radio="Radio=%s" % (str(self.my_rssi))
             ##############################
             # Final Telemetry text
             ##############################
