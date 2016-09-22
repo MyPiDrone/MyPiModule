@@ -858,9 +858,9 @@ class MyPiModule(mp_module.MPModule):
                 num_sats1 = msg.satellites_visible
             num_sats2 = self.master.field('GPS2_RAW', 'satellites_visible', -1)
             if num_sats2 == -1:
-                self.sats_string = "%u" % num_sats1
+                self.my_sats_string = "%u" % num_sats1
             else:
-                self.sats_string = "%u/%u" % (num_sats1, num_sats2)
+                self.my_sats_string = "%u/%u" % (num_sats1, num_sats2)
             if ((msg.fix_type >= 3 and self.master.mavlink10()) or
                 (msg.fix_type == 2 and not self.master.mavlink10())):
                 if (msg.fix_type >= 4):
