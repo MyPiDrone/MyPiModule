@@ -379,9 +379,22 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
+            myTText="{0} Vid{1:3}".format(myTText,["OFF","ON"][self.video_on == True])
+            myTText="{0} {1}".format(myTText,self.myTText_Radio)
+            myTText="{0} Ask={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
+            myTText="{0} ({1}V,{2}A,{3}%)".format(myTText,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime)
+            myTText="{0} {1}".format(myTText,myTText_FlightTime)
+            myTText="{0} {1}".format(myTText,myTText_GPS)
+            myTText="{0} {1}".format(myTText,myTText_Heading)
+            myTText="{0} {1}".format(myTText,myTText_GPSSpeed)
+            myTText="{0} Thr={1}".format(myTText,self.mythrottle)
+            myTText="{0} Thr={1}".format(myTText,myTText_Attitude_pitch)
+            myTText="{0} Pich={1}".format(myTText,myTText_Attitude_Roll)
+            myTText="{0} Alt={1}m".format(myTText,self.status.altitude)
             print("%s" % myTText)
+            intext = myTText
             ##################################################################################
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\n{14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,myTText_GPS,myTText_Heading,myTText_GPSSpeed,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
+            #intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\n{14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,myTText_GPS,myTText_Heading,myTText_GPSSpeed,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
