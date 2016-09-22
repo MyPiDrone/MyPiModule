@@ -219,7 +219,6 @@ class MyPiModule(mp_module.MPModule):
         self.myRoll=0
         self.myPitch=0
         self.myTText_Radio = ""
-        self.myTText_FlightTime = ""
         self.in_air = False
         self.start_time = 0.0
         self.total_time = 0.0
@@ -336,7 +335,30 @@ class MyPiModule(mp_module.MPModule):
                  direction="^\ "
             myTText_Heading="Hdg=%u/%u Rel=%u %s" % (self.Heading, self.gps_heading,self.relativeHeading,direction)
             ##################################################################################
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\nGPSSpeed={14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,self.myTText_FlightTime,self.myTText_gps,myTText_Heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
+            # myTText_FlightTime
+            ##################################################################################
+            t = time.localtime(msg._timestamp)
+            flying = False
+            if self.mpstate.vehicle_type == 'copter':
+                flying = self.master.motors_armed()
+            else:
+                flying = msg.groundspeed > 3
+            if flying and not self.in_air:
+                self.in_air = True
+                self.start_time = time.mktime(t)
+            elif flying and self.in_air:
+                self.total_time = time.mktime(t) - self.start_time
+                current_all_total_time = self.all_total_time + self.total_time
+                myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
+            elif not flying and self.in_air:
+                self.in_air = False
+                self.total_time = time.mktime(t) - self.start_time
+                self.all_total_time = self.all_total_time + self.total_time
+                myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
+            else:
+                myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
+            ##################################################################################
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\nGPSSpeed={14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,self.myTText_gps,myTText_Heading,math.ceil(self.mygroundspeed*10)/10,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
@@ -796,32 +818,6 @@ class MyPiModule(mp_module.MPModule):
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
             self.my_telemetry_text()
-            ###########################################
-            # Start re-used code mavproxy_console.py
-            ###########################################
-            t = time.localtime(msg._timestamp)
-            flying = False
-            if self.mpstate.vehicle_type == 'copter':
-                flying = self.master.motors_armed()
-            else:
-                flying = msg.groundspeed > 3
-            if flying and not self.in_air:
-                self.in_air = True
-                self.start_time = time.mktime(t)
-            elif flying and self.in_air:
-                self.total_time = time.mktime(t) - self.start_time
-                current_all_total_time = self.all_total_time + self.total_time
-                self.myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
-            elif not flying and self.in_air:
-                self.in_air = False
-                self.total_time = time.mktime(t) - self.start_time
-                self.all_total_time = self.all_total_time + self.total_time
-                self.myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
-            else:
-                self.myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
-            ###########################################
-            # End re-used code mavproxy_console.py
-            ###########################################
         elif mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
             self.myvolt = msg.voltage_battery
