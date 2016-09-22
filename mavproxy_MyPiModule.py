@@ -379,7 +379,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
-            print(%s" % myTText)
+            print("%s" % myTText)
             ##################################################################################
             intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\n{14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,myTText_GPS,myTText_Heading,myTText_GPSSpeed,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
