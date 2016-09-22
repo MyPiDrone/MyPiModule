@@ -227,6 +227,7 @@ class MyPiModule(mp_module.MPModule):
         self.armingHeading = 366
         self.Heading = 0
         self.gps_heading = 0
+        self.timestamp = 0
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
@@ -337,7 +338,6 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             # myTText_FlightTime
             ##################################################################################
-            t = time.localtime(msg._timestamp)
             flying = False
             if self.mpstate.vehicle_type == 'copter':
                 flying = self.master.motors_armed()
@@ -345,14 +345,14 @@ class MyPiModule(mp_module.MPModule):
                 flying = msg.groundspeed > 3
             if flying and not self.in_air:
                 self.in_air = True
-                self.start_time = time.mktime(t)
+                self.start_time = time.mktime(self.timestamp)
             elif flying and self.in_air:
-                self.total_time = time.mktime(t) - self.start_time
+                self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
             elif not flying and self.in_air:
                 self.in_air = False
-                self.total_time = time.mktime(t) - self.start_time
+                self.total_time = time.mktime(self.timestamp) - self.start_time
                 self.all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             else:
@@ -817,6 +817,8 @@ class MyPiModule(mp_module.MPModule):
             if self.armed == True: self.mylogverbose = True
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
+            self.timestamp = time.localtime(msg._timestamp)
+print(">>> %s %s\n" % (msg._timestamp,self.timestamp))
             self.my_telemetry_text()
         elif mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
