@@ -353,7 +353,7 @@ class MyPiModule(mp_module.MPModule):
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
-                myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
+                myTText_FlightTime="FlightT=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
             elif not flying and self.in_air:
                 self.in_air = False
                 self.total_time = time.mktime(self.timestamp) - self.start_time
@@ -374,6 +374,12 @@ class MyPiModule(mp_module.MPModule):
                 myTText_GPS="GPS=OK%s(%s)" % (self.my_fix_type_string, self.my_sats_string)
             else:
                 myTText_GPS="GPS=%s(%s)!" % (self.my_fix_type_string, self.my_sats_string)
+            myTText=level
+            myTText=myTText . ["Disarmed","Armed"][self.armed == True]
+            myTText=myTText . self.mystatename[self.mystate]
+            myTText=myTText . self.status.flightmode
+            myTText=myTText . ["Down",self.net_ip_current][self.net_up == True]
+            print(%s" % myTText)
             ##################################################################################
             intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\n{14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,myTText_GPS,myTText_Heading,myTText_GPSSpeed,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
