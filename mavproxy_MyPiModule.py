@@ -245,9 +245,13 @@ class MyPiModule(mp_module.MPModule):
             fo.write("%s %s %s %s\n" % (date,level,prefix,msg))
             fo.close()
 
+    # quality - Specifies the quality that the encoder should attempt to maintain. i
+    # For the 'h264' format, use values between 10 and 40 where 10 is extremely high quality,i
+    # and 40 is extremely low (20-25 is usually a reasonable range for H.264 encoding).
     def my_start_camera(self):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(640, 480))
-        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
+        #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
+        self.camera.start_recording(self.outpipe, format='h264', quality=30, bitrate=3000000)
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
