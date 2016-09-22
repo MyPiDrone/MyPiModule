@@ -215,7 +215,6 @@ class MyPiModule(mp_module.MPModule):
         ###########################################
         # Start re-used code mavproxy_console.py
         ###########################################
-        self.myTText_gps = ""
         self.myRoll=0
         self.myPitch=0
         self.myTText_Radio = ""
@@ -226,6 +225,9 @@ class MyPiModule(mp_module.MPModule):
         self.relativeHeading = 0
         self.armingHeading = 366
         self.Heading = 0
+        self.my_gps_ok = 0
+        self.my_fix_type_string= ""
+        self.my_sats_string = ""
         self.gps_heading = 0
         self.timestamp = time.time()
         ###########################################
@@ -306,7 +308,8 @@ class MyPiModule(mp_module.MPModule):
 	    else:
                 myTText_Attitude_pitch="%u --------------" % self.myPitch
             ##################################################################################
-            # myTText_Heading=
+            # re-used code mavproxy_console.py
+            # myTText_Heading
             ##################################################################################
             if self.armed == True and self.armingHeading == 366:
                  self.armingHeading = self.Heading
@@ -336,6 +339,7 @@ class MyPiModule(mp_module.MPModule):
                  direction="^\ "
             myTText_Heading="Hdg=%u/%u Rel=%u %s" % (self.Heading, self.gps_heading,self.relativeHeading,direction)
             ##################################################################################
+            # re-used code mavproxy_console.py
             # myTText_FlightTime
             ##################################################################################
             flying = False
@@ -357,9 +361,21 @@ class MyPiModule(mp_module.MPModule):
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
+            ##################################################################################
+            # re-used code mavproxy_console.py
+            # myTText_GPSSpeed
+            ##################################################################################
             myTText_GPSSpeed="GPSSpeed={0}".format(math.ceil(self.mygroundspeed*10)/10)
             ##################################################################################
-            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\n{14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,self.myTText_gps,myTText_Heading,myTText_GPSSpeed,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
+            # re-used code mavproxy_console.py
+            # myTText_GPS
+            ##################################################################################
+            if self.my_gps_ok == 1:
+                self.myTText_GPS="GPS=OK%s(%s)" % (self.my_fix_type_string, self.my_sats_string)
+            else:
+                self.myTText_GPS="GPS=%s(%s)!" % (self.my_fix_type_string, self.my_sats_string)
+            ##################################################################################
+            intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\n{14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,myTText_GPS,myTText_Heading,myTText_GPSSpeed,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
                 self.current_intext = intext            
                 print("%s %s" % (mytime,intext))
@@ -842,18 +858,19 @@ class MyPiModule(mp_module.MPModule):
                 num_sats1 = msg.satellites_visible
             num_sats2 = self.master.field('GPS2_RAW', 'satellites_visible', -1)
             if num_sats2 == -1:
-                sats_string = "%u" % num_sats1
+                self.sats_string = "%u" % num_sats1
             else:
-                sats_string = "%u/%u" % (num_sats1, num_sats2)
+                self.sats_string = "%u/%u" % (num_sats1, num_sats2)
             if ((msg.fix_type >= 3 and self.master.mavlink10()) or
                 (msg.fix_type == 2 and not self.master.mavlink10())):
                 if (msg.fix_type >= 4):
-                    fix_type = "%u" % msg.fix_type
+                    self.my_fix_type_string = "%u" % msg.fix_type
                 else:
-                    fix_type = ""
-                self.myTText_gps="GPS=OK%s(%s)" % (fix_type, sats_string)
+                    self.my_fix_type_string = ""
+                self.my_gps_ok=1
             else:
-                self.myTText_gps="GPS=%u(%s)!" % (msg.fix_type, sats_string)
+                self.my_gps_ok=0
+                self.my_fix_type_string = "%u" % msg.fix_type
             if self.master.mavlink10():
                 self.gps_heading = int(self.mpstate.status.msgs['GPS_RAW_INT'].cog * 0.01)
             else:
