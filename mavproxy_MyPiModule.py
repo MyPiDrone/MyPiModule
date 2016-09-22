@@ -357,7 +357,7 @@ class MyPiModule(mp_module.MPModule):
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
-            myTText_GPSSpeed="GPSSpeed={1}".format(math.ceil(self.mygroundspeed*10)/10)
+            myTText_GPSSpeed="GPSSpeed={1}".format(math.ceil(self.mygroundspeed*10)/10))
             ##################################################################################
             intext = "{0:1} {1:8} {2:8} {3:8} {4:12} Vid{5:3} {6}\nAsk={7:8} ({8}V,{9}A,{10}%) {11} {12} {13}\n{14} Thr={15} Pitch={16}  Roll={17}\nALt={18}m ".format(level,["Disarmed","Armed"][self.armed == True],self.mystatename[self.mystate],self.status.flightmode,["Down",self.net_ip_current][self.net_up == True],["OFF","ON"][self.video_on == True],self.myTText_Radio,["RTL","STABILIZE"][self.stabilize_on == True],math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime,self.myTText_gps,myTText_Heading,myTText_GPSSpeed,self.mythrottle,myTText_Attitude_pitch,myTText_Attitude_Roll,self.status.altitude)
             if self.mydebug and self.current_intext != intext:
