@@ -818,7 +818,7 @@ class MyPiModule(mp_module.MPModule):
             else: self.mylogverbose = self.settings.mylogverbose
             self.mydebug = self.settings.mydebug
             self.timestamp = time.localtime(msg._timestamp)
-print(">>> %s %s\n" % (msg._timestamp,self.timestamp))
+            print(">>> %s %s\n" % (msg._timestamp,self.timestamp))
             self.my_telemetry_text()
         elif mtype == "SYS_STATUS":
             self.SYS_STATUS += 1
