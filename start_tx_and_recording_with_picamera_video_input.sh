@@ -11,7 +11,7 @@ env
 VIDDIR="/root/fpv/videos"
 WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx"
 WifiBroadcast_TX="/root/wifibroadcast/tx"
-log="/var/log/start_tx_with_video_recording.log"
+log="/var/log/start_tx.log"
 pipeout='/tmp/MyPiCamera.pipeout'
 mkfifo $pipeout
 
@@ -114,14 +114,14 @@ then
                 if [ "$OPTION" = "--vr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
-                        tee $VIDEO 1>>$log 2>&1 < $pipeout
+                        tee $VIDEO 1>$log 2>&1 < $pipeout
                 elif [ "$OPTION" = "--vbr" ]; then
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
-                        tee $VIDEO < $pipeout | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>>$log 2>&1
+                        tee $VIDEO < $pipeout | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
-                        $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>>$log 2>&1 < $pipeout
+                        $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1 < $pipeout
                 fi
         fi
 else
