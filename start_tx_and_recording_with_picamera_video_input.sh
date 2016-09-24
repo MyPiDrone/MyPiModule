@@ -11,7 +11,7 @@ env
 VIDDIR="/root/fpv/videos"
 WifiBroadcast_TX="/root/WifiBroadcast/wifibroadcast/tx"
 WifiBroadcast_TX="/root/wifibroadcast/tx"
-log="/var/log/start^Cx_with_video_recording.log"
+log="/var/log/start_tx_with_video_recording.log"
 pipeout='/tmp/MyPiCamera.pipeout'
 mkfifo $pipeout
 
