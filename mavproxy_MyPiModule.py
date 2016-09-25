@@ -153,6 +153,7 @@ class MyPiModule(mp_module.MPModule):
            subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh",self.settings.myinterfacetx,self.settings.mychanneltx,"--vb"],stdout=out,stderr=err)
         print ("/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh %s %s --vbr is starting : waiting %s opening..." % (self.settings.myinterfacetx,self.settings.mychanneltx,self.settings.mypipeout))
         self.outpipe = open(self.settings.mypipeout, 'w')
+        self.my_video_filename = "Video-Tarot-{0}.h264".format(datetime.now().strftime('%Y-%m-%d_%H:%M'))
         ###############################################################################
         # V1 camera
         #Mode   Size    Aspect Ratio    Frame rates     Video Image  FOV     Binning
@@ -258,7 +259,10 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(640, 480))
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
-        self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high')
+        h264name=self.settings.myvideopath + self.my_video_filename
+        print("Camera Start Recording %s" % h264name)
+        self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, bitrate=17000000, splitter_port=2, profile='high', resize=(640, 480))
+        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, bitrate=4000000, profile='high')
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
@@ -776,10 +780,13 @@ class MyPiModule(mp_module.MPModule):
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
                    self.camera.led = False
-                   self.camera.wait_recording(2)
+                   self.camera.wait_recording(2,splitter_port=1)
+                   self.camera.wait_recording(2,splitter_port=2)
                    self.my_telemetry_text()
-                   self.camera.wait_recording(1)
-                   self.camera.stop_recording()
+                   self.camera.wait_recording(2,splitter_port=1)
+                   self.camera.wait_recording(2,splitter_port=2)
+                   self.camera.stop_recording(splitter_port=1)
+                   self.camera.stop_recording(splitter_port=2)
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                self.my_video_status()
