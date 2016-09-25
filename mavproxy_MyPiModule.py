@@ -463,7 +463,7 @@ class MyPiModule(mp_module.MPModule):
     def my_video_status(self):
             self.video_on = False
             try:
-               self.camera._check_recording_stopped()
+               self.camera._check_recording_stopped(splitter_port=1)
             except:
                self.video_on = True
 
