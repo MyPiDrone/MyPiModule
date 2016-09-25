@@ -259,6 +259,9 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(640, 480))
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
+        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, bitrate=4000000, profile='high')
+
+    def my_start_camera_recording(self):
         h264name=self.settings.myvideopath + "/" + self.my_video_filename
         linkname=self.settings.myvideopath + "/Video-Tarot"
         try:
@@ -271,7 +274,6 @@ class MyPiModule(mp_module.MPModule):
             pass
         print("Camera Start Recording %s" % h264name)
         self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, bitrate=17000000, profile='high', resize=(640, 480))
-        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, bitrate=4000000, profile='high')
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
@@ -790,12 +792,9 @@ class MyPiModule(mp_module.MPModule):
                    self.my_statustext_send("Video off")
                    self.camera.led = False
                    self.camera.wait_recording(2,splitter_port=1)
-                   self.camera.wait_recording(2,splitter_port=2)
                    self.my_telemetry_text()
                    self.camera.wait_recording(2,splitter_port=1)
-                   self.camera.wait_recording(2,splitter_port=2)
                    self.camera.stop_recording(splitter_port=1)
-                   self.camera.stop_recording(splitter_port=2)
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                self.my_video_status()
