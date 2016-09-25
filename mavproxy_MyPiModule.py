@@ -151,7 +151,7 @@ class MyPiModule(mp_module.MPModule):
             pass
         with open("/var/log/start_tx_with_video_recording.log","wb") as out, open("/var/log/start_tx_with_video_recording.log","wb") as err:
            subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh",self.settings.myinterfacetx,self.settings.mychanneltx,"--vb"],stdout=out,stderr=err)
-        print ("/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh %s %s --vbr is starting : waiting %s opening..." % (self.settings.myinterfacetx,self.settings.mychanneltx,self.settings.mypipeout))
+        print ("/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh %s %s --vb is starting : waiting %s opening..." % (self.settings.myinterfacetx,self.settings.mychanneltx,self.settings.mypipeout))
         self.outpipe = open(self.settings.mypipeout, 'w')
         self.my_video_filename = "Video-Tarot-{0}.h264".format(datetime.now().strftime('%Y-%m-%d_%H:%M'))
         ###############################################################################
@@ -260,6 +260,8 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
         h264name=self.settings.myvideopath + "/" + self.my_video_filename
+        linkname=self.settings.myvideopath + "/Video-Tarot"
+        os.symlink(h264name, linkname)
         print("Camera Start Recording %s" % h264name)
         self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, bitrate=17000000, profile='high', resize=(640, 480))
         self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, bitrate=4000000, profile='high')
