@@ -261,7 +261,10 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
         h264name=self.settings.myvideopath + "/" + self.my_video_filename
         linkname=self.settings.myvideopath + "/Video-Tarot"
-        os.symlink(h264name, linkname)
+        try:
+            os.symlink(h264name, linkname)
+        except OSError:
+            pass
         print("Camera Start Recording %s" % h264name)
         self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, bitrate=17000000, profile='high', resize=(640, 480))
         self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, bitrate=4000000, profile='high')
