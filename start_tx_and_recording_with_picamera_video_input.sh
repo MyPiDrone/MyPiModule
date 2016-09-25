@@ -98,24 +98,24 @@ then
                 #echo "$PREFIX Starting HD Video conversion h264 to mp4 : avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4 ..."
                 #avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4
                 echo "$PREFIX Starting HD Video re-transmission for $VIDEO..."
-                $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN < $pipeout
+                $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1 < $pipeout
         else
                 echo "$PREFIX Starting HD Video transmission and recording..."
                 VIDEO="$VIDDIR/Video-Tarot-`date +%Y-%m-%d_%H:%M`.h264"
                 # creation du lien sur la derniere video
                 [ ! -d $VIDDIR ] && mkdir -p $VIDDIR
-                touch $VIDEO
                 echo "$PREFIX New Video=$VIDEO"
                 echo "$PREFIX -------------------------------- Liste des videos ---------------------------"
                 du -hs $VIDDIR
                 du -hs $VIDDIR/*
                 echo "$PREFIX -----------------------------------------------------------------------------"
-                ## pour renverser l image option --vflip
                 if [ "$OPTION" = "--vr" ]; then
+                	touch $VIDEO
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording $VIDEO in progress : hit CTRL C to stop"
                         tee $VIDEO 1>$log 2>&1 < $pipeout
                 elif [ "$OPTION" = "--vbr" ]; then
+                	touch $VIDEO
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
                         echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
                         tee $VIDEO < $pipeout | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1
