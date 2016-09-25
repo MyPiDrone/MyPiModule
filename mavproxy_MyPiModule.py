@@ -261,7 +261,6 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
         h264name=self.settings.myvideopath + "/" + self.my_video_filename
         linkname=self.settings.myvideopath + "/Video-Tarot"
-        os.unlink(targetLink)
         try:
             os.unlink(linkname)
         except OSError:
