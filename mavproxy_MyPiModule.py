@@ -376,12 +376,14 @@ class MyPiModule(mp_module.MPModule):
             if flying and not self.in_air:
                 self.in_air = True
                 self.start_time = time.mktime(self.timestamp)
+                my_start_camera_recording()
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
             elif not flying and self.in_air:
                 self.in_air = False
+                self.camera.stop_recording(splitter_port=1)
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 self.all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
@@ -417,7 +419,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0}\nSmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
             myTText="{0} Ask={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
-            myTText="{0} ({1}V,{2}A,{3}%)".format(myTText,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime)
+            myTText="{0} ({1:5}V,{2:5}A,{3:3}%)".format(myTText,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining,myTText_FlightTime)
             myTText="{0} {1}".format(myTText,myTText_FlightTime)
             myTText="{0} {1}".format(myTText,myTText_GPSSpeed)
             myTText="{0}\n{1}".format(myTText,myTText_Heading)
