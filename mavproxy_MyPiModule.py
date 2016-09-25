@@ -383,7 +383,7 @@ class MyPiModule(mp_module.MPModule):
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
             elif not flying and self.in_air:
                 self.in_air = False
-                self.camera.stop_recording(splitter_port=1)
+                self.camera.stop_recording(splitter_port=2)
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 self.all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
