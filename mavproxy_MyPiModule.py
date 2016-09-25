@@ -234,6 +234,7 @@ class MyPiModule(mp_module.MPModule):
         self.my_sats_string = ""
         self.gps_heading = 0
         self.timestamp = time.time()
+        self.simple_mode_on = False
         ###########################################
         # End re-used code mavproxy_console.py
         ###########################################
@@ -394,6 +395,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,["Disarmed","Armed"][self.armed == True])
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
+            myTText="{0} SmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
             myTText="{0} Vid{1:3}".format(myTText,["OFF","ON"][self.video_on == True])
             myTText="{0} {1}".format(myTText,myTText_Radio)
@@ -982,6 +984,10 @@ class MyPiModule(mp_module.MPModule):
             self.STATUSTEXT += 1
             self.myseverity = msg.severity
             self.mytext = msg.text
+            if self.mytext == "SIMPLE mode on":
+                self.simple_mode_on = True
+            if self.mytext == "SIMPLE mode off":
+                self.simple_mode_on = False
             self.my_statustext_check()
         elif mtype == "PARAM_VALUE":
             self.PARAM_VALUE += 1
