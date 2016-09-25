@@ -375,8 +375,8 @@ class MyPiModule(mp_module.MPModule):
                 flying = msg.groundspeed > 3
             if flying and not self.in_air:
                 self.in_air = True
-                my_start_camera_recording()
                 self.start_time = time.mktime(self.timestamp)
+                self.my_start_camera_recording()
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
