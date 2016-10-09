@@ -25,6 +25,7 @@ cp /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh           
 cp /usr/local/bin/start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh      ${MY_DIR_MYPIMODULE}
 cp /usr/local/bin/start_tx_and_recording_with_raspivid_video_input.sh                ${MY_DIR_MYPIMODULE}
 cp /usr/local/bin/MyPiCamera_sample.py                                               ${MY_DIR_MYPIMODULE}
+cp /usr/local/bin/MyPiCamera_sample.sh                                               ${MY_DIR_MYPIMODULE}
 cp /usr/local/bin/manage_network.sh                                  ${MY_DIR_MYPIMODULE}
 cp /usr/local/bin/show_modules.sh                                    ${MY_DIR_MYPIMODULE}
 cp /usr/local/bin/start_wlan1_mode_monitor.sh                        ${MY_DIR_MYPIMODULE}
@@ -33,7 +34,7 @@ cp /usr/local/bin/start_wlan1_mode_managed.sh                        ${MY_DIR_MY
 cd ${MY_DIR_MYPIMODULE}
 VERSION=`grep "self.myversion" mavproxy_MyPiModule.py|head -n 1|awk -F'"' '{print "v"$2}'`
 echo "mavproxy_MyPiModule.py VERSION=$VERSION"
-LIST="mav.parm mavproxy_MyPiModule.py rc.local ArduCopter-quad.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_tx_and_recording_with_picamera_video_input.sh start_tx_and_recording_with_raspivid_video_input.sh start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf manage_network.sh MyPiModule_build_and_git_update.sh MyPiDrone_drone_install.sh MyPiDrone_gcs_install.sh telem1.lua telem2.lua MyPiCamera_sample.py"
+LIST="mav.parm mavproxy_MyPiModule.py rc.local ArduCopter-quad.service mavproxy.service README.md start_MAVProxy_MyPiModule.sh start_ArduCopter-quad.sh show_modules.sh start_rx.sh start_ap.sh start_rx_and_broadcast_over_ap.sh start_tx_and_recording_with_picamera_video_input.sh start_tx_and_recording_with_raspivid_video_input.sh start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh start_wlan1_mode_monitor.sh start_wlan1_mode_managed.sh download_ArduCopter-quad.sh ArduCopter.stg wifiap.service hostapd.conf dnsmasq.conf manage_network.sh MyPiModule_build_and_git_update.sh MyPiDrone_drone_install.sh MyPiDrone_gcs_install.sh telem1.lua telem2.lua MyPiCamera_sample.py MyPiCamera_sample.sh"
 git config --global status.showUntrackedFiles no
 git add $LIST
 #git commit -i $LIST
