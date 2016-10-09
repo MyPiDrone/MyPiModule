@@ -201,7 +201,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.annotate_text_size = 16
         #
         self.camera.resolution = (1296, 972)
-        self.camera.framerate = 25
+        self.camera.framerate = 5
         self.camera.annotate_text_size = 32 
         #
         #self.camera.resolution = (1296, 730)
@@ -461,6 +461,8 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_status(self):
+            # TODO : check disable
+            # this method dont work with two splitter_port : already active
             #self.video_on = False
             #try:
             #   self.camera._check_recording_stopped(splitter_port=1)
