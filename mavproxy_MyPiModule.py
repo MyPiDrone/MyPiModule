@@ -807,6 +807,7 @@ class MyPiModule(mp_module.MPModule):
                        self.video_on_request = True
                        self.video_on_request_time = time.time()
                        self.camera.led = True
+                       self.video_on = True
                        self.my_start_camera()
                        msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on)
                        self.my_write_log("INFO",msg)
