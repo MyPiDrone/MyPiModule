@@ -262,7 +262,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
         #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
-        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='baseline')
+        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
 
     def my_start_camera_recording(self):
         h264name=self.settings.myvideopath + "/" + self.my_video_filename
