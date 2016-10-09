@@ -372,6 +372,7 @@ class MyPiModule(mp_module.MPModule):
             # myTText_FlightTime
             ##################################################################################
             flying = False
+            myTText_FlightTime="FlightTime=0:00/0:00"
             if self.mpstate.vehicle_type == 'copter':
                 flying = self.master.motors_armed()
             else:
