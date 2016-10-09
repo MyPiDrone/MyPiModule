@@ -424,7 +424,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0}\nSmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
             myTText="{0} Ask={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
             myTText="{0} ({1:5}V,{2:5}A,{3:3}%)".format(myTText,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining)
-            myTText="{0} {1}".format(myTText,myTText_FlightTime)
+            #myTText="{0} {1}".format(myTText,myTText_FlightTime)
             myTText="{0} {1}".format(myTText,myTText_GPSSpeed)
             myTText="{0}\n{1}".format(myTText,myTText_Heading)
             myTText="{0} Pitch={1}".format(myTText,myTText_Attitude_pitch)
