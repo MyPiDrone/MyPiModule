@@ -34,7 +34,7 @@ class MyPiModule(mp_module.MPModule):
         self.add_command('mystabilize', self.cmd_mystabilize, "change flight mode to STABILIZE")
         # my settings
         self.settings.append(MPSetting('mytimebat', int, 5, 'Battery refresh Interval Time sec', tab='my'))
-        self.settings.append(MPSetting('mytimeTText', int, 1, 'Telemetry text refresh Interval Time sec'))
+        self.settings.append(MPSetting('mytimeTText', float, 0.5, 'Telemetry text refresh Interval Time sec'))
         self.settings.append(MPSetting('mytimerc', int, 4, 'RC refresh Interval Time sec'))
         self.settings.append(MPSetting('myseqinit', int, 15, 'Time sec before init var and start polling'))
         self.settings.append(MPSetting('myseqpoll', int, 10, 'Time sec between poll status Network, Video, mode'))
@@ -259,7 +259,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(640, 480))
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
-        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, bitrate=4000000, profile='high')
+        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=5, bitrate=4000000, profile='high')
 
     def my_start_camera_recording(self):
         h264name=self.settings.myvideopath + "/" + self.my_video_filename
