@@ -51,7 +51,9 @@ ifconfig $WLAN
 echo "-----------------------------------------------------------------------------"
 iwconfig $WLAN
 echo "-----------------------------------------------------------------------------"
-mkfifo /tmp/MyPiCamera.pipein
+if [ ! -p /tmp/MyPiCamera.pipein ]; then
+	mkfifo /tmp/MyPiCamera.pipein
+fi
 ./MyPiCamera_sample.py | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 2>&1 &
 PID=$!
 sleep 3
