@@ -6,6 +6,7 @@
 ####### How to used : 
 #######  MyPiCamera_sample.py | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
 #######  echo 'My telemetry text' > /tmp/MyPiCamera.pipein
+####### Sample start exec MyPiCamera_sample.sh
 ##############################################################################################################################
 import os
 import sys
