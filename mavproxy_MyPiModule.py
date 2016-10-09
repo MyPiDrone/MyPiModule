@@ -255,11 +255,12 @@ class MyPiModule(mp_module.MPModule):
     # quality - Specifies the quality that the encoder should attempt to maintain.
     # For the 'h264' format, use values between 10 and 40 where 10 is extremely high quality,
     # and 40 is extremely low (20-25 is usually a reasonable range for H.264 encoding).
+    # reference : raspivid -ih -t 1200000 -w 1296 -h 972 -fps 42 -b 4000000 -n -g 60 -pf high -o -
     def my_start_camera(self):
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(640, 480))
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
         #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
-        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=5, bitrate=4000000, profile='high')
+        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
 
     def my_start_camera_recording(self):
         h264name=self.settings.myvideopath + "/" + self.my_video_filename
