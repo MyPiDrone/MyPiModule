@@ -461,11 +461,12 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_status(self):
-            self.video_on = False
-            try:
-               self.camera._check_recording_stopped(splitter_port=1)
-            except:
-               self.video_on = True
+            #self.video_on = False
+            #try:
+            #   self.camera._check_recording_stopped(splitter_port=1)
+            #except:
+            #   self.video_on = True
+            self.video_on = self.video_on
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
