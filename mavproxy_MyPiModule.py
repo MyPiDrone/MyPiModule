@@ -311,13 +311,13 @@ class MyPiModule(mp_module.MPModule):
             # myTText_Attitude_Roll draw Roll and Pitch
             ##################################################################################
             if self.myRoll > 5 and self.myRoll < 15:
-                myTText_Attitude_Roll="%u ^``````---+---___v" % self.myRoll
+                myTText_Attitude_Roll="%u ^___---+---``````v" % self.myRoll
             elif self.myRoll > 15:
-                myTText_Attitude_Roll="%u ^````````````+______v" % self.myRoll 
+                myTText_Attitude_Roll="%u ^______+````````````v" % self.myRoll 
             elif self.myRoll < -5 and self.myRoll > -15:
-                myTText_Attitude_Roll="%u v___---+---``````^    " % self.myRoll 
+                myTText_Attitude_Roll="%u v``````---+---___^    " % self.myRoll 
             elif self.myRoll < -15:
-                myTText_Attitude_Roll= "%u v______+````````````^    " % self.myRoll 
+                myTText_Attitude_Roll= "%u v````````````+______^    " % self.myRoll 
 	    else:
                 myTText_Attitude_Roll="%u -------+------- " % self.myRoll
             ##################################################################################
