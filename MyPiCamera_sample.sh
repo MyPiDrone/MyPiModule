@@ -52,6 +52,9 @@ echo "--------------------------------------------------------------------------
 iwconfig $WLAN
 echo "-----------------------------------------------------------------------------"
 mkfifo /tmp/MyPiCamera.pipein
-./MyPiCamera_sample.py | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
+./MyPiCamera_sample.py | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 2>&1 &
+PID=$!
 sleep 3
 echo 'My telemetry text' > /tmp/MyPiCamera.pipein
+sleep 20
+kill $PID
