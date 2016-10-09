@@ -23,6 +23,16 @@ pin = open(pipein, 'r')
 
 telemetry_text = "" 
 
+#Mode   Size    Aspect Ratio    Frame rates     FOV     Binning
+#0      automatic selection
+#1      1920x1080       16:9    1-30fps         Partial None
+#2      2592x1944       4:3     1-15fps         Full    None
+#3      2592x1944       4:3     0.1666-1fps     Full    None
+#4      1296x972        4:3     1-42fps         Full    2x2
+#5      1296x730        16:9    1-49fps         Full    2x2
+#6      640x480         4:3     42.1-60fps      Full    2x2 plus skip
+#7      640x480         4:3     60.1-90fps      Full    2x2 plus skip
+
 with picamera.PiCamera() as camera:
     camera.sharpness = 0
     camera.contrast = 0
@@ -41,8 +51,8 @@ with picamera.PiCamera() as camera:
     camera.hflip = False
     camera.vflip = False
     camera.crop = (0.0, 0.0, 1.0, 1.0)
-    camera.resolution = (1296, 730)
-    camera.framerate = 49
+    camera.resolution = (1296, 972)
+    camera.framerate = 42
     #camera.start_preview()
     camera.annotate_background = picamera.Color('black')
     camera.annotate_text_size = 20
