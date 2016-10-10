@@ -446,7 +446,7 @@ class MyPiModule(mp_module.MPModule):
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
                 print("jpgname=%s" % jpgname)
-                self.camera.capture(jpgname, use_video_port=True)
+                self.camera.capture(jpgname, splitter_port=1, use_video_port=True)
             print "here4"
 
     def my_network_status(self):
