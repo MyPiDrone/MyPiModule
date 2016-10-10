@@ -465,7 +465,7 @@ class MyPiModule(mp_module.MPModule):
                 self.video_on = True
             else:
                 self.video_on = False
-            print(("Size1:% Size2:%s" % (statinfo1.st_size,statinfo2.st_size))
+            print("Size1:% Size2:%s" % (statinfo1.st_size,statinfo2.st_size))
             # TODO : check disable
             # this method dont work with two splitter_port : already active
             #self.video_on = False
