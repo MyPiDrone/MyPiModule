@@ -436,11 +436,11 @@ class MyPiModule(mp_module.MPModule):
             # max 255
             new_telemetry_text = (myintext[:254] + '!') if len(myintext) > 254 else myintext
             # new telemetry text
-            print "here3"
             if self.current_telemetry_text != new_telemetry_text:
                self.camera.annotate_background = picamera.Color(color)
                self.camera.annotate_text = "%s" % (new_telemetry_text)
                self.current_telemetry_text = new_telemetry_text
+            print "here3"
             ##################################
             # snapshot each minute
             ##################################
