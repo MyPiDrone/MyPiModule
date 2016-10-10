@@ -276,7 +276,7 @@ class MyPiModule(mp_module.MPModule):
         except OSError:
             pass
         print("Camera Start Recording %s" % h264name)
-        self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, bitrate=17000000, profile='high', resize=(640, 480))
+        self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
         print("Camera Start Recording %s" % h264name)
 
     def my_telemetry_text(self):
