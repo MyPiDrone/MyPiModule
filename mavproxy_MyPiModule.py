@@ -440,7 +440,6 @@ class MyPiModule(mp_module.MPModule):
                self.camera.annotate_background = picamera.Color(color)
                self.camera.annotate_text = "%s" % (new_telemetry_text)
                self.current_telemetry_text = new_telemetry_text
-            print "here3"
             ##################################
             # snapshot each minute
             ##################################
@@ -449,6 +448,7 @@ class MyPiModule(mp_module.MPModule):
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
                 #print("jpgname=%s" % jpgname)
+            print "here3"
                 self.camera.capture(jpgname, use_video_port=True)
             print "here4"
 
