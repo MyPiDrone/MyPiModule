@@ -372,7 +372,6 @@ class MyPiModule(mp_module.MPModule):
             # myTText_FlightTime
             ##################################################################################
             flying = False
-            myTText_FlightTime="FlightTime=?:??/?:??"
             if self.mpstate.vehicle_type == 'copter':
                 flying = self.master.motors_armed()
             else:
@@ -472,7 +471,7 @@ class MyPiModule(mp_module.MPModule):
             #   self.camera._check_recording_stopped(splitter_port=1)
             #except:
             #   self.video_on = True
-            self.video_on = self.video_on
+            rc = 0
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
