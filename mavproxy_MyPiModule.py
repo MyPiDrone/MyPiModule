@@ -448,7 +448,7 @@ class MyPiModule(mp_module.MPModule):
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
                 #print("jpgname=%s" % jpgname)
-            print "here3"
+                print "here3"
                 self.camera.capture(jpgname, use_video_port=True)
             print "here4"
 
