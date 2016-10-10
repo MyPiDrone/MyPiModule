@@ -376,7 +376,6 @@ class MyPiModule(mp_module.MPModule):
                 self.in_air = True
                 self.start_time = time.mktime(self.timestamp)
                 self.my_start_camera_recording()
-                print "here1"
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
@@ -389,7 +388,6 @@ class MyPiModule(mp_module.MPModule):
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
-            print "here2"
             ##################################################################################
             # re-used code mavproxy_console.py
             # myTText_GPSSpeed
@@ -447,8 +445,7 @@ class MyPiModule(mp_module.MPModule):
                 self.snapshottime = mytime
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
-                #print("jpgname=%s" % jpgname)
-                print "here3"
+                print("jpgname=%s" % jpgname)
                 self.camera.capture(jpgname, use_video_port=True)
             print "here4"
 
