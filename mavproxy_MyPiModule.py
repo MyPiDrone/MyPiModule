@@ -258,9 +258,6 @@ class MyPiModule(mp_module.MPModule):
     # and 40 is extremely low (20-25 is usually a reasonable range for H.264 encoding).
     # reference : raspivid -ih -t 1200000 -w 1296 -h 972 -fps 42 -b 4000000 -n -g 60 -pf high -o -
     def my_start_camera(self):
-        #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60 , resize=(640, 480))
-        #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=3000000, intra_period=60)
-        #self.camera.start_recording(self.outpipe, format='h264', quality=23, bitrate=4000000, profile='high',resize=(640, 480))
         #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
         self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
 
@@ -276,7 +273,7 @@ class MyPiModule(mp_module.MPModule):
         except OSError:
             pass
         print("Camera Start Recording %s" % h264name)
-        self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
+        self.camera.start_recording(h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
@@ -445,8 +442,8 @@ class MyPiModule(mp_module.MPModule):
                 self.snapshottime = mytime
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
-                #print("jpgname=%s" % jpgname)
-                self.camera.capture(jpgname, splitter_port=1, use_video_port=True)
+                print("jpgname=%s" % jpgname)
+                self.camera.capture(jpgname, format='jpeg', use_video_port=True, splitter_port=1)
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterfaceadmin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
