@@ -48,7 +48,7 @@ else
 fi
 echo "$PREFIX WLAN=$WLAN CHANNEL=$CHANNEL OPTION=$OPTION"
 
-C=`ps -ef|grep -v "grep"|grep -v "start_tx.sh"|grep -ci "tx "`
+C=`ps -ef|grep -v "grep"|grep -v "start_tx"|grep -ci "tx "`
 if [ $C -ne 0 ]; then
         echo "$PREFIX _____________________ stop $WifiBroadcast_TX _______________________________"
         killall $WifiBroadcast_TX
