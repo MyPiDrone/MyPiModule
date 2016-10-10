@@ -460,13 +460,13 @@ class MyPiModule(mp_module.MPModule):
             h264name=self.settings.myvideopath + "/" + self.my_video_filename
             if os.path.exists(h264name):
                 statinfo1 = os.stat(h264name)
-                time.sleep(1)
+                time.sleep(.500)
                 statinfo2 = os.stat(h264name)
                 if statinfo1.st_size != statinfo1.st_size:
                     self.video_on = True
                 else:
                     self.video_on = False
-                print("Size1:% Size2:%s" % (statinfo1.st_size,statinfo2.st_size))
+                print("Size1:%s Size2:%s" % (statinfo1.st_size,statinfo2.st_size))
             else:
                 self.video_on = False
             # TODO : check disable
