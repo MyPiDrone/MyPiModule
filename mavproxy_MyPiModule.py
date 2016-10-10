@@ -436,6 +436,7 @@ class MyPiModule(mp_module.MPModule):
             # max 255
             new_telemetry_text = (myintext[:254] + '!') if len(myintext) > 254 else myintext
             # new telemetry text
+            print "here3"
             if self.current_telemetry_text != new_telemetry_text:
                self.camera.annotate_background = picamera.Color(color)
                self.camera.annotate_text = "%s" % (new_telemetry_text)
@@ -449,7 +450,7 @@ class MyPiModule(mp_module.MPModule):
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
                 #print("jpgname=%s" % jpgname)
                 self.camera.capture(jpgname, use_video_port=True)
-            print "here3"
+            print "here4"
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterfaceadmin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
