@@ -457,6 +457,15 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_status(self):
+            h264name=self.settings.myvideopath + "/" + self.my_video_filename
+            statinfo1 = os.stat(h264name)
+            time.sleep(1)
+            statinfo2 = os.stat(h264name)
+            if statinfo1.st_size != statinfo1.st_size:
+                self.video_on = True
+            else:
+                self.video_on = False
+            print(("Size1:% Size2:%s" % (statinfo1.st_size,statinfo2.st_size))
             # TODO : check disable
             # this method dont work with two splitter_port : already active
             #self.video_on = False
@@ -464,7 +473,6 @@ class MyPiModule(mp_module.MPModule):
             #   self.camera._check_recording_stopped(splitter_port=1)
             #except:
             #   self.video_on = True
-            rc = 0
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
