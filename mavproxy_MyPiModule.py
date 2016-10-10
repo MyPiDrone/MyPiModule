@@ -458,7 +458,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_video_status(self):
             h264name=self.settings.myvideopath + "/" + self.my_video_filename
-            if path(h264name).is_file():
+            if os.path.exists(h264name):
                 statinfo1 = os.stat(h264name)
                 time.sleep(1)
                 statinfo2 = os.stat(h264name)
