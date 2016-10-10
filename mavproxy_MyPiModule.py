@@ -277,7 +277,6 @@ class MyPiModule(mp_module.MPModule):
             pass
         print("Camera Start Recording %s" % h264name)
         self.camera.start_recording(h264name, splitter_port=2,format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
-        print("Camera Start Recording %s" % h264name)
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
@@ -372,15 +371,12 @@ class MyPiModule(mp_module.MPModule):
             # re-used code mavproxy_console.py
             # myTText_FlightTime
             ##################################################################################
-            flying = False
-            if self.mpstate.vehicle_type == 'copter':
-                flying = self.master.motors_armed()
-            else:
-                flying = msg.groundspeed > 3
+            flying = self.master.motors_armed()
             if flying and not self.in_air:
                 self.in_air = True
                 self.start_time = time.mktime(self.timestamp)
                 self.my_start_camera_recording()
+                print "here1"
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
@@ -393,6 +389,7 @@ class MyPiModule(mp_module.MPModule):
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
+            print "here2"
             ##################################################################################
             # re-used code mavproxy_console.py
             # myTText_GPSSpeed
