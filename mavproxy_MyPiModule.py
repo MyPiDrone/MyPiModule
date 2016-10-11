@@ -408,7 +408,8 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
-            myTText="{0} Vid{1:3}".format(myTText,["OFF","ON"][self.video_wbc_on == True])
+            myTText="{0} VidWBC{1:3}".format(myTText,["OFF","ON"][self.video_wbc_on == True])
+            myTText="{0} VidRec{1:3}".format(myTText,["OFF","ON"][self.video_recording_on == True])
             myTText="{0} {1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0}\nSmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
@@ -455,6 +456,15 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_recording_status(self):
+            # this method dont work with two splitter_port : already active
+            #self.video_wbc_on = False
+            #try:
+            #   self.camera._check_recording_stopped(splitter_port=1)
+            #except:
+            #   self.video_wbc_on = True
+            ######################################
+            # check with size on sd card
+            ######################################
             h264name=self.settings.myvideopath + "/" + self.my_video_filename
             if os.path.exists(h264name):
                 currentsize = os.stat(h264name)
@@ -464,16 +474,8 @@ class MyPiModule(mp_module.MPModule):
                 else:
                     self.video_recording_on = False
                 print("Video recording : Current size:%s and Previous size:%s" % (currentsize.st_size,self.video_recording_size))
-
             else:
-                self.video_wbc_on = False
-            # TODO : check disable
-            # this method dont work with two splitter_port : already active
-            #self.video_wbc_on = False
-            #try:
-            #   self.camera._check_recording_stopped(splitter_port=1)
-            #except:
-            #   self.video_wbc_on = True
+                self.video_recording_on = False
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
