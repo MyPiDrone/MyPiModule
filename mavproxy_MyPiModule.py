@@ -102,11 +102,7 @@ class MyPiModule(mp_module.MPModule):
         self.net_up_prev = False
         self.net_ip_current = "null"
         #
-        self.video_wbc_on_request = False
-        self.video_wbc_on_request_time = time.time()
-        self.video_wbc_on_request_retry = 20
         self.video_wbc_on = True
-        self.video_wbc_on_prev = True
         #
         self.rtl_on_request = False
         self.rtl_on_request_time = time.time()
@@ -794,35 +790,22 @@ class MyPiModule(mp_module.MPModule):
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 HIGH '''
            if self.myrcraw[self.settings.myrcvideo] > self.RC_high_mark[self.settings.myrcvideo]:
-               self.my_video_recording_status()
                if self.video_wbc_on == True:
                    self.video_wbc_on = False
-                   self.video_wbc_on_prev = self.video_wbc_on
-                   self.video_wbc_on_request = False
                    msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
-                   self.camera.led = False
                    self.camera.wait_recording(2,splitter_port=1)
                    self.my_telemetry_text()
                    self.camera.wait_recording(2,splitter_port=1)
                    self.camera.stop_recording(splitter_port=1)
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
-               self.my_video_recording_status()
                if self.video_wbc_on == False:
-                   if (self.video_wbc_on_request == False or (self.video_wbc_on == False and self.video_wbc_on_request == True and (time.time() > self.video_wbc_on_request_time + self.video_wbc_on_request_retry))):
-                       if self.video_wbc_on_request == True: self.my_statustext_send("Video ON retry")
-                       self.video_wbc_on_request = True
-                       self.video_wbc_on_request_time = time.time()
-                       self.camera.led = True
-                       self.video_wbc_on = True
-                       self.my_start_camera()
-                       msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on_request,self.video_wbc_on)
-                       self.my_write_log("INFO",msg)
-               else:
-                   if self.video_wbc_on_prev != self.video_wbc_on: self.my_statustext_send("Video ON")
-                   self.video_wbc_on_prev = self.video_wbc_on
+                   self.video_wbc_on = True
+                   self.my_start_camera()
+                   msg = "MyRC%sRaw %s LOW : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on)
+                   self.my_write_log("INFO",msg)
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
