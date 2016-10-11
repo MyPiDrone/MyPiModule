@@ -103,6 +103,8 @@ class MyPiModule(mp_module.MPModule):
         self.net_ip_current = "null"
         #
         self.video_wbc_on = True
+        self.video_recording_on = False
+        self.video_size = 0
         #
         self.rtl_on_request = False
         self.rtl_on_request_time = time.time()
@@ -455,14 +457,14 @@ class MyPiModule(mp_module.MPModule):
     def my_video_recording_status(self):
             h264name=self.settings.myvideopath + "/" + self.my_video_filename
             if os.path.exists(h264name):
-                statinfo1 = os.stat(h264name)
-                time.sleep(.500)
-                statinfo2 = os.stat(h264name)
-                if statinfo1.st_size != statinfo1.st_size:
-                    self.video_wbc_on = True
+                currentsize = os.stat(h264name)
+                if currentsize.st_size != self.video_recording_size:
+                    self.video_recording_size = currentsize.st_size
+                    self.video_recording_on = True
                 else:
-                    self.video_wbc_on = False
-                print("Size1:%s Size2:%s" % (statinfo1.st_size,statinfo2.st_size))
+                    self.video_recording_on = False
+                print("Video recording : Current size:%s and Previous size:%s" % (currentsize.st_size,self.video_recording_size))
+
             else:
                 self.video_wbc_on = False
             # TODO : check disable
