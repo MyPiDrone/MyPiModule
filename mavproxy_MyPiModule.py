@@ -102,11 +102,11 @@ class MyPiModule(mp_module.MPModule):
         self.net_up_prev = False
         self.net_ip_current = "null"
         #
-        self.video_on_request = False
-        self.video_on_request_time = time.time()
-        self.video_on_request_retry = 20
-        self.video_on = True
-        self.video_on_prev = True
+        self.video_wbc_on_request = False
+        self.video_wbc_on_request_time = time.time()
+        self.video_wbc_on_request_retry = 20
+        self.video_wbc_on = True
+        self.video_wbc_on_prev = True
         #
         self.rtl_on_request = False
         self.rtl_on_request_time = time.time()
@@ -243,7 +243,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_write_log(self,level,msg):
         #OUTPUT FILE
-        prefix = "Armed=%s State=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s Stabilize=%s Throttle=%s Volt=%s Current=%s Remaining=%s Altitude=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
+        prefix = "Armed=%s State=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s Stabilize=%s Throttle=%s Volt=%s Current=%s Remaining=%s Altitude=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_wbc_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining,self.status.altitude)
         date = datetime.now().strftime(self.FORMAT)
         if self.mydebug:
             print("%s %s %s %s" % (date,level,prefix,msg))
@@ -281,7 +281,7 @@ class MyPiModule(mp_module.MPModule):
             ############################################
             # LED flashing
             ############################################
-            if self.video_on == True:
+            if self.video_wbc_on == True:
                 if self.my_camera_led == True:
                     self.camera.led = False
                     self.my_camera_led = False 
@@ -410,7 +410,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
-            myTText="{0} Vid{1:3}".format(myTText,["OFF","ON"][self.video_on == True])
+            myTText="{0} Vid{1:3}".format(myTText,["OFF","ON"][self.video_wbc_on == True])
             myTText="{0} {1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0}\nSmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
@@ -456,26 +456,26 @@ class MyPiModule(mp_module.MPModule):
                 self.net_ip_current = "null" 
                 self.net_up = False 
 
-    def my_video_status(self):
+    def my_video_recording_status(self):
             h264name=self.settings.myvideopath + "/" + self.my_video_filename
             if os.path.exists(h264name):
                 statinfo1 = os.stat(h264name)
                 time.sleep(.500)
                 statinfo2 = os.stat(h264name)
                 if statinfo1.st_size != statinfo1.st_size:
-                    self.video_on = True
+                    self.video_wbc_on = True
                 else:
-                    self.video_on = False
+                    self.video_wbc_on = False
                 print("Size1:%s Size2:%s" % (statinfo1.st_size,statinfo2.st_size))
             else:
-                self.video_on = False
+                self.video_wbc_on = False
             # TODO : check disable
             # this method dont work with two splitter_port : already active
-            #self.video_on = False
+            #self.video_wbc_on = False
             #try:
             #   self.camera._check_recording_stopped(splitter_port=1)
             #except:
-            #   self.video_on = True
+            #   self.video_wbc_on = True
 
     def my_mode_status(self):
             if self.status.flightmode == "RTL": self.rtl_on = True
@@ -501,8 +501,8 @@ class MyPiModule(mp_module.MPModule):
             ####################################################
             # video status
             ####################################################
-            self.my_video_status()
-            if self.video_on == True: self.my_statustext_send("VIDEO ON")
+            self.my_video_recording_status()
+            if self.video_wbc_on == True: self.my_statustext_send("VIDEO ON")
             else: self.my_statustext_send("VIDEO OFF")
             # to send statustext
             #print("self.settings.source_system=%s" % self.settings.source_system)
@@ -584,7 +584,7 @@ class MyPiModule(mp_module.MPModule):
     def cmd_mybat(self, args):
         self.my_rc_check()
         self.my_network_status()
-        self.my_video_status()
+        self.my_video_recording_status()
         self.my_mode_status()
         if self.mydebug:
            print("cmd_mybat %s" % self)
@@ -598,7 +598,7 @@ class MyPiModule(mp_module.MPModule):
         print ("low    : %s" % self.RC_low_mark)
         print ("high   : %s" % self.RC_high_mark)
         if self.mydebug == False:
-            prefix = "Armed=%s State=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s Stabilize=%s Throttle=%s Volt=%s Current=%s Remaining=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
+            prefix = "Armed=%s State=%s Mode=%s NetUP=%s VideoON=%s MyRTL=%s Stabilize=%s Throttle=%s Volt=%s Current=%s Remaining=%s" % (self.armed,self.mystatename[self.mystate],self.status.flightmode,self.net_up,self.video_wbc_on,self.rtl_on,self.stabilize_on,self.mythrottle,self.myvolt,self.mycurrent,self.myremaining)
             print ("INFO %s %s" % (prefix,msg))
         msg = "RC1:%s RC2:%s RC3:%s RC4:%s RC5:%s RC6:%s RC7:%s RC8:%s" % (self.myrcraw[1],self.myrcraw[2],self.myrcraw[3],self.myrcraw[4],self.myrcraw[5],self.myrcraw[6],self.myrcraw[7],self.myrcraw[8])
         self.my_write_log("INFO",msg)
@@ -794,12 +794,12 @@ class MyPiModule(mp_module.MPModule):
            ''' RC1 ROLL / RC2 PITCH / RC3 TROTTLE / RC4 YAW '''
            ''' MANAGE VIDEO OFF : RC6 HIGH '''
            if self.myrcraw[self.settings.myrcvideo] > self.RC_high_mark[self.settings.myrcvideo]:
-               self.my_video_status()
-               if self.video_on == True:
-                   self.video_on = False
-                   self.video_on_prev = self.video_on
-                   self.video_on_request = False
-                   msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on)
+               self.my_video_recording_status()
+               if self.video_wbc_on == True:
+                   self.video_wbc_on = False
+                   self.video_wbc_on_prev = self.video_wbc_on
+                   self.video_wbc_on_request = False
+                   msg = "MyRC%sraw %s HIGH : MyVideo on %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on)
                    self.my_write_log("INFO",msg)
                    self.my_statustext_send("Video off")
                    self.camera.led = False
@@ -809,20 +809,20 @@ class MyPiModule(mp_module.MPModule):
                    self.camera.stop_recording(splitter_port=1)
            ''' MANAGE VIDEO ON : RC6 LOW '''
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
-               self.my_video_status()
-               if self.video_on == False:
-                   if (self.video_on_request == False or (self.video_on == False and self.video_on_request == True and (time.time() > self.video_on_request_time + self.video_on_request_retry))):
-                       if self.video_on_request == True: self.my_statustext_send("Video ON retry")
-                       self.video_on_request = True
-                       self.video_on_request_time = time.time()
+               self.my_video_recording_status()
+               if self.video_wbc_on == False:
+                   if (self.video_wbc_on_request == False or (self.video_wbc_on == False and self.video_wbc_on_request == True and (time.time() > self.video_wbc_on_request_time + self.video_wbc_on_request_retry))):
+                       if self.video_wbc_on_request == True: self.my_statustext_send("Video ON retry")
+                       self.video_wbc_on_request = True
+                       self.video_wbc_on_request_time = time.time()
                        self.camera.led = True
-                       self.video_on = True
+                       self.video_wbc_on = True
                        self.my_start_camera()
-                       msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_on_request,self.video_on)
+                       msg = "MyRC%sRaw %s LOW : request up %s : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on_request,self.video_wbc_on)
                        self.my_write_log("INFO",msg)
                else:
-                   if self.video_on_prev != self.video_on: self.my_statustext_send("Video ON")
-                   self.video_on_prev = self.video_on
+                   if self.video_wbc_on_prev != self.video_wbc_on: self.my_statustext_send("Video ON")
+                   self.video_wbc_on_prev = self.video_wbc_on
            if self.armed == False and self.mystate == 3:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
@@ -956,7 +956,7 @@ class MyPiModule(mp_module.MPModule):
                 self.last_seq_time = time.time()
                 self.my_init_var()
                 self.net_up_prev = self.net_up
-                self.video_on_prev = self.video_on
+                self.video_wbc_on_prev = self.video_wbc_on
                 self.rtl_on_prev = self.rtl_on
                 self.stabilize_on_prev = self.stabilize_on
                 ####################################################
@@ -969,18 +969,18 @@ class MyPiModule(mp_module.MPModule):
                 if (time.time() > self.last_seq_time + self.settings.myseqpoll):
                     self.last_seq_time = time.time()
                     self.my_network_status()
-                    self.my_video_status()
+                    self.my_video_recording_status()
                     self.my_mode_status()
-                    msg = "INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s params: %s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_on_prev,self.video_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on,self.myparamcount)
+                    msg = "INFO HEARTBEAT sequence %s : recheck status : network %s>%s, video %s>%s, mode RTL %s>%s, mode STABILIZE: %s>%s params: %s" % (self.HEARTBEAT,self.net_up_prev,self.net_up,self.video_wbc_on_prev,self.video_wbc_on,self.rtl_on_prev,self.rtl_on,self.stabilize_on_prev,self.stabilize_on,self.myparamcount)
                     self.my_write_log("INFO",msg)
                     if self.net_up != self.net_up_prev:
                         if self.net_up == True: self.my_statustext_send("%s up. %s" % (self.settings.myinterfaceadmin,self.net_ip_current))
                         else: self.my_statustext_send("%s down." % self.settings.myinterfaceadmin)
                         self.net_up_prev = self.net_up
-                    if self.video_on != self.video_on_prev:
-                        if self.video_on == True: self.my_statustext_send("Video on.")
+                    if self.video_wbc_on != self.video_wbc_on_prev:
+                        if self.video_wbc_on == True: self.my_statustext_send("Video on.")
                         else: self.my_statustext_send("Video off.")
-                        self.video_on_prev = self.video_on
+                        self.video_wbc_on_prev = self.video_wbc_on
                     if self.rtl_on != self.rtl_on_prev:
                         if self.rtl_on == True: self.my_statustext_send("Mode RTL.")
                         self.rtl_on_prev = self.rtl_on
