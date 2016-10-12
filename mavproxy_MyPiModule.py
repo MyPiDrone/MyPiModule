@@ -17,7 +17,6 @@ import os, sys, math, time
 import picamera
 from pymavlink import mavutil
 from datetime import datetime
-from shutil import copyfile
 
 import subprocess
 
@@ -272,7 +271,8 @@ class MyPiModule(mp_module.MPModule):
 
     def my_start_camera_recording(self):
         print("Camera Start Recording %s" % self.h264name)
-        self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
+        #self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
+        self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high')
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
@@ -383,13 +383,13 @@ class MyPiModule(mp_module.MPModule):
                 self.all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
                 # copy file WBC
-                print("copyfile %s to %s in progress" % (self.h264name,self.outpipe))
+                print("Redo video file %s in progress" % self.h264name)
                 self.camera.stop_recording(splitter_port=1)
-                #copyfile(self.h264name,self.outpipe)
-                f = open(self.h264name)
-                for line in f.readlines():
-                    self.outpipe.write(line)
-                print("copyfile %s to %s ended" % (self.h264name,self.outpipe))
+                f = open(self.h264name, 'rb')
+                for byte in f.read(1):
+                    self.outpipe.write(byte)
+                f.close()
+                print("Redo video file ended")
                 self.my_start_camera_wbc()
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
