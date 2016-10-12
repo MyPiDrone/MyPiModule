@@ -17,6 +17,7 @@ import os, sys, math, time
 import picamera
 from pymavlink import mavutil
 from datetime import datetime
+from shutil import copyfile
 
 import subprocess
 
@@ -153,6 +154,16 @@ class MyPiModule(mp_module.MPModule):
         print ("/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh %s %s --vb is starting (log here /var/log/start_tx.log) : waiting %s opening..." % (self.settings.myinterfacetx,self.settings.mychanneltx,self.settings.mypipeout))
         self.outpipe = open(self.settings.mypipeout, 'w')
         self.my_video_filename = "Video-Tarot-{0}.h264".format(datetime.now().strftime('%Y-%m-%d_%H:%M'))
+        self.linkname=self.settings.myvideopath + "/Video-Tarot"
+        self.h264name=self.settings.myvideopath + "/" + self.my_video_filename
+        try:
+            os.unlink(self.linkname)
+        except OSError:
+            pass
+        try:
+            os.symlink(self.h264name, self.linkname)
+        except OSError:
+            pass
         ###############################################################################
         # V1 camera
         #Mode   Size    Aspect Ratio    Frame rates     Video Image  FOV     Binning
@@ -260,18 +271,8 @@ class MyPiModule(mp_module.MPModule):
         self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
 
     def my_start_camera_recording(self):
-        h264name=self.settings.myvideopath + "/" + self.my_video_filename
-        linkname=self.settings.myvideopath + "/Video-Tarot"
-        try:
-            os.unlink(linkname)
-        except OSError:
-            pass
-        try:
-            os.symlink(h264name, linkname)
-        except OSError:
-            pass
-        print("Camera Start Recording %s" % h264name)
-        self.camera.start_recording(h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
+        print("Camera Start Recording %s" % self.h264name)
+        self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
@@ -381,6 +382,11 @@ class MyPiModule(mp_module.MPModule):
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 self.all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
+                # copy file WBC
+                linkname=self.settings.myvideopath + "/Video-Tarot"
+                self.camera.stop_recording(splitter_port=1)
+                copyfile(self.linkname,self.outpipe)
+                self.my_start_camera()
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             ##################################################################################
@@ -408,7 +414,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
-            myTText="{0} Vid={1}/{2}".format(myTText,["-","Wbc"][self.video_wbc_on == True],["-","Rec"][self.video_recording_on == True])
+            myTText="{0} Vid={1}/{2}".format(myTText,["---","WBC"][self.video_wbc_on == True],["---","Rec"][self.video_recording_on == True])
             myTText="{0} {1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0}\nSmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
@@ -464,9 +470,8 @@ class MyPiModule(mp_module.MPModule):
             ######################################
             # check with size on sd card
             ######################################
-            h264name=self.settings.myvideopath + "/" + self.my_video_filename
-            if os.path.exists(h264name):
-                currentsize = os.stat(h264name)
+            if os.path.exists(self.h264name):
+                currentsize = os.stat(self.h264name)
                 if currentsize.st_size != self.video_recording_size:
                     self.video_recording_size = currentsize.st_size
                     self.video_recording_on = True
