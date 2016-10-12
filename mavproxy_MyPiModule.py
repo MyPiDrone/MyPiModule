@@ -386,7 +386,9 @@ class MyPiModule(mp_module.MPModule):
                 print("copyfile %s to %s in progress" % (self.h264name,self.outpipe))
                 self.camera.stop_recording(splitter_port=1)
                 #copyfile(self.h264name,self.outpipe)
-                os.system("cat self.h264name > self.outpipe")
+                f = open(self.h264name)
+                for line in f.readlines():
+                    self.outpipe.write(line)
                 print("copyfile %s to %s ended" % (self.h264name,self.outpipe))
                 self.my_start_camera_wbc()
             else:
