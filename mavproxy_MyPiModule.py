@@ -223,7 +223,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.start_preview()
         self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.my_start_camera()
+        self.my_start_camera_wbc()
         self.snapshottime = datetime.now().strftime('%Y-%m-%d:%H:%M')
         self.current_telemetry_text = "Welcome PiCamera"
         self.current_myTText = "" 
@@ -266,7 +266,7 @@ class MyPiModule(mp_module.MPModule):
     # For the 'h264' format, use values between 10 and 40 where 10 is extremely high quality,
     # and 40 is extremely low (20-25 is usually a reasonable range for H.264 encoding).
     # reference : raspivid -ih -t 1200000 -w 1296 -h 972 -fps 42 -b 4000000 -n -g 60 -pf high -o -
-    def my_start_camera(self):
+    def my_start_camera_wbc(self):
         #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
         self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
 
@@ -383,10 +383,11 @@ class MyPiModule(mp_module.MPModule):
                 self.all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
                 # copy file WBC
-                linkname=self.settings.myvideopath + "/Video-Tarot"
+                print("copyfile %s to %s in progress" % (self.h264name,self.outpipe))
                 self.camera.stop_recording(splitter_port=1)
-                copyfile(self.linkname,self.outpipe)
-                self.my_start_camera()
+                copyfile(self.h264name,self.outpipe)
+                print("copyfile %s to %s ended" % (self.h264name,self.outpipe))
+                self.my_start_camera_wbc()
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             ##################################################################################
@@ -811,7 +812,7 @@ class MyPiModule(mp_module.MPModule):
            if self.myrcraw[self.settings.myrcvideo] > 0 and self.myrcraw[self.settings.myrcvideo] < self.RC_low_mark[self.settings.myrcvideo]:
                if self.video_wbc_on == False:
                    self.video_wbc_on = True
-                   self.my_start_camera()
+                   self.my_start_camera_wbc()
                    msg = "MyRC%sRaw %s LOW : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on)
                    self.my_write_log("INFO",msg)
            if self.armed == False and self.mystate == 3:
