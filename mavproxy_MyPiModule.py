@@ -408,7 +408,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
-            myTText="{0} Vid=Wbc{1}/Rec{2}".format(myTText,["OFF","ON"][self.video_wbc_on == True],["OFF","ON"][self.video_recording_on == True])
+            myTText="{0} Vid{1}/Rec{2}".format(myTText,["OFF","ON"][self.video_wbc_on == True],["OFF","ON"][self.video_recording_on == True])
             myTText="{0} {1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0}\nSmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
