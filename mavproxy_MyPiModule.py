@@ -857,7 +857,7 @@ class MyPiModule(mp_module.MPModule):
                     print("Redo video file ended")
                     if self.video_wbc_on == True:                    
                         self.my_start_camera_wbc()
-            else:
+           else:
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > 0 and self.myrcraw[self.settings.myrcroll] < self.RC_low_mark[self.settings.myrcroll]:
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
