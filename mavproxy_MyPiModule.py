@@ -225,7 +225,7 @@ class MyPiModule(mp_module.MPModule):
         # Create an array representing a 1296x972 image of
         # a cross through the center of the display. The shape of
         # the array must be of the form (height, width, color)
-        a = np.zeros((972, 1280, 3), dtype=np.uint8)
+        a = np.zeros((972, 1296, 3), dtype=np.uint8)
         a[486, :, :] = 0xff
         a[:, 648, :] = 0xff
         self.camera.start_preview()
