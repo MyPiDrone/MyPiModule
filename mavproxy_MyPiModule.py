@@ -46,6 +46,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcnet', int, 8, 'Radio channel to change network on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
+        self.settings.append(MPSetting('myrcpitch', int, 2, 'Radio channel to redo video'))
         self.settings.append(MPSetting('myinterfaceadmin', str, "wlan0", 'Network admin interface name'))
         self.settings.append(MPSetting('myinterfacetx', str, "wlan1", 'Wifibroadcast interface name'))
         self.settings.append(MPSetting('mychanneltx', str, "-19", 'Channel wifibroadcast interface name'))
@@ -386,17 +387,6 @@ class MyPiModule(mp_module.MPModule):
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 self.all_total_time = self.all_total_time + self.total_time
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
-                # copy file WBC
-                print("Redo video file %s in progress" % self.h264name)
-                self.camera.stop_recording(splitter_port=1)
-                with open(self.h264name, "rb") as f:
-                    byte = f.read(2048)
-                    while byte:
-                        byte = f.read(2048)
-                        self.outpipe.write(byte)
-                f.close()
-                print("Redo video file ended")
-                self.my_start_camera_wbc()
             else:
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             ##################################################################################
@@ -849,6 +839,26 @@ class MyPiModule(mp_module.MPModule):
                        self.my_statustext_send("Reboot ByRadio canceled")
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
+               ''' MANAGE REDO VIDEO RC2 LOW '''
+               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
+                    msg = "MyRC%sRaw %s : Redo video" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                    self.my_write_log("INFO",msg)
+                    self.my_statustext_send("Redo video")
+                    # copy file WBC
+                    print("Redo video file %s in progress" % self.h264name)
+                    if self.video_wbc_on == True:                    
+                        self.camera.stop_recording(splitter_port=1)
+                    with open(self.h264name, "rb") as f:
+                        byte = f.read(2048)
+                        while byte:
+                            byte = f.read(2048)
+                            self.outpipe.write(byte)
+                    f.close()
+                    print("Redo video file ended")
+                    if self.video_wbc_on == True:                    
+                        self.my_start_camera_wbc()
+            else:
+               if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > 0 and self.myrcraw[self.settings.myrcroll] < self.RC_low_mark[self.settings.myrcroll]:
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
