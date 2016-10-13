@@ -17,6 +17,7 @@ import os, sys, math, time
 import picamera
 from pymavlink import mavutil
 from datetime import datetime
+import numpy as np
 
 import subprocess
 
@@ -221,7 +222,14 @@ class MyPiModule(mp_module.MPModule):
         #
         self.my_camera_led = True
         self.camera.led = True
+        # Create an array representing a 1280x720 image of
+        # a cross through the center of the display. The shape of
+        # the array must be of the form (height, width, color)
+        a = np.zeros((972, 1296, 3), dtype=np.uint8)
+        a[360, :, :] = 0xff
+        a[:, 640, :] = 0xff
         self.camera.start_preview()
+        camera.add_overlay(np.getbuffer(a), layer=3, alpha=64)
         self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.my_start_camera_wbc()
