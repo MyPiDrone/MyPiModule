@@ -842,7 +842,8 @@ class MyPiModule(mp_module.MPModule):
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
                ''' MANAGE REDO VIDEO RC2 LOW '''
-               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch] and time.time() > self.last_redo_video_time + 30:
+               ''' another redo video only after 10sec '''
+               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch] and time.time() > self.last_redo_video_time + 10:
                     self.last_redo_video_time = time.time()
                     msg = "MyRC%sRaw %s : Redo video" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
                     self.my_write_log("INFO",msg)
