@@ -480,11 +480,11 @@ class MyPiModule(mp_module.MPModule):
             if os.path.exists(self.h264name):
                 currentsize = os.stat(self.h264name)
                 if currentsize.st_size != self.video_recording_size:
-                    print("Video recording in progress : Current size:%sMeg" % math.ceil(currentsize.st_size)/1024)
+                    print("Video recording in progress : Current size:{0}Meg".format(math.ceil(currentsize.st_size)/1024))
                     self.video_recording_size = currentsize.st_size
                     self.video_recording_on = True
                 else:
-                    print("Video recording paused : Current size:%sMeg" % math.ceil(currentsize.st_size)/1024)
+                    print("Video recording paused : Current size:{0}Meg".format(math.ceil(currentsize.st_size)/1024))
                     self.video_recording_on = False
             else:
                 self.video_recording_on = False
