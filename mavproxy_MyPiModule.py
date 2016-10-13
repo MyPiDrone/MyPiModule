@@ -843,24 +843,29 @@ class MyPiModule(mp_module.MPModule):
                        self.reboot_by_radio_time = 0
                ''' MANAGE REDO VIDEO RC2 LOW '''
                ''' another redo video only after 20sec '''
-               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch] and time.time() > self.last_redo_video_time + 20:
-                    self.last_redo_video_time = time.time()
-                    msg = "MyRC%sRaw %s : Redo video" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
-                    self.my_write_log("INFO",msg)
-                    self.my_statustext_send("Redo video")
-                    # copy file WBC
-                    print("Redo video file %s in progress" % self.h264name)
-                    if self.video_wbc_on == True:                    
-                        self.camera.stop_recording(splitter_port=1)
-                    with open(self.h264name, "rb") as f:
-                        byte = f.read(2048)
-                        while byte:
+               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
+                    if time.time() > self.last_redo_video_time + 20:
+                        self.last_redo_video_time = time.time()
+                        msg = "MyRC%sRaw %s : Redo video" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                        self.my_write_log("INFO",msg)
+                        self.my_statustext_send("Redo video")
+                        # copy file WBC
+                        print("Redo video file %s in progress" % self.h264name)
+                        if self.video_wbc_on == True:                    
+                            self.camera.stop_recording(splitter_port=1)
+                        with open(self.h264name, "rb") as f:
                             byte = f.read(2048)
-                            self.outpipe.write(byte)
-                    f.close()
-                    print("Redo video file ended")
-                    if self.video_wbc_on == True:                    
-                        self.my_start_camera_wbc()
+                            while byte:
+                                byte = f.read(2048)
+                                self.outpipe.write(byte)
+                        f.close()
+                        print("Redo video file ended")
+                        if self.video_wbc_on == True:                    
+                            self.my_start_camera_wbc()
+                    else:
+                        msg = "MyRC%sRaw %s : Redo video : please wait 30sec" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                        self.my_write_log("INFO",msg)
+                        self.my_statustext_send("Redo video please wait")
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
