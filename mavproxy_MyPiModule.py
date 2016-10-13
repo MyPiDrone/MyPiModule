@@ -397,11 +397,6 @@ class MyPiModule(mp_module.MPModule):
                 myTText_FlightTime="FlightTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             ##################################################################################
             # re-used code mavproxy_console.py
-            # myTText_GPSSpeed
-            ##################################################################################
-            myTText_GPSSpeed="GPSSpeed={0}".format(math.ceil(self.mygroundspeed*10)/10)
-            ##################################################################################
-            # re-used code mavproxy_console.py
             # myTText_GPS
             ##################################################################################
             if self.my_gps_ok == 1:
@@ -419,15 +414,15 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,["Disarmed","Armed"][self.armed == True])
             myTText="{0} {1:8}".format(myTText,self.mystatename[self.mystate])
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
+            myTText="{0} Ask={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
             myTText="{0} Vid={1}/{2}".format(myTText,["---","WBC"][self.video_wbc_on == True],["---","Rec"][self.video_recording_on == True])
-            myTText="{0} {1}".format(myTText,myTText_Radio)
+            myTText="{0}\n{1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
-            myTText="{0}\nSmplMd{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
-            myTText="{0} Ask={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
+            myTText="{0} GSpeed{1}".format(myTText,math.ceil(self.mygroundspeed*10)/10)
+            myTText="{0} SMode{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
             myTText="{0} ({1:5}V,{2:5}A,{3:3}%)".format(myTText,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining)
             myTText="{0} {1}".format(myTText,myTText_FlightTime)
-            myTText="{0} {1}".format(myTText,myTText_GPSSpeed)
             myTText="{0}\n{1}".format(myTText,myTText_Heading)
             myTText="{0} Pitch={1}".format(myTText,myTText_Attitude_pitch)
             myTText="{0} Roll={1}".format(myTText,myTText_Attitude_Roll)
