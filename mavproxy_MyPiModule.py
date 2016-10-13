@@ -377,6 +377,7 @@ class MyPiModule(mp_module.MPModule):
                     self.video_wbc_on = True
                     self.my_start_camera_wbc()
                 self.my_start_camera_recording()
+                myTText_FlightTime="FlightTime=-:--/-:--"
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
