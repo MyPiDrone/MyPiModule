@@ -366,11 +366,15 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             # re-used code mavproxy_console.py
             # myTText_FlightTime
+            # manage recording
             ##################################################################################
             flying = self.master.motors_armed()
             if flying and not self.in_air:
                 self.in_air = True
                 self.start_time = time.mktime(self.timestamp)
+                if self.video_wbc_on == False:
+                    self.video_wbc_on = True
+                    self.my_start_camera_wbc()
                 self.my_start_camera_recording()
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
@@ -416,7 +420,8 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} {1:8}".format(myTText,self.status.flightmode)
             myTText="{0} Ask={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
-            myTText="{0} Vid={1}/{2}".format(myTText,["---","WBC"][self.video_wbc_on == True],["---","{0}Meg".format(self.video_recording_size/1048576)][self.video_recording_on == True])
+            video_size=self.video_recording_size/1048576
+            myTText="{0} Vid{1}/{2}".format(myTText,["---","WBC"][self.video_wbc_on == True],["{0}Meg","{0}Meg^".format(video_size,video_size)][self.video_recording_on == True])
             myTText="{0}\n{1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0} GSpeed={1}".format(myTText,math.ceil(self.mygroundspeed*10)/10)
@@ -464,11 +469,11 @@ class MyPiModule(mp_module.MPModule):
 
     def my_video_recording_status(self):
             # this method dont work with two splitter_port : already active
-            #self.video_wbc_on = False
+            #self.video_recording_on = False
             #try:
             #   self.camera._check_recording_stopped(splitter_port=1)
             #except:
-            #   self.video_wbc_on = True
+            #   self.video_recording_on = True
             ######################################
             # check with size on sd card
             ######################################
