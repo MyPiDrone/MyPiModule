@@ -385,9 +385,11 @@ class MyPiModule(mp_module.MPModule):
                 # copy file WBC
                 print("Redo video file %s in progress" % self.h264name)
                 self.camera.stop_recording(splitter_port=1)
-                f = open(self.h264name, 'rb')
-                fileContent = f.read()
-                self.outpipe.write(filecontent)
+                with open(self.h264name, "rb") as f:
+                    byte = f.read(1)
+                    while byte:
+                        byte = f.read(1)
+                        self.outpipe.write(byte)
                 f.close()
                 print("Redo video file ended")
                 self.my_start_camera_wbc()
