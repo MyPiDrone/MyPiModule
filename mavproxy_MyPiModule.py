@@ -386,9 +386,9 @@ class MyPiModule(mp_module.MPModule):
                 print("Redo video file %s in progress" % self.h264name)
                 self.camera.stop_recording(splitter_port=1)
                 with open(self.h264name, "rb") as f:
-                    byte = f.read(1024)
+                    byte = f.read(2048)
                     while byte:
-                        byte = f.read(1024)
+                        byte = f.read(2048)
                         self.outpipe.write(byte)
                 f.close()
                 print("Redo video file ended")
@@ -480,11 +480,11 @@ class MyPiModule(mp_module.MPModule):
             if os.path.exists(self.h264name):
                 currentsize = os.stat(self.h264name)
                 if currentsize.st_size != self.video_recording_size:
-                    print("Video recording in progress : Current size:{0}Meg".format(math.ceil(currentsize.st_size)/1024))
+                    print("Video recording in progress : Current size:{0}Meg".format(currentsize.st_size/1048576))
                     self.video_recording_size = currentsize.st_size
                     self.video_recording_on = True
                 else:
-                    print("Video recording paused : Current size:{0}Meg".format(math.ceil(currentsize.st_size)/1024))
+                    print("Video recording paused : Current size:{0}Meg".format(currentsize.st_size/1048576))
                     self.video_recording_on = False
             else:
                 self.video_recording_on = False
