@@ -229,7 +229,7 @@ class MyPiModule(mp_module.MPModule):
         a[360, :, :] = 0xff
         a[:, 640, :] = 0xff
         self.camera.start_preview()
-        camera.add_overlay(np.getbuffer(a), layer=3, alpha=64)
+        self.camera.add_overlay(np.getbuffer(a), layer=3, alpha=64)
         self.camera.annotate_background = picamera.Color('black')
         self.camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.my_start_camera_wbc()
