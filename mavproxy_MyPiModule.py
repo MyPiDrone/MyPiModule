@@ -446,7 +446,7 @@ class MyPiModule(mp_module.MPModule):
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
                 print("jpgname=%s" % jpgname)
-                self.camera.capture(jpgname, format='jpeg', use_video_port=True, splitter_port=2)
+                self.camera.capture(jpgname, format='jpeg', use_video_port=True, splitter_port=0)
 
     def my_network_status(self):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterfaceadmin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
