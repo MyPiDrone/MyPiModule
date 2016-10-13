@@ -841,7 +841,7 @@ class MyPiModule(mp_module.MPModule):
                        self.my_statustext_send("Reboot ByRadio canceled")
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
-               ''' MANAGE REDO VIDEO YAW RC4 LOW and RC2 HIGH '''
+               ''' MANAGE REDO VIDEO YAW RC4 LOW and PITCH RC2 HIGH '''
                ''' another redo video only after 10sec '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
                     if time.time() > self.last_redo_video_time + 10:
