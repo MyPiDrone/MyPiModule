@@ -842,10 +842,9 @@ class MyPiModule(mp_module.MPModule):
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
                ''' MANAGE REDO VIDEO RC2 LOW '''
-               ''' another redo video only after 20sec '''
+               ''' another redo video only after 10sec '''
                if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
-                    if time.time() > self.last_redo_video_time + 20:
-                        self.last_redo_video_time = time.time()
+                    if time.time() > self.last_redo_video_time + 10:
                         msg = "MyRC%sRaw %s : Redo video" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
                         self.my_write_log("INFO",msg)
                         self.my_statustext_send("Redo video")
@@ -862,6 +861,7 @@ class MyPiModule(mp_module.MPModule):
                         print("Redo video file ended")
                         if self.video_wbc_on == True:                    
                             self.my_start_camera_wbc()
+                        self.last_redo_video_time = time.time()
                     else:
                         msg = "MyRC%sRaw %s : Redo video : please wait 30sec" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
                         self.my_write_log("INFO",msg)
