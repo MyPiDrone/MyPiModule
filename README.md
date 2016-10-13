@@ -20,6 +20,7 @@
          - Now mavproxy_MyPiModule.py is controling video and photos snapshot with telemetry text overlayed (255 chars max) :
             - Used picamera python module instead of raspivid (1)
             - Now start_MAVProxy_MyPiModule.sh execute mavproxy.py and mavproxy.py execute start_tx_and_recording_with_picamera_video_input.sh (2)
+         - add MANAGE REDO VIDEO YAW RC4 LOW and PITCH RC2 HIGH 
         
           - (1) Here a python sample with a named pipe MyPiCamera_sample.py and command execution with  tx :
               - mkfifo /tmp/MyPiCamera.pipein
@@ -90,6 +91,9 @@ The main functions of MyPiModule (MAVProxy module):
     - enable / disable the video on wifibroadcast wlan1 from the radio:
         - RC6 LOW (also used to tilt the camera left): Video wifibroadcast ON
         - RC6 HIGH (also used to tilt the camera to right): Video wifibroadcast OFF
+    - Run a Redo Video from the radio:
+        - Conditions: STANDBY + DISARMED
+        - On the radio: LOW YAW (RC4) and PITCH HIGH (RC2)
 
 ==> Logs: /var/log/mavproxy_MyPiModule.log
 
