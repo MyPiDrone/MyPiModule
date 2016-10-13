@@ -212,9 +212,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.framerate = 30
         #self.camera.annotate_text_size = 16
         #
-        ##self.camera.resolution = (1296, 972)
-        ##self.camera.framerate = 42
-        self.camera.resolution = (1280, 720)
+        self.camera.resolution = (1296, 972)
         self.camera.framerate = 42
         self.camera.annotate_text_size = 32 
         #
@@ -224,12 +222,12 @@ class MyPiModule(mp_module.MPModule):
         #
         self.my_camera_led = True
         self.camera.led = True
-        # Create an array representing a 1280x720 image of
+        # Create an array representing a 1296x972 image of
         # a cross through the center of the display. The shape of
         # the array must be of the form (height, width, color)
-        a = np.zeros((720, 1280, 3), dtype=np.uint8)
-        a[360, :, :] = 0xff
-        a[:, 640, :] = 0xff
+        a = np.zeros((972, 1280, 3), dtype=np.uint8)
+        a[486, :, :] = 0xff
+        a[:, 648, :] = 0xff
         self.camera.start_preview()
         self.camera.add_overlay(np.getbuffer(a), layer=3, alpha=64)
         self.camera.annotate_background = picamera.Color('black')
