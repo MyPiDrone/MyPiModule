@@ -106,7 +106,7 @@ class MyPiModule(mp_module.MPModule):
         self.video_wbc_on = True
         self.video_recording_on = False
         self.video_recording_size = 0
-        self.redo_video = False
+        self.last_redo_video_time = time.time()
         #
         self.rtl_on_request = False
         self.rtl_on_request_time = time.time()
@@ -842,8 +842,8 @@ class MyPiModule(mp_module.MPModule):
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
                ''' MANAGE REDO VIDEO RC2 LOW '''
-               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch] and self.redo_video == False:
-                    self.redo_video = True
+               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch] and time.time() > self.last_redo_video_time + 30:
+                    self.last_redo_video_time = time.time()
                     msg = "MyRC%sRaw %s : Redo video" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
                     self.my_write_log("INFO",msg)
                     self.my_statustext_send("Redo video")
@@ -957,7 +957,6 @@ class MyPiModule(mp_module.MPModule):
             self.myrcraw[1] = msg.chan1_raw ; self.myrcraw[2] = msg.chan2_raw ; self.myrcraw[3] = msg.chan3_raw ; self.myrcraw[4] = msg.chan4_raw
             self.myrcraw[5] = msg.chan5_raw ; self.myrcraw[6] = msg.chan6_raw ; self.myrcraw[7] = msg.chan7_raw ; self.myrcraw[8] = msg.chan8_raw
             self.my_rssi=msg.rssi
-            self.redo_video=False
             self.my_rc_check()
         elif mtype == "HEARTBEAT":
             self.HEARTBEAT += 1
