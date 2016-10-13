@@ -841,15 +841,15 @@ class MyPiModule(mp_module.MPModule):
                        self.my_statustext_send("Reboot ByRadio canceled")
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
-               ''' MANAGE REDO VIDEO RC2 LOW '''
+               ''' MANAGE REDO VIDEO YAW RC4 LOW and RC2 HIGH '''
                ''' another redo video only after 10sec '''
-               if self.myrcraw[self.settings.myrcpitch] > 0 and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
+               if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
                     if time.time() > self.last_redo_video_time + 10:
-                        msg = "MyRC%sRaw %s : Redo video" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                        msg = "MyRC%sRaw %s : Redo video (Warning MyPiModule is paused)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
                         self.my_write_log("INFO",msg)
                         self.my_statustext_send("Redo video")
                         # copy file WBC
-                        print("Redo video file %s in progress" % self.h264name)
+                        print("Redo video file %s in progress (Warning MyPiModule is paused)" % self.h264name)
                         if self.video_wbc_on == True:                    
                             self.camera.stop_recording(splitter_port=1)
                         with open(self.h264name, "rb") as f:
@@ -858,7 +858,7 @@ class MyPiModule(mp_module.MPModule):
                                 byte = f.read(2048)
                                 self.outpipe.write(byte)
                         f.close()
-                        print("Redo video file ended")
+                        print("Redo video file ended (MyPiModule now is released)")
                         if self.video_wbc_on == True:                    
                             self.my_start_camera_wbc()
                         self.last_redo_video_time = time.time()
