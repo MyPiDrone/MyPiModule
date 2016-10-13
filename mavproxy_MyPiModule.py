@@ -421,7 +421,7 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0} Ask={1:8}".format(myTText,["RTL","STABILIZE"][self.stabilize_on == True])
             myTText="{0} {1:12}".format(myTText,["Down",self.net_ip_current][self.net_up == True])
             video_size=self.video_recording_size/1048576
-            myTText="{0} Vid{1}/{2}".format(myTText,["---","WBC"][self.video_wbc_on == True],["{0}Meg","{0}Meg^".format(video_size,video_size)][self.video_recording_on == True])
+            myTText="{0} Vid{1}/{2}".format(myTText,["OFF","WBC"][self.video_wbc_on == True],["{0}Meg".format(video_size),"{0}Meg^".format(video_size)][self.video_recording_on == True])
             myTText="{0}\n{1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0} GSpeed={1}".format(myTText,math.ceil(self.mygroundspeed*10)/10)
