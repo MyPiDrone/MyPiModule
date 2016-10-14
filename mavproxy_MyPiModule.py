@@ -14,15 +14,21 @@
 ''' ----------------------------------------------------------------------------------- '''
 
 import os, sys, math, time
+#import numpy as np
+import subprocess
 import picamera
 from pymavlink import mavutil
 from datetime import datetime
-import numpy as np
-
-import subprocess
-
+from threading import Thread
 from MAVProxy.modules.lib import mp_module
 from MAVProxy.modules.lib.mp_settings import MPSetting
+
+class MyRedoVideoThread(Thread):
+    def __init__(self, arg1):
+        Thread.__init__(self)
+        self.arg1 = arg1
+    def run(self):
+        print("MyThread %s" % self.arg1)
 
 class MyPiModule(mp_module.MPModule):
     def __init__(self, mpstate):
@@ -858,6 +864,9 @@ class MyPiModule(mp_module.MPModule):
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
                     if time.time() > self.last_redo_video_time + 10:
                         msg = "MyRC%sRaw %s : Redo video (Warning MyPiModule is paused)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                        mythread = MyRedoVideoThread(self.h264name)
+                        mythread.start()
+                        mythread.join()
                         self.my_write_log("INFO",msg)
                         self.my_statustext_send("Redo video")
                         # copy file WBC
