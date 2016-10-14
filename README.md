@@ -122,7 +122,7 @@ The main functions of MyPiModule (MAVProxy module):
     - mylogverbose : True or False
     - mypipeout : /tmp/MyPiCamera.pipeout : see start_tx_and_recording_with_raspivid_video_input.sh
     - myseqinit : 15sec before init var and start polling
-    - myseqpoll : polling sequence 10
+    - myseqpoll : 10sec polling interval to control network status, video recording, flightmode.
     - myvideopath : /root/fpv/videos
 
 * Video functions: ** NEW in 2.3 **
