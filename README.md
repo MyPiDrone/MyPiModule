@@ -19,11 +19,12 @@
          - See chapter : "Overlaying text on the output" here : https://picamera.readthedocs.io/en/release-1.12/recipes1.html#overlaying-text-on-the-output
          - Now mavproxy_MyPiModule.py is controling video and photos snapshot with telemetry text overlayed (255 chars max) :
             - Used picamera python module instead of raspivid (1)
-       - Video Wifibroadcast ON/OFF (default ON) : RC6 LOW or RC6 HIGH
-       - Video recording h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
-       - Photos JPEG on SD card (on per minute) : automatic start/stop with Drone Armed/Disarmed
+       - Video Wifibroadcast ON/OFF (default ON) : RC6 LOW (OFF) or RC6 HIGH (ON)
+       - Video recording in h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
+       - Photos JPEG on SD card (one snapshot per minute) : automatic start/stop with Drone Armed/Disarmed
        - Videos and photos are stored in /root/fpv/videos directory
-       - Viewing last Video with Wifibroadcast (redo video) : STANDBY + DISARMED, LOW YAW (RC4) and PITCH HIGH (RC2) (Warning : during redo video the MyPiModule is paused)
+       - Viewing last Video with Wifibroadcast (redo video) : STANDBY + DISARMED, LOW YAW (RC4) and PITCH HIGH (RC2)
+         (Warning : during redo video the MyPiModule is paused)
         
           - (1) Here a python sample with a named pipe MyPiCamera_sample.py and command execution with  tx :
               - mkfifo /tmp/MyPiCamera.pipein
@@ -108,9 +109,10 @@ The main functions of MyPiModule (MAVProxy module):
     - myminremain : 10% (low battery remaining mark).
     - myminvolt : 10V (battery low voltage mark).
     - mytimebat : 5sec interval data mesurement of the battery voltage.
-    - mytimerc : 5sec interval data mesurement of the radio channels.
-    - myrcvideo : channel to control video on / off, default 6.
-    - myrcyaw and myrcroll : the two channels to control the shutdown or reboot, default 4 and 1.
+    - mytimerc : 4sec interval data mesurement of the radio channels.
+    - mytimeTText : 0.5sec telemetry text refresh Interval Time
+    - myrcvideo : channel to control video WBC on / off, default 6.
+    - myrcyaw and myrcroll and myrcpitch : channels to control the shutdown, reboot, redo video, default 4, 1, 2.
     - myrcnet : channel to control wlan0 on/off, default 8
     - mychanneltx : Wifibroadcast 2.4Ghz (CH 11) or 2.3Ghz (CH -19)
     - mydebug : True or False
@@ -119,25 +121,26 @@ The main functions of MyPiModule (MAVProxy module):
     - mylog : /var/log/mavproxy_MyPiModule.log
     - mylogverbose : True or False
     - mypipeout : /tmp/MyPiCamera.pipeout : see start_tx_and_recording_with_raspivid_video_input.sh
-    - myseqinit : delay to start 15s
-    - myseqpoll : polling sequence 10
+    - myseqinit : 15sec before init var and start polling
+    - myseqpoll : 10sec polling interval to control network status, video recording, flightmode.
     - myvideopath : /root/fpv/videos
 
 * Video functions: ** NEW in 2.3 **
 
-    - Video Wifibroadcast ON/OFF (default ON) : RC6 LOW or RC6 HIGH
-    - Video recording h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
-    - Photos JPEG on SD card (on per minute) : automatic start/stop with Drone Armed/Disarmed
+    - Video Wifibroadcast ON/OFF (default ON) : RC6 LOW (OFF) or RC6 HIGH (ON)
+    - Video recording in h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
+    - Photos JPEG on SD card (one snapshot per minute) : automatic start/stop with Drone Armed/Disarmed
     - Videos and photos are stored in /root/fpv/videos directory
-    - Viewing last Video with Wifibroadcast (redo video) : STANDBY + DISARMED, LOW YAW (RC4) and PITCH HIGH (RC2) (Warning : during redo video the MyPiModule is paused)
+    - Viewing last Video with Wifibroadcast (redo video) : STANDBY + DISARMED, LOW YAW (RC4) and PITCH HIGH (RC2) 
+      (Warning : during redo video the MyPiModule is paused)
 
 * Console mode functions:
 
     - mybat       : battery status
     - myshut      : execute a shutdown (to cancel shutdown execute a new request in time delay of 30 secondes)
     - myreboot    : execute a reboot (to cancel reboot execute a new request in time delay of 30 secondes)
-    - myrtl       : set RTL mode *NEW*
-    - mystabilize : set STABILIZE mode *NEW*
+    - myrtl       : set RTL mode
+    - mystabilize : set STABILIZE mode
 
     Shutdown and reboot may be canceled : execute a new command before delay (30sec) to do that .
 
