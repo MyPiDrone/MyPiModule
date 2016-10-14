@@ -20,8 +20,8 @@
          - Now mavproxy_MyPiModule.py is controling video and photos snapshot with telemetry text overlayed (255 chars max) :
             - Used picamera python module instead of raspivid (1)
        - Video Wifibroadcast ON/OFF (default ON) : RC6 LOW or RC6 HIGH
-       - Video recording h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
-       - Photos JPEG on SD card (on per minute) : automatic start/stop with Drone Armed/Disarmed
+       - Video recording in h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
+       - Photos JPEG on SD card (one per minute) : automatic start/stop with Drone Armed/Disarmed
        - Videos and photos are stored in /root/fpv/videos directory
        - Viewing last Video with Wifibroadcast (redo video) : STANDBY + DISARMED, LOW YAW (RC4) and PITCH HIGH (RC2) (Warning : during redo video the MyPiModule is paused)
         
@@ -125,9 +125,9 @@ The main functions of MyPiModule (MAVProxy module):
 
 * Video functions: ** NEW in 2.3 **
 
-    - Video Wifibroadcast ON/OFF (default ON) : RC6 LOW or RC6 HIGH
-    - Video recording h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
-    - Photos JPEG on SD card (on per minute) : automatic start/stop with Drone Armed/Disarmed
+    - Video Wifibroadcast ON/OFF (default ON) : RC6 LOW (OFF) or RC6 HIGH (ON)
+    - Video recording in h264 format on SD card : automatic start/stop with Drone Armed/Disarmed
+    - Photos JPEG on SD card (one snapshot per minute) : automatic start/stop with Drone Armed/Disarmed
     - Videos and photos are stored in /root/fpv/videos directory
     - Viewing last Video with Wifibroadcast (redo video) : STANDBY + DISARMED, LOW YAW (RC4) and PITCH HIGH (RC2) (Warning : during redo video the MyPiModule is paused)
 
