@@ -315,7 +315,7 @@ class MyPiModule(mp_module.MPModule):
             # check Thread redo video
             ############################################
             if self.myinitthread == True:
-                if mythread.isAlive() == False:
+                if self.mythread.isAlive() == False:
                     self.myinitthread = False
                     if self.video_wbc_on == True:
                         self.my_start_camera_wbc()
@@ -887,8 +887,8 @@ class MyPiModule(mp_module.MPModule):
                          msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
                          self.my_write_log("INFO",msg)
                          self.my_statustext_send("Redo video")
-                         mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
-                         mythread.start()
+                         self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
+                         self.mythread.start()
                          self.myinitthread = True
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
