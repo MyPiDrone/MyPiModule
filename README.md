@@ -110,7 +110,6 @@ The main functions of MyPiModule (MAVProxy module):
     - myminvolt : 10V (battery low voltage mark).
     - mytimebat : 5sec interval data mesurement of the battery voltage.
     - mytimerc : 4sec interval data mesurement of the radio channels.
-    - myseqinit : 15sec before init var and start polling
     - mytimeTText : 0.5sec telemetry text refresh Interval Time
     - myrcvideo : channel to control video WBC on / off, default 6.
     - myrcyaw and myrcroll and myrcpitch : channels to control the shutdown, reboot, redo video, default 4, 1, 2.
@@ -122,7 +121,7 @@ The main functions of MyPiModule (MAVProxy module):
     - mylog : /var/log/mavproxy_MyPiModule.log
     - mylogverbose : True or False
     - mypipeout : /tmp/MyPiCamera.pipeout : see start_tx_and_recording_with_raspivid_video_input.sh
-    - myseqinit : delay to start 15s
+    - myseqinit : 15sec before init var and start polling
     - myseqpoll : polling sequence 10
     - myvideopath : /root/fpv/videos
 
