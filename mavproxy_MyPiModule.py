@@ -43,8 +43,6 @@ class MyRedoVideoThread(Thread):
                self.outpipe.write(byte)
         f.close()
         print("Redo video file ended (camera now is released)")
-        if self.video_wbc_on == True:
-            self.my_start_camera_wbc()
 
 class MyPiModule(mp_module.MPModule):
     def __init__(self, mpstate):
@@ -129,7 +127,7 @@ class MyPiModule(mp_module.MPModule):
         self.video_wbc_on = True
         self.video_recording_on = False
         self.video_recording_size = 0
-        self.last_redo_video_time = time.time()
+        self.myinitthread = False
         #
         self.rtl_on_request = False
         self.rtl_on_request_time = time.time()
@@ -313,6 +311,14 @@ class MyPiModule(mp_module.MPModule):
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
             self.last_TText_check_time = time.time()
+            ############################################
+            # check Thread redo video
+            ############################################
+            if self.myinitthread == true:
+                if mythread.isAlive() == False:
+                    self.myinitthread = False
+                    if self.video_wbc_on == True:
+                        self.my_start_camera_wbc()
             ############################################
             # LED flashing
             ############################################
@@ -876,20 +882,14 @@ class MyPiModule(mp_module.MPModule):
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
                ''' MANAGE REDO VIDEO YAW RC4 LOW and PITCH RC2 HIGH '''
-               ''' another redo video only after 10sec '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
-                    if time.time() > self.last_redo_video_time + 10:
-                        msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
-                        mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
-                        mythread.start()
-                        self.my_write_log("INFO",msg)
-                        self.my_statustext_send("Redo video")
-                        print("MyRedoVideoThread %s" % mythread.isAlive())
-                        self.last_redo_video_time = time.time()
-                    else:
-                        msg = "MyRC%sRaw %s : Redo video : please wait 30sec" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
-                        self.my_write_log("INFO",msg)
-                        self.my_statustext_send("Redo video please wait")
+                    if self.myinitthread == False:
+                         msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                         self.my_write_log("INFO",msg)
+                         self.my_statustext_send("Redo video")
+                         mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
+                         mythread.start()
+                         self.myinitthread = True
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
