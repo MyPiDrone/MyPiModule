@@ -314,7 +314,7 @@ class MyPiModule(mp_module.MPModule):
             ############################################
             # check Thread redo video
             ############################################
-            if self.myinitthread == true:
+            if self.myinitthread == True:
                 if mythread.isAlive() == False:
                     self.myinitthread = False
                     if self.video_wbc_on == True:
