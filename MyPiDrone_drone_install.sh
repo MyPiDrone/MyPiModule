@@ -18,7 +18,7 @@ cp ${MY_DIR_MYPIMODULE}/start_tx_and_recording_with_picamera_video_input.sh     
 cp ${MY_DIR_MYPIMODULE}/start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh      /usr/local/bin/
 cp ${MY_DIR_MYPIMODULE}/start_tx_and_recording_with_raspivid_video_input.sh                /usr/local/bin/
 cp ${MY_DIR_MYPIMODULE}/manage_network.sh                                  /usr/local/bin/
-cp ${MY_DIR_MYPIMODULE}/start_tx_with_video_recording_broadcast_over_ap.sh /usr/local/bin/
+#cp ${MY_DIR_MYPIMODULE}/start_tx_with_video_recording_broadcast_over_ap.sh /usr/local/bin/
 cp ${MY_DIR_MYPIMODULE}/show_modules.sh                                    /usr/local/bin/
 cp ${MY_DIR_MYPIMODULE}/start_wlan1_mode_monitor.sh                        /usr/local/bin/
 cp ${MY_DIR_MYPIMODULE}/start_wlan1_mode_managed.sh                        /usr/local/bin/
