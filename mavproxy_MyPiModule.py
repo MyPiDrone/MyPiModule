@@ -300,13 +300,15 @@ class MyPiModule(mp_module.MPModule):
     # and 40 is extremely low (20-25 is usually a reasonable range for H.264 encoding).
     # reference : raspivid -ih -t 1200000 -w 1296 -h 972 -fps 42 -b 4000000 -n -g 60 -pf high -o -
     def my_start_camera_wbc(self):
-        #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
-        self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
+        if self.myinitthread == False:
+            #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
+            self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
 
     def my_start_camera_recording(self):
-        print("Camera Start Recording %s" % self.h264name)
-        #self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
-        self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high')
+        if self.myinitthread == False:
+            print("Camera Start Recording %s" % self.h264name)
+            #self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
+            self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high')
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
@@ -319,6 +321,8 @@ class MyPiModule(mp_module.MPModule):
                     self.myinitthread = False
                     if self.video_wbc_on == True:
                         self.my_start_camera_wbc()
+                    if self.video_recording_on == True:
+                        self.my_start_camera_recording()
             ############################################
             # LED flashing
             ############################################
@@ -500,6 +504,7 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_recording_status(self):
+            if self.myinitthread == False:
             # this method dont work with two splitter_port : already active
             #self.video_recording_on = False
             #try:
