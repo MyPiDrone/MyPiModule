@@ -23,6 +23,8 @@ from threading import Thread
 from MAVProxy.modules.lib import mp_module
 from MAVProxy.modules.lib.mp_settings import MPSetting
 
+block=512
+
 class MyRedoVideoThread(Thread):
     def __init__(self,h264name,camera,outpipe,video_wbc_on):
         Thread.__init__(self)
@@ -37,9 +39,9 @@ class MyRedoVideoThread(Thread):
         if self.video_wbc_on == True:
             self.camera.stop_recording(splitter_port=1)
         with open(self.h264name, "rb") as f:
-            byte = f.read(2048)
+            byte = f.read(block)
             while byte:
-               byte = f.read(2048)
+               byte = f.read(block)
                self.outpipe.write(byte)
         f.close()
         print("Redo video file ended (camera now is released)")
