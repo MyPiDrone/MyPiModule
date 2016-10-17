@@ -907,6 +907,7 @@ class MyPiModule(mp_module.MPModule):
                              self.myinitthread = True
                     else:
                         block_size=block_size+512
+                        print("Set block_size=%s" % block_size)
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
