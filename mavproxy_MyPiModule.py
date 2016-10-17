@@ -301,7 +301,7 @@ class MyPiModule(mp_module.MPModule):
     # reference : raspivid -ih -t 1200000 -w 1296 -h 972 -fps 42 -b 4000000 -n -g 60 -pf high -o -
     def my_start_camera_wbc(self):
         if self.myinitthread == False:
-            print "Camera Start video wifbroadcast"
+            print "Camera Start video wifibroadcast"
             #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
             self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
 
@@ -889,12 +889,13 @@ class MyPiModule(mp_module.MPModule):
                ''' MANAGE REDO VIDEO YAW RC4 LOW and PITCH RC2 HIGH '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
                     if self.myinitthread == False:
-                         msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
-                         self.my_write_log("INFO",msg)
-                         self.my_statustext_send("Redo video")
-                         self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
-                         self.mythread.start()
-                         self.myinitthread = True
+                         if os.path.exists(self.h264name):
+                             msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                             self.my_write_log("INFO",msg)
+                             self.my_statustext_send("Redo video")
+                             self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
+                             self.mythread.start()
+                             self.myinitthread = True
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
