@@ -308,8 +308,9 @@ class MyPiModule(mp_module.MPModule):
     def my_start_camera_recording(self):
         if self.myinitthread == False:
             print("Camera Start Recording %s" % self.h264name)
-            #self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
-            self.camera.start_recording(self.h264name, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high')
+            outfile = open(self.h264name, 'a')
+            #self.camera.start_recording(outfile, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high', resize=(640, 480))
+            self.camera.start_recording(outfile, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high')
 
     def my_telemetry_text(self):
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
