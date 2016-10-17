@@ -897,8 +897,11 @@ class MyPiModule(mp_module.MPModule):
                              self.my_write_log("INFO",msg)
                              self.my_statustext_send("Redo video")
                              self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
+                             block=512
                              self.mythread.start()
                              self.myinitthread = True
+                    else:
+                        block=block+512
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
