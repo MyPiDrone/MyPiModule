@@ -504,7 +504,6 @@ class MyPiModule(mp_module.MPModule):
                 self.net_up = False 
 
     def my_video_recording_status(self):
-            if self.myinitthread == False:
             # this method dont work with two splitter_port : already active
             #self.video_recording_on = False
             #try:
