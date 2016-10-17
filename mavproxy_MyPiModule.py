@@ -23,7 +23,7 @@ from threading import Thread
 from MAVProxy.modules.lib import mp_module
 from MAVProxy.modules.lib.mp_settings import MPSetting
 
-block=512
+block_size=512
 
 class MyRedoVideoThread(Thread):
     def __init__(self,h264name,camera,outpipe,video_wbc_on):
@@ -35,14 +35,19 @@ class MyRedoVideoThread(Thread):
     def run(self):
         print("MyThread %s %s %s %s" % (self.h264name,self.camera,self.outpipe,self.video_wbc_on))
         # copy file WBC
+        block_size_old=0
         print("Redo video file %s in progress (Warning camera is locked)" % self.h264name)
         if self.video_wbc_on == True:
             self.camera.stop_recording(splitter_port=1)
         with open(self.h264name, "rb") as f:
-            byte = f.read(block)
+            byte = f.read(block_size)
             while byte:
-               byte = f.read(block)
+               if block_size_old != block_size:
+                   print("New block_size=%s" % block_size)
+                   block_size_old=block_size
+               byte = f.read(block_size)
                self.outpipe.write(byte)
+                     
         f.close()
         print("Redo video file ended (camera now is released)")
 
@@ -897,11 +902,11 @@ class MyPiModule(mp_module.MPModule):
                              self.my_write_log("INFO",msg)
                              self.my_statustext_send("Redo video")
                              self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
-                             block=512
+                             block_size=512
                              self.mythread.start()
                              self.myinitthread = True
                     else:
-                        block=block+512
+                        block_size=block_size+512
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
