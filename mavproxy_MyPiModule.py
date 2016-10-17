@@ -854,7 +854,7 @@ class MyPiModule(mp_module.MPModule):
                    self.my_start_camera_wbc()
                    msg = "MyRC%sRaw %s LOW : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on)
                    self.my_write_log("INFO",msg)
-           if self.armed == False and self.mystate == 3:
+           if self.armed == False and (self.mystate == 3 or self.mystate == 4):
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
                if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
                    if self.shutdown_by_radio == False:
