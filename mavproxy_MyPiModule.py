@@ -322,7 +322,7 @@ class MyPiModule(mp_module.MPModule):
                     self.myinitthread = False
                     if self.video_wbc_on == True:
                         self.my_start_camera_wbc()
-                    if self.video_recording_on == True:
+                    if self.video_recording_on == True and self.master.motors_armed():
                         self.my_start_camera_recording()
             ############################################
             # LED flashing
