@@ -23,7 +23,7 @@ from threading import Thread
 from MAVProxy.modules.lib import mp_module
 from MAVProxy.modules.lib.mp_settings import MPSetting
 
-block_size=512
+block_size=1
 
 class MyRedoVideoThread(Thread):
     def __init__(self,h264name,camera,outpipe,video_wbc_on):
@@ -906,16 +906,24 @@ class MyPiModule(mp_module.MPModule):
                              self.my_write_log("INFO",msg)
                              self.my_statustext_send("Redo video")
                              self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
-                             block_size=512
+                             block_size=1
                              self.mythread.start()
                              self.myinitthread = True
                     else:
-                        block_size=block_size+1024
-                        print("Set +1024 block_size=%s" % block_size)
+                        if block_size == 1:
+                            block_size=1024
+                            print("Set block_size=%s" % block_size)
+                        else:
+                            block_size=block_size+1024
+                            print("Set +1024 block_size=%s" % block_size)
                if self.myrcraw[self.settings.myrcpitch] < self.RC_high_mark[self.settings.myrcpitch]:
                     if self.myinitthread == False:
-                        block_size=block_size-1024
-                        print("Set -1024 block_size=%s" % block_size)
+                        if block_size <= 1:
+                            block_size=1
+                            print("Set block_size=%s" % block_size)
+                        else:
+                            block_size=block_size-1024
+                            print("Set -1024 block_size=%s" % block_size)
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
