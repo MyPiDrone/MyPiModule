@@ -28,12 +28,12 @@ block_size=512
 class MyRedoVideoThread(Thread):
     def __init__(self,h264name,camera,outpipe,video_wbc_on):
         Thread.__init__(self)
-        global block_size
         self.h264name=h264name
         self.camera=camera
         self.outpipe=outpipe
         self.video_wbc_on=video_wbc_on
     def run(self):
+        global block_size
         print("MyThread %s %s %s %s" % (self.h264name,self.camera,self.outpipe,self.video_wbc_on))
         # copy file WBC
         block_size_old=0
