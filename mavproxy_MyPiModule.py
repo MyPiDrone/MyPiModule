@@ -56,7 +56,6 @@ class MyRedoVideoThread(Thread):
 class MyPiModule(mp_module.MPModule):
     def __init__(self, mpstate):
         super(MyPiModule, self).__init__(mpstate, "MyPiModule", "my commands")
-        global block_size
         # my cmd
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
@@ -776,6 +775,7 @@ class MyPiModule(mp_module.MPModule):
                 self.my_manage_init()
 
     def my_rc_check(self):
+       global block_size
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
            if self.mydebug:
