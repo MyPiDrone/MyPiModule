@@ -63,7 +63,7 @@ class MyPiModule(mp_module.MPModule):
         # my settings
         self.settings.append(MPSetting('mytimebat', float, 5, 'Battery refresh Interval Time sec', tab='my'))
         self.settings.append(MPSetting('mytimeTText', float, 0.5, 'Telemetry text refresh Interval Time sec'))
-        self.settings.append(MPSetting('mytimerc', float, 4, 'RC refresh Interval Time sec'))
+        self.settings.append(MPSetting('mytimerc', float, 1, 'RC refresh Interval Time sec'))
         self.settings.append(MPSetting('myseqinit', float, 15, 'Time sec before init var and start polling'))
         self.settings.append(MPSetting('myseqpoll', float, 10, 'Time sec between poll status Network, Video, mode'))
         self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
