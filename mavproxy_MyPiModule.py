@@ -32,6 +32,7 @@ class MyRedoVideoThread(Thread):
         self.video_wbc_on=video_wbc_on
     def run(self):
         global block_size
+        global stopredo
         print("MyThread %s %s %s %s" % (self.h264name,self.camera,self.outpipe,self.video_wbc_on))
         # copy file WBC
         block_size_old=0
@@ -40,7 +41,7 @@ class MyRedoVideoThread(Thread):
             self.camera.stop_recording(splitter_port=1)
         with open(self.h264name, "rb") as f:
             byte = f.read(block_size)
-            while byte:
+            while byte and stopredo == False:
                if block_size_old != block_size:
                    print("New block_size=%s" % block_size)
                    block_size_old=block_size
@@ -321,6 +322,7 @@ class MyPiModule(mp_module.MPModule):
             self.camera.start_recording(outfile, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high')
 
     def my_telemetry_text(self):
+        global stopredo
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
             self.last_TText_check_time = time.time()
             ############################################
@@ -433,6 +435,7 @@ class MyPiModule(mp_module.MPModule):
                     self.my_start_camera_wbc()
                 self.my_start_camera_recording()
                 myTText_FlightTime="FlightTime=-:--/-:--"
+                stopredo=True
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
@@ -774,6 +777,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_rc_check(self):
        global block_size
+       global stopredo
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
            if self.mydebug:
@@ -905,6 +909,7 @@ class MyPiModule(mp_module.MPModule):
                              self.my_statustext_send("Redo video")
                              self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
                              block_size=1
+                             stopredo=False
                              self.mythread.start()
                              self.myinitthread = True
                     else:
@@ -915,7 +920,7 @@ class MyPiModule(mp_module.MPModule):
                             block_size=block_size+1024
                             print("Set +1024 block_size=%s" % block_size)
                if self.myrcraw[self.settings.myrcpitch] < self.RC_high_mark[self.settings.myrcpitch]:
-                    if self.myinitthread == False:
+                    if self.myinitthread == True:
                         if block_size <= 1:
                             block_size=1
                             print("Set block_size=%s" % block_size)
