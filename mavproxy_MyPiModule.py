@@ -921,11 +921,11 @@ class MyPiModule(mp_module.MPModule):
                             print("Set +1024 block_size=%s" % block_size)
                if self.myrcraw[self.settings.myrcpitch] < self.RC_high_mark[self.settings.myrcpitch]:
                     if self.myinitthread == True:
+                        block_size=block_size-1024
                         if block_size <= 0:
                             block_size=1
                             print("Set block_size=%s" % block_size)
                         else:
-                            block_size=block_size-1024
                             print("Set -1024 block_size=%s" % block_size)
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
