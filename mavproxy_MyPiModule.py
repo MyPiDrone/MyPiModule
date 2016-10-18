@@ -56,6 +56,7 @@ class MyRedoVideoThread(Thread):
 class MyPiModule(mp_module.MPModule):
     def __init__(self, mpstate):
         super(MyPiModule, self).__init__(mpstate, "MyPiModule", "my commands")
+        global block_size
         # my cmd
         self.add_command('mybat', self.cmd_mybat, "my battery information")
         self.add_command('myshut', self.cmd_myshutdown, "to shutdown")
