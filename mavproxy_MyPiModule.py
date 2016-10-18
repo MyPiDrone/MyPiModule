@@ -899,6 +899,7 @@ class MyPiModule(mp_module.MPModule):
                        self.reboot_by_radio_time = 0
                ''' MANAGE REDO VIDEO YAW RC4 LOW and PITCH RC2 HIGH '''
                if self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
+                    print("Display1 block_size=%s" % block_size)
                     if self.myinitthread == False:
                          if os.path.exists(self.h264name):
                              msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
@@ -912,6 +913,7 @@ class MyPiModule(mp_module.MPModule):
                         block_size=block_size+512
                         print("Set +512 block_size=%s" % block_size)
                if self.myrcraw[self.settings.myrcpitch] < self.RC_high_mark[self.settings.myrcpitch]:
+                    print("Display2 block_size=%s" % block_size)
                     if self.myinitthread == False:
                         block_size=block_size-512
                         print("Set -512 block_size=%s" % block_size)
