@@ -23,8 +23,6 @@ from threading import Thread
 from MAVProxy.modules.lib import mp_module
 from MAVProxy.modules.lib.mp_settings import MPSetting
 
-block_size=1
-
 class MyRedoVideoThread(Thread):
     def __init__(self,h264name,camera,outpipe,video_wbc_on):
         Thread.__init__(self)
