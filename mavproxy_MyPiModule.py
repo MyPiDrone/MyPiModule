@@ -50,7 +50,6 @@ class MyRedoVideoThread(Thread):
                time.sleep(.100)
                byte = f.read(block_size)
                self.outpipe.write(byte)
-                     
         f.close()
         print("Redo video file ended (camera now is released)")
 
