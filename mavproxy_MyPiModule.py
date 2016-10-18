@@ -45,6 +45,9 @@ class MyRedoVideoThread(Thread):
                if block_size_old != block_size:
                    print("New block_size=%s" % block_size)
                    block_size_old=block_size
+               if block_size<0:
+                    block_size=512
+               time.sleep(.100)
                byte = f.read(block_size)
                self.outpipe.write(byte)
                      
@@ -182,7 +185,8 @@ class MyPiModule(mp_module.MPModule):
            subprocess.Popen(["/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh",self.settings.myinterfacetx,self.settings.mychanneltx,"--vb"],stdout=out,stderr=err)
         print ("/usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh %s %s --vb is starting (log here /var/log/start_tx.log) : waiting %s opening..." % (self.settings.myinterfacetx,self.settings.mychanneltx,self.settings.mypipeout))
         self.outpipe = open(self.settings.mypipeout, 'w')
-        self.my_video_filename = "Video-Tarot-{0}.h264".format(datetime.now().strftime('%Y-%m-%d_%H:%M'))
+        #self.my_video_filename = "Video-Tarot-{0}.h264".format(datetime.now().strftime('%Y-%m-%d_%H:%M'))
+        self.my_video_filename = "Video-Tarot-1.h264"
         self.linkname=self.settings.myvideopath + "/Video-Tarot"
         self.h264name=self.settings.myvideopath + "/" + self.my_video_filename
         try:
@@ -867,9 +871,9 @@ class MyPiModule(mp_module.MPModule):
                    self.my_start_camera_wbc()
                    msg = "MyRC%sRaw %s LOW : current up %s" % (self.settings.myrcvideo,self.myrcraw[self.settings.myrcvideo],self.video_wbc_on)
                    self.my_write_log("INFO",msg)
-           if self.armed == False and (self.mystate == 3 or self.mystate == 4):
+           if self.armed == False and (self.mystate == 3 or self.mystate == 4) and self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw]:
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MAX RC1 '''
-               if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
+               if self.myrcraw[self.settings.myrcroll] > self.RC_high_mark[self.settings.myrcroll]:
                    if self.shutdown_by_radio == False:
                        msg = "MyRC%sRaw %s MyRC%sRaw %s : Shutdown ByRadio" % (self.settings.myrcyaw,self.myrcraw[self.settings.myrcyaw],self.settings.myrcroll,self.myrcraw[self.settings.myrcroll])
                        self.my_write_log("INFO",msg)
@@ -882,7 +886,7 @@ class MyPiModule(mp_module.MPModule):
                        self.shutdown_by_radio = False
                        self.shutdown_by_radio_time = 0
                ''' MANAGE REBOOT YAW RC4 LOW and ROLL MIN RC1 '''
-               if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcroll] > 0 and self.myrcraw[self.settings.myrcroll] < self.RC_low_mark[self.settings.myrcroll]:
+               if self.myrcraw[self.settings.myrcroll] < self.RC_low_mark[self.settings.myrcroll]:
                    if self.reboot_by_radio == False:
                        msg = "MyRC%sRaw %s MyRC%sRaw %s : Reboot ByRadio" % (self.settings.myrcyaw,self.myrcraw[self.settings.myrcyaw],self.settings.myrcroll,self.myrcraw[self.settings.myrcroll])
                        self.my_write_log("INFO",msg)
@@ -895,7 +899,7 @@ class MyPiModule(mp_module.MPModule):
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
                ''' MANAGE REDO VIDEO YAW RC4 LOW and PITCH RC2 HIGH '''
-               if self.myrcraw[self.settings.myrcyaw] > 0 and self.myrcraw[self.settings.myrcyaw] < self.RC_low_mark[self.settings.myrcyaw] and self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
+               if self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
                     if self.myinitthread == False:
                          if os.path.exists(self.h264name):
                              msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
@@ -907,7 +911,11 @@ class MyPiModule(mp_module.MPModule):
                              self.myinitthread = True
                     else:
                         block_size=block_size+512
-                        print("Set block_size=%s" % block_size)
+                        print("Set +512 block_size=%s" % block_size)
+               if self.myrcraw[self.settings.myrcpitch] < self.RC_high_mark[self.settings.myrcpitch]:
+                    if self.myinitthread == False:
+                        block_size=block_size-512
+                        print("Set -512 block_size=%s" % block_size)
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
