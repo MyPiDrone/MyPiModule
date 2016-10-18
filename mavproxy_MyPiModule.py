@@ -48,7 +48,6 @@ class MyRedoVideoThread(Thread):
                    block_size_old=block_size
                if block_size<0:
                     block_size=512
-               time.sleep(.100)
                byte = f.read(block_size)
                self.outpipe.write(byte)
         f.close()
