@@ -42,11 +42,11 @@ class MyRedoVideoThread(Thread):
         with open(self.h264name, "rb") as f:
             byte = f.read(block_size)
             while byte and stopredo == False:
+               if block_size<0:
+                    block_size=1
                if block_size_old != block_size:
                    print("New block_size=%s" % block_size)
                    block_size_old=block_size
-               if block_size<0:
-                    block_size=1
                byte = f.read(block_size)
                self.outpipe.write(byte)
         f.close()
