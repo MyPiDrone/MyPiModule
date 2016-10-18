@@ -28,6 +28,7 @@ block_size=512
 class MyRedoVideoThread(Thread):
     def __init__(self,h264name,camera,outpipe,video_wbc_on):
         Thread.__init__(self)
+        global block_size
         self.h264name=h264name
         self.camera=camera
         self.outpipe=outpipe
