@@ -13,7 +13,7 @@
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
 ''' ----------------------------------------------------------------------------------- '''
 
-import os, sys, math, time, psutils
+import os, sys, math, time
 #import numpy as np
 import subprocess
 import picamera
