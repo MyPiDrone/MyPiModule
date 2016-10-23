@@ -500,7 +500,7 @@ class MyPiModule(mp_module.MPModule):
             ##################################
             mysnapshottime = datetime.now().strftime('%H:%M')
             #if mysnapshottime != self.snapshottime and (self.in_air == True or (self.mystate != 3 and self.mystate != 4)):
-            if mysnapshottime != self.snapshottime and (self.in_air == True or self.mystate != 3):
+            if mysnapshottime != self.snapshottime and (self.in_air == True or self.mystate != 4):
                 self.snapshottime = mysnapshottime
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
