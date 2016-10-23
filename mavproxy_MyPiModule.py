@@ -434,20 +434,20 @@ class MyPiModule(mp_module.MPModule):
                     self.video_wbc_on = True
                     self.my_start_camera_wbc()
                 self.my_start_camera_recording()
-                myTText_FlightTime="FTime=-:--/-:--"
+                myTText_FlightTime="FT=-:--/-:--"
                 stopreplay=True
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
-                myTText_FlightTime="FTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
+                myTText_FlightTime="FT=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(current_all_total_time)/60, int(current_all_total_time)%60)
             elif not flying and self.in_air:
                 self.in_air = False
                 self.camera.stop_recording(splitter_port=2)
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 self.all_total_time = self.all_total_time + self.total_time
-                myTText_FlightTime="FTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
+                myTText_FlightTime="FT=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             else:
-                myTText_FlightTime="FTime=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
+                myTText_FlightTime="FT=%u:%02u/%u:%02u" % (int(self.total_time)/60, int(self.total_time)%60,int(self.all_total_time)/60, int(self.all_total_time)%60)
             ##################################################################################
             # re-used code mavproxy_console.py
             # myTText_GPS
@@ -474,8 +474,8 @@ class MyPiModule(mp_module.MPModule):
             myTText="{0}\n{1}L{2}%{3}w".format(myTText,math.ceil(os.getloadavg()[0]*10)/10,psutil.cpu_times_percent()[0],psutil.cpu_times_percent()[4])
             myTText="{0} {1}".format(myTText,myTText_Radio)
             myTText="{0} {1}".format(myTText,myTText_GPS)
-            myTText="{0} GSpeed={1}".format(myTText,math.ceil(self.mygroundspeed*10)/10)
-            myTText="{0} SMode{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
+            myTText="{0} GSpd={1}".format(myTText,math.ceil(self.mygroundspeed*10)/10)
+            myTText="{0} SM{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
             myTText="{0} ({1:5}V,{2:5}A,{3:3}%)".format(myTText,math.ceil(self.myvolt/100)/10,math.ceil(self.mycurrent)/100,self.myremaining)
             myTText="{0} {1}".format(myTText,myTText_FlightTime)
             myTText="{0}\n{1}".format(myTText,myTText_Heading)
