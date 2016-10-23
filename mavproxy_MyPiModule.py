@@ -7,7 +7,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
-''' Version 2.3 : September 4 2016                                                      '''
+''' Version 2.4 : Octobre 23 2016                                                      '''
 ''' MyPiModule new version : Overlaying telemetry text on video before Wifibroadcasting '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
@@ -23,7 +23,7 @@ from threading import Thread
 from MAVProxy.modules.lib import mp_module
 from MAVProxy.modules.lib.mp_settings import MPSetting
 
-class MyRedoVideoThread(Thread):
+class MyReplayVideoThread(Thread):
     def __init__(self,h264name,camera,outpipe,video_wbc_on):
         Thread.__init__(self)
         self.h264name=h264name
@@ -31,26 +31,26 @@ class MyRedoVideoThread(Thread):
         self.outpipe=outpipe
         self.video_wbc_on=video_wbc_on
     def run(self):
-        global block_size
-        global stopredo
+        global block_size_replay
+        global stopreplay
         print("MyThread %s %s %s %s" % (self.h264name,self.camera,self.outpipe,self.video_wbc_on))
         # copy file WBC
-        block_size_old=0
-        print("Redo video file %s in progress (Warning camera is locked)" % self.h264name)
+        block_size_replay_old=0
+        print("Replay video file %s in progress (Warning camera is locked)" % self.h264name)
         if self.video_wbc_on == True:
             self.camera.stop_recording(splitter_port=1)
         with open(self.h264name, "rb") as f:
-            byte = f.read(block_size)
-            while byte and stopredo == False:
-               if block_size<0:
-                    block_size=1
-               if block_size_old != block_size:
-                   print("New block_size=%s" % block_size)
-                   block_size_old=block_size
-               byte = f.read(block_size)
+            byte = f.read(block_size_replay)
+            while byte and stopreplay == False:
+               if block_size_replay<0:
+                    block_size_replay=1
+               if block_size_replay_old != block_size_replay:
+                   print("New block_size_replay=%s" % block_size_replay)
+                   block_size_replay_old=block_size_replay
+               byte = f.read(block_size_replay)
                self.outpipe.write(byte)
         f.close()
-        print("Redo video file ended (camera now is released)")
+        print("Replay video file ended (camera now is released)")
 
 class MyPiModule(mp_module.MPModule):
     def __init__(self, mpstate):
@@ -75,7 +75,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myrcnet', int, 8, 'Radio channel to change network on/off'))
         self.settings.append(MPSetting('myrcyaw', int, 4, 'Radio channel to reboot/shutdown'))
         self.settings.append(MPSetting('myrcroll', int, 1, 'Radio channel to reboot/shutdown'))
-        self.settings.append(MPSetting('myrcpitch', int, 2, 'Radio channel to redo video'))
+        self.settings.append(MPSetting('myrcpitch', int, 2, 'Radio channel to replay video'))
         self.settings.append(MPSetting('myinterfaceadmin', str, "wlan0", 'Network admin interface name'))
         self.settings.append(MPSetting('myinterfacetx', str, "wlan1", 'Wifibroadcast interface name'))
         self.settings.append(MPSetting('mychanneltx', str, "-19", 'Channel wifibroadcast interface name'))
@@ -83,7 +83,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myvideopath', str, "/root/fpv/videos", 'output video directory'))
         self.settings.append(MPSetting('mypipeout', str, "/tmp/MyPiCamera.pipeout", 'Named pipe for tx'))
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
-        self.myversion = "2.3"
+        self.myversion = "2.4"
         self.myinit = False
         self.mylogverbose = self.settings.mylogverbose
         self.mydebug = self.settings.mydebug
@@ -322,11 +322,11 @@ class MyPiModule(mp_module.MPModule):
             self.camera.start_recording(outfile, splitter_port=2, format='h264', quality=23, intra_period=60, bitrate=17000000, profile='high')
 
     def my_telemetry_text(self):
-        global stopredo
+        global stopreplay
         if (time.time() > self.last_TText_check_time + self.settings.mytimeTText):
             self.last_TText_check_time = time.time()
             ############################################
-            # check Thread redo video
+            # check Thread replay video
             ############################################
             if self.myinitthread == True:
                 if self.mythread.isAlive() == False:
@@ -435,7 +435,7 @@ class MyPiModule(mp_module.MPModule):
                     self.my_start_camera_wbc()
                 self.my_start_camera_recording()
                 myTText_FlightTime="FlightTime=-:--/-:--"
-                stopredo=True
+                stopreplay=True
             elif flying and self.in_air:
                 self.total_time = time.mktime(self.timestamp) - self.start_time
                 current_all_total_time = self.all_total_time + self.total_time
@@ -776,8 +776,8 @@ class MyPiModule(mp_module.MPModule):
                 self.my_manage_init()
 
     def my_rc_check(self):
-       global block_size
-       global stopredo
+       global block_size_replay
+       global stopreplay
        if time.time() > self.last_rc_check_time + self.settings.mytimerc:
            self.last_rc_check_time = time.time()
            if self.mydebug:
@@ -900,33 +900,33 @@ class MyPiModule(mp_module.MPModule):
                        self.my_statustext_send("Reboot ByRadio canceled")
                        self.reboot_by_radio = False
                        self.reboot_by_radio_time = 0
-               ''' MANAGE REDO VIDEO YAW RC4 LOW and PITCH RC2 HIGH '''
+               ''' MANAGE REPLAY VIDEO YAW RC4 LOW and PITCH RC2 HIGH '''
                if self.myrcraw[self.settings.myrcpitch] > self.RC_high_mark[self.settings.myrcpitch]:
                     if self.myinitthread == False:
                          if os.path.exists(self.h264name):
-                             msg = "MyRC%sRaw %s : Redo video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
+                             msg = "MyRC%sRaw %s : Replay video (camera is locked)" % (self.settings.myrcpitch,self.myrcraw[self.settings.myrcpitch])
                              self.my_write_log("INFO",msg)
-                             self.my_statustext_send("Redo video")
-                             self.mythread = MyRedoVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
-                             block_size=1
-                             stopredo=False
+                             self.my_statustext_send("Replay video")
+                             self.mythread = MyReplayVideoThread(self.h264name,self.camera,self.outpipe,self.video_wbc_on)
+                             block_size_replay=1
+                             stopreplay=False
                              self.mythread.start()
                              self.myinitthread = True
                     else:
-                        if block_size == 1:
-                            block_size=1024
-                            print("Set block_size=%s" % block_size)
+                        if block_size_replay == 1:
+                            block_size_replay=1024
+                            print("Set block_size_replay=%s" % block_size_replay)
                         else:
-                            block_size=block_size+1024
-                            print("Set +1024 block_size=%s" % block_size)
+                            block_size_replay=block_size_replay+1024
+                            print("Set +1024 block_size_replay=%s" % block_size_replay)
                if self.myrcraw[self.settings.myrcpitch] < self.RC_high_mark[self.settings.myrcpitch]:
                     if self.myinitthread == True:
-                        block_size=block_size-1024
-                        if block_size <= 0:
-                            block_size=1
-                            print("Set block_size=%s" % block_size)
+                        block_size_replay=block_size_replay-1024
+                        if block_size_replay <= 0:
+                            block_size_replay=1
+                            print("Set block_size_replay=%s" % block_size_replay)
                         else:
-                            print("Set -1024 block_size=%s" % block_size)
+                            print("Set -1024 block_size_replay=%s" % block_size_replay)
            ''' shutdown and reboot cancel if Armed '''
            if self.armed == True:
                if self.shutdown_by_radio == True:
