@@ -472,7 +472,7 @@ class MyPiModule(mp_module.MPModule):
             video_size=self.video_recording_size/1048576
             myTText="{0} Vid{1}/{2}".format(myTText,["OFF","WBC"][self.video_wbc_on == True],["{0}Meg".format(video_size),"{0}Meg^".format(video_size)][self.video_recording_on == True])
             myTText="{0}\n{1}".format(myTText,myTText_Radio)
-            myTText="{0} Lavg={1}".format(os.getloadavg())
+            myTText="{0} Lavg={1}".format(myTText,os.getloadavg())
             myTText="{0} {1}".format(myTText,myTText_GPS)
             myTText="{0} GSpeed={1}".format(myTText,math.ceil(self.mygroundspeed*10)/10)
             myTText="{0} SMode{1:3}".format(myTText,["OFF","ON"][self.simple_mode_on == True])
