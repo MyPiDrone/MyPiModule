@@ -28,11 +28,14 @@ if [ "_$1" = "_" ]; then
 	WLAN=`/sbin/ifconfig -a |egrep -i '30.*B5.*C2.*11.*83.*22|30.*b5.*c2.*11.*62.*ea'|awk '{print $1}'`
 	#WLAN="wlan2"
 	#WLAN="wlx60e3270f04fd"
+	#WLAN="wlx30b5c21162ea"
+	#WLAN="wlx24050f6dae59"
 else
 	WLAN=$1
 fi
 if [ "_$2" = "_" ]; then
 	CHANNEL="-19"
+	#CHANNEL="149"
 	#CHANNEL="11"
 else
 	CHANNEL=$2
@@ -54,11 +57,13 @@ then
                 sleep 1
                 iw dev $WLAN set freq 2357
                 #sleep 1
+                ### channel 149
+                [ "$CHANNEL" = "149" ] && iw dev $WLAN set freq 5745
                 ### channel -19
                 [ "$CHANNEL" = "-19" ] && iw dev $WLAN set freq 2312
                 ### channel 11
                 [ "$CHANNEL" = "11" ] && iw dev $WLAN set freq 2462
-        	iw reg set BO
+        	iw reg set FR
         	echo Setting maximum Tx Power
         	iwconfig $WLAN txpower 30
 		sleep 1
