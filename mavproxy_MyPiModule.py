@@ -495,10 +495,11 @@ class MyPiModule(mp_module.MPModule):
                self.camera.annotate_text = "%s" % (new_telemetry_text)
                self.current_telemetry_text = new_telemetry_text
             ##################################
-            # snapshot each minute
+            # snapshot each minute if armed
+            # or STATUS not ACTIVE or STANDBY
             ##################################
             mysnapshottime = datetime.now().strftime('%H:%M')
-            if mysnapshottime != self.snapshottime and self.in_air == True:
+            if mysnapshottime != self.snapshottime and (self.in_air == True or (self.mystate != 3 and self.mystate != 4)):
                 self.snapshottime = mysnapshottime
                 mydate = datetime.now().strftime('%Y-%m-%d_%H:%M')
                 jpgname=self.settings.myvideopath + "/Photo-Tarot-" + mydate + ".jpg"
