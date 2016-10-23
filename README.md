@@ -12,6 +12,10 @@
 
  Changelog :
 
+      version 2.4 : Added Replay Video Thread
+
+#########################################################################################
+
       version 2.3 : Overlaying telemetry text on video before Wifibroadcast
 
        - Added picamera python module inside mavproxy_MyPiModule.py to broadcast video and telemetry text 
@@ -59,7 +63,8 @@
         - start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh  DRONE : start Video Broadcast over Wifi AP : Beta test
         - start_ap.sh                                                    GCS   : start Wifi AP on GCS
         - start_rx.sh                                                    GCS   : view Video on GCS
-        - start_rx_and_broadcast_over_ap.sh                              GCS   : rx and streamin video over AP to Android QtGStreamerHUD emlid
+        - start_rx_and_broadcast_over_ap.sh                              GCS   : rx 2.3Ghz and streaming video over AP to myMediaCodecPlayer-for-FPV Android application (socat UDP port 5000 with CSL-300 5Ghz)
+        - start_rx_and_broadcast_over_ap_with_diversity.sh               GCS   : start_rx_and_broadcast_over_ap.sh + diversity (2 X TPLINK)
         - hostapd.conf                                                   GCS   : Wifi Access Point configuration
         - dnsmasq.conf                                                   GCS   : dnsmasq configuration
         - show_modules.sh                                                DRONE : tools show params modules
