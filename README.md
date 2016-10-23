@@ -12,7 +12,10 @@
 
  Changelog :
 
-      version 2.4 : Added Python Replay Video Thread in MyPiModule
+      version 2.4 : minor changes
+          
+       - Added : Python Replay Video Thread in MyPiModule
+       - Added : python psutil Loadavg CPU% IOWAIT%
 
 #########################################################################################
 
