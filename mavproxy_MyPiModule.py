@@ -212,7 +212,7 @@ class MyPiModule(mp_module.MPModule):
         # 1    1920x1080        16:9    0.1-30fps  x        Partial   None 
         # 2    3280x2464        4:3     0.1-15fps  x    x   Full      None 
         # 3    3280x2464        4:3     0.1-15fps  x    x   Full      None 
-        # 4    1640x1232        4:3     0.1-40fps  x        Full      2x2 
+        # 4    1640x1232        4:3     0.1-40fps  x        Full      2x2       Valid 30 fps max
         # 5    1640x922         16:9    0.1-40fps  x        Full      2x2 
         # 6    1280x720         16:9    40-90fps   x        Partial   2x2 
         # 7    640x480          4:3     40-90fps   x        Partial   2x2 
@@ -241,8 +241,8 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.framerate = 30
         #self.camera.annotate_text_size = 16
         #
-        self.camera.resolution = (1640,922)
-        self.camera.framerate = 40
+        self.camera.resolution = (1640,1232)
+        self.camera.framerate = 30
         self.camera.annotate_text_size = 32 
         #TEST#self.camera.resolution = (2048,1350)
         #TEST#self.camera.framerate = 30
