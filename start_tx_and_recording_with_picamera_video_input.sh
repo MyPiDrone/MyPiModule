@@ -109,6 +109,7 @@ then
                 du -hs $VIDDIR
                 du -hs $VIDDIR/*
                 echo "$PREFIX -----------------------------------------------------------------------------"
+		echo "$WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN"
                 if [ "$OPTION" = "--vr" ]; then
                 	touch $VIDEO
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
@@ -117,7 +118,8 @@ then
                 elif [ "$OPTION" = "--vbr" ]; then
                 	touch $VIDEO
                         ln -sf $VIDEO $VIDDIR/Video-Tarot-h264
-                        echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
+                        #echo "$PREFIX Recording and broadcasting  $VIDEO in progress : hit CTRL C to stop"
+			echo "$WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN"
                         tee $VIDEO < $pipeout | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
