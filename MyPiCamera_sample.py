@@ -68,12 +68,14 @@ with picamera.PiCamera() as camera:
     camera.crop = (0.0, 0.0, 1.0, 1.0)
     camera.resolution = (1640, 922)
     camera.framerate = 40
-    camera.start_preview()
+    #camera.start_preview()
     camera.annotate_background = picamera.Color('black')
     camera.annotate_text_size = 20
     camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    camera.start_recording(pout, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='baseline')
+    camera.start_recording(pout, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
+    #camera.start_recording(pout, format='mjpeg', quality=0, intra_period=60, bitrate=4000000, profile='baseline')
     start = dt.datetime.now()
+    print "here"
     while (dt.datetime.now() - start).seconds < 12000:
         intext = pin.read()
         intext = intext.rstrip()
