@@ -15,6 +15,13 @@
 # [Install]
 # WantedBy=multi-user.target
 # 
+#-----------------------------
+# TODO
+# apt-get install python-psutil
+# apt-get install python-picamera python-picamera-docs
+# pip install MAVProxy --upgrade
+#-----------------------------
+#
 echo " "
 echo "_______________________________________________________" >> /var/log/mavproxy_MyPiModule.log
 MSG="MAVProxy is started and MyPiModule,mode modules loaded."
