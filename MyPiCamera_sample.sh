@@ -4,15 +4,28 @@
 #TITLE# DRONE MyPiCamera start MyPiCamera_sample.py & tx (python sample with picamera)
 ####### www.MyPiDrone.com
 ##############################################################################################################################
-#Mode   Size    Aspect Ratio    Frame rates     FOV     Binning
+###############################################################################
+# V1 camera
+#Mode   Size    Aspect Ratio    Frame rates     Video Image  FOV     Binning
 #0      automatic selection
-#1      1920x1080       16:9    1-30fps         Partial None
-#2      2592x1944       4:3     1-15fps         Full    None
-#3      2592x1944       4:3     0.1666-1fps     Full    None
-#4      1296x972        4:3     1-42fps         Full    2x2
-#5      1296x730        16:9    1-49fps         Full    2x2
-#6      640x480         4:3     42.1-60fps      Full    2x2 plus skip
-#7      640x480         4:3     60.1-90fps      Full    2x2 plus skip
+#1      1920x1080       16:9    1-30fps         x            Partial None
+#2      2592x1944       4:3     1-15fps         x      x     Full    None
+#3      2592x1944       4:3     0.1666-1fps     x      x     Full    None
+#4      1296x972        4:3     1-42fps         x            Full    2x2
+#5      1296x730        16:9    1-49fps         x            Full    2x2
+#6      640x480         4:3     42.1-60fps      x            Full    2x2 plus skip
+#7      640x480         4:3     60.1-90fps      x          Full    2x2 plus skip
+###############################################################################
+# V2 camera
+# Mode Resolution Aspect Ratio Framerates Video Image FoV     Binning
+# 1    1920x1080        16:9    0.1-30fps  x        Partial   None
+# 2    3280x2464        4:3     0.1-15fps  x    x   Full      None
+# 3    3280x2464        4:3     0.1-15fps  x    x   Full      None
+# 4    1640x1232        4:3     0.1-40fps  x        Full      2x2
+# 5    1640x922         16:9    0.1-40fps  x        Full      2x2
+# 6    1280x720         16:9    40-90fps   x        Partial   2x2
+# 7    640x480          4:3     40-90fps   x        Partial   2x2
+###############################################################################
 #WIDTH=1296
 #HEIGHT=972
 #FPS=42
