@@ -6,7 +6,7 @@ After=rsyslog.service
 
 [Service]
 Type=forking
-#/usr/bin/ArduCopter-quad -A /dev/ttyAMA0 -C udp:127.0.0.1:14550
+#/usr/bin/ArduCopter-quad -A udp:127.0.0.1:14550 -C /dev/ttyAMA0
 ExecStart=/usr/local/bin/start_ArduCopter-quad.sh
 #KillMode=process
 # never use Restart option for ArduCopter-quad process
