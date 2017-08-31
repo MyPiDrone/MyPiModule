@@ -98,6 +98,7 @@ then
                 #echo "$PREFIX Starting HD Video conversion h264 to mp4 : avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4 ..."
                 #avconv -stats -y -r $FPS -i $VIDEO -vcodec copy $VIDEO.mp4
                 echo "$PREFIX Starting HD Video re-transmission for $VIDEO..."
+		echo "$WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1 < $pipeout"
                 $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1 < $pipeout
         else
                 echo "$PREFIX Starting HD Video transmission and recording..."
@@ -123,6 +124,7 @@ then
                         tee $VIDEO < $pipeout | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1
                 else
                         echo "$PREFIX Broadcasting video (no recording) in progress : hit CTRL C to stop"
+                        echo "$WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1 < $pipeout"
                         $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>$log 2>&1 < $pipeout
                 fi
         fi
