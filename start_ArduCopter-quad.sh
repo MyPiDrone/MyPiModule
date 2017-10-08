@@ -23,5 +23,5 @@ M=`strings /opt/ardupilot/navio2/arducopter-3.4/bin/arducopter-quad |grep -i "In
 #nohup /usr/bin/ArduCopter-quad -A /dev/ttyAMA0 -C udp:127.0.0.1:14550 1>>/var/log/ArduCopter-quad.log 2>&1 &
 #nohup /opt/ardupilot/navio2/arducopter-3.4/bin/arducopter-quad -A udp:127.0.0.1:14550 -C /dev/ttyAMA0 1>>/var/log/ArduCopter-quad.log 2>&1 &
 #nohup /opt/ardupilot/navio2/arducopter-3.4/bin/arducopter-quad -A /dev/ttyAMA0 -C udp:127.0.0.1:14550 1>>/var/log/ArduCopter-quad.log 2>&1 &
-nohup /opt/ardupilot/navio2/arducopter-3.4/bin/arducopter-quad -C /dev/ttyAMA0 -A udp:127.0.0.1:14550 1>>/var/log/ArduCopter-quad.log 2>&1 &
+nohup /opt/ardupilot/navio2/arducopter-3.4/bin/arducopter-quad -C /dev/ttyAMA0 -A udp:127.0.0.1:14650 1>>/var/log/ArduCopter-quad.log 2>&1 &
 M="/usr/bin/ArduCopter-quad PID $!"                                       ; echo "$D $M"; echo "$D $M" >> /var/log/ArduCopter-quad.log
