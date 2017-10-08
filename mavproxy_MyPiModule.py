@@ -320,7 +320,7 @@ class MyPiModule(mp_module.MPModule):
         if self.myinitthread == False:
             print "Camera Start video wifibroadcast"
             #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
-            self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60,   bitrate=2000000, profile='high')
+            self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=10, intra_period=60, bitrate=4000000, profile='high')
 
     def my_start_camera_recording(self):
         if self.myinitthread == False:
