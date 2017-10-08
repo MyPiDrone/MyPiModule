@@ -241,9 +241,9 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.framerate = 30
         #self.camera.annotate_text_size = 16
         #
-        self.camera.resolution = (2048,1350)
-        self.camera.framerate = 15
-        self.camera.annotate_text_size = 16
+        self.camera.resolution = (1920,1080)
+        self.camera.framerate = 30
+        self.camera.annotate_text_size = 32
         #
 #        # 30 max H264 format
 #        self.camera.resolution = (1640,1232)
