@@ -237,13 +237,14 @@ class MyPiModule(mp_module.MPModule):
         self.camera.vflip = False
         self.camera.crop = (0.0, 0.0, 1.0, 1.0)
         #
-        #self.camera.resolution = (640,480)
-        #self.camera.framerate = 30
-        #self.camera.annotate_text_size = 16
+        self.camera.resolution = (640,480)
+        self.camera.framerate = 90
+        self.camera.annotate_text_size = 16
         #
-        self.camera.resolution = (1640,1232)
-        self.camera.framerate = 40
-        self.camera.annotate_text_size = 32 
+#        # 30 max H264 format
+#        self.camera.resolution = (1640,1232)
+#        self.camera.framerate = 30
+#        self.camera.annotate_text_size = 32 
         #TEST#self.camera.resolution = (2048,1350)
         #TEST#self.camera.framerate = 30
         #TEST#self.camera.annotate_text_size = 32 
