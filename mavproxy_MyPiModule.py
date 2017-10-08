@@ -229,7 +229,7 @@ class MyPiModule(mp_module.MPModule):
         #self.camera.video_stabilization = True
         self.camera.video_stabilization = False
         self.camera.exposure_compensation = 0
-        self.camera.exposure_mode = 'auto'²
+        self.camera.exposure_mode = 'auto'
         self.camera.meter_mode = 'average'
         self.camera.awb_mode = 'auto'
         self.camera.image_effect = 'watercolor'
