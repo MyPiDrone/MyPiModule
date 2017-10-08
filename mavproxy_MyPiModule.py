@@ -221,13 +221,15 @@ class MyPiModule(mp_module.MPModule):
         ###############################################################################
         self.camera=picamera.PiCamera()
         self.camera.sharpness = 0
+        #self.camera.contrast = 0
         self.camera.contrast = 10
         self.camera.brightness = 50
         self.camera.saturation = 0
         self.camera.ISO = 0
-        self.camera.video_stabilization = True
+        #self.camera.video_stabilization = True
+        self.camera.video_stabilization = False
         self.camera.exposure_compensation = 0
-        self.camera.exposure_mode = 'auto'
+        self.camera.exposure_mode = 'auto'²
         self.camera.meter_mode = 'average'
         self.camera.awb_mode = 'auto'
         self.camera.image_effect = 'watercolor'
@@ -237,13 +239,13 @@ class MyPiModule(mp_module.MPModule):
         self.camera.vflip = False
         self.camera.crop = (0.0, 0.0, 1.0, 1.0)
         #
-        self.camera.resolution = (640,480)
-        self.camera.framerate = 30
-        self.camera.annotate_text_size = 16
+        #self.camera.resolution = (640,480)
+        #self.camera.framerate = 30
+        #self.camera.annotate_text_size = 16
         #
-        #self.camera.resolution = (1920,1080)
-        #self.camera.framerate = 15
-        #self.camera.annotate_text_size = 32
+        self.camera.resolution = (1920,1080)
+        self.camera.framerate = 15
+        self.camera.annotate_text_size = 32
         #
         # 30 max H264 format
 #        self.camera.resolution = (1640,1232)
