@@ -221,8 +221,8 @@ class MyPiModule(mp_module.MPModule):
         ###############################################################################
         self.camera=picamera.PiCamera()
         self.camera.sharpness = 0
-        self.camera.contrast = 0
-        self.camera.brightness = 60
+        self.camera.contrast = 10
+        self.camera.brightness = 50
         self.camera.saturation = 0
         self.camera.ISO = 0
         self.camera.video_stabilization = True
@@ -320,7 +320,7 @@ class MyPiModule(mp_module.MPModule):
         if self.myinitthread == False:
             print "Camera Start video wifibroadcast"
             #self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=23, intra_period=60, bitrate=4000000, profile='high')
-            self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=25, intra_period=60, bitrate=4000000, profile='high')
+            self.camera.start_recording(self.outpipe, splitter_port=1, format='h264', quality=0, intra_period=60, bitrate=4000000, profile='high')
 
     def my_start_camera_recording(self):
         if self.myinitthread == False:
