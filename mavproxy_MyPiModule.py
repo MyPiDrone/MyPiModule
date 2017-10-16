@@ -222,7 +222,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera=picamera.PiCamera()
         self.camera.sharpness = 0
         #self.camera.contrast = 0
-        self.camera.contrast = 15
+        self.camera.contrast = 0
         self.camera.brightness = 50
         self.camera.saturation = 0
         self.camera.ISO = 0
@@ -231,7 +231,8 @@ class MyPiModule(mp_module.MPModule):
         self.camera.exposure_mode = 'auto'
         self.camera.meter_mode = 'average'
         self.camera.awb_mode = 'auto'
-        self.camera.image_effect = 'watercolor'
+        #self.camera.image_effect = 'watercolor'
+        #self.camera.image_effect = 'colorpoint'
         self.camera.color_effects = None
         self.camera.rotation = 0
         self.camera.hflip = False
