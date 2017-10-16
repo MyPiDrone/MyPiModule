@@ -223,7 +223,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.sharpness = 0
         #self.camera.contrast = 0
         self.camera.contrast = 10
-        self.camera.brightness = 40
+        self.camera.brightness = 45
         self.camera.saturation = 0
         self.camera.ISO = 0
         self.camera.video_stabilization = True
