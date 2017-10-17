@@ -67,8 +67,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mytimerc', float, 1, 'RC refresh Interval Time sec'))
         self.settings.append(MPSetting('myseqinit', float, 15, 'Time sec before init var and start polling'))
         self.settings.append(MPSetting('myseqpoll', float, 10, 'Time sec between poll status Network, Video, mode'))
-        #self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
-        self.settings.append(MPSetting('mydebug', bool, True, 'Debug'))
+        self.settings.append(MPSetting('mydebug', bool, False, 'Debug'))
         self.settings.append(MPSetting('myminvolt', int, 10000, 'Minimum battery voltage before shutdown'))
         self.settings.append(MPSetting('myminremain', int, 10, 'Minimum battery remaining before shutdown'))
         self.settings.append(MPSetting('mydelayinit', int, 30, 'Delay before shutdown or reboot'))
@@ -233,7 +232,7 @@ class MyPiModule(mp_module.MPModule):
         self.camera.meter_mode = 'average'
         self.camera.awb_mode = 'auto'
         self.camera.image_effect = 'watercolor'
-        #self.camera.image_effect = 'colorbalance'
+        #self.camera.image_effect = 'colorbalance' # plante la camera
         self.camera.color_effects = None
         self.camera.rotation = 0
         self.camera.hflip = False
