@@ -232,8 +232,8 @@ class MyPiModule(mp_module.MPModule):
         self.camera.exposure_mode = 'auto'
         self.camera.meter_mode = 'average'
         self.camera.awb_mode = 'auto'
-        #self.camera.image_effect = 'watercolor'
-        self.camera.image_effect = 'colorbalance'
+        self.camera.image_effect = 'watercolor'
+        #self.camera.image_effect = 'colorbalance'
         self.camera.color_effects = None
         self.camera.rotation = 0
         self.camera.hflip = False
