@@ -592,7 +592,7 @@ class MyPiModule(mp_module.MPModule):
         #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
         # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
-        self.master.mav.statustext_send(1, "%s" % (self.mycountermessage,text))
+        self.master.mav.statustext_send(1, "%s" % text)
         #self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         self.master2.close()
         #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
