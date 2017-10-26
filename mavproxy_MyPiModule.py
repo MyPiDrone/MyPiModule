@@ -3,7 +3,7 @@
 ''' MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 :                  '''
 '''        Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler      '''
 '''        Project 2 : TAROT 650 Copter QUAD with Raspberry PI3 & Navio2 controler      '''
-'''                    raspian Kernel 4.4.y                                             '''
+'''                    raspian Kernel Linux navio2 4.4.xx emlid-v7+ PREEMPT             '''
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
