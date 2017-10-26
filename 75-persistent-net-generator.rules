@@ -1,3 +1,4 @@
+#TITLE# DRONE set interface name with 70-persistent-net.rules
 # These rules generate rules to keep network interface names unchanged
 # across reboots and write them to /etc/udev/rules.d/70-persistent-net.rules.
 
