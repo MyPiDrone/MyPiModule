@@ -1,4 +1,6 @@
 #!/usr/bin/python
+#TITLE# DRONE MyPiCamera sample add_overlay
+
 # Test Overlay Timer - has three overlays
 import picamera
 import time
