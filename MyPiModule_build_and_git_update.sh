@@ -40,6 +40,7 @@ git add $LIST
 #git commit -i $LIST
 for F in $LIST
 do
+	git add $F
 	DESC=`grep "^#TITLE#" $F|cut -d' ' -f2-`
 	if [ "_$DESC" = "_" ]; then
 		git commit $F -m "$VERSION $date"
