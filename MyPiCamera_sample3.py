@@ -1,7 +1,7 @@
 #!/usr/bin/python
 ##############################################################################################################################
 ####### www.MyPiDrone.com
-#TITLE# DRONE MyPiCamera sample write telemetry over video with MMALPythonComponent and Python Imaging Library Pillow
+#TITLE# DRONE MyPiCamera sample overlay with mmalObj
 ####### www.MyPiDrone.com
 ####### How to used :
 #######  MyPiCamera_sample.py | tee $VIDEO | $WifiBroadcast_TX -p $PORT -b $BLOCK_SIZE -r $FECS -f $PACKET_LENGTH $WLAN 1>/dev/null 2>&1 &
