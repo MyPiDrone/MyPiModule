@@ -1,7 +1,7 @@
 #!/bin/sh
 ##############################################################################################################################
 ####### www.MyPiDrone.com
-#TITLE# DRONE MyPiCamera start MyPiCamera_sample.py & tx (python sample with picamera)
+#TITLE# DRONE MyPiCamera start MyPiCamera_sample3.py & tx (python sample with picamera)
 ####### www.MyPiDrone.com
 ##############################################################################################################################
 ###############################################################################
