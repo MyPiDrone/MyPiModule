@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#TITLE# DRONE MyPiCamera sample statustext_send
+
 import os, sys, math, time, psutil
 #import numpy as np
 import subprocess
