@@ -1,13 +1,13 @@
-#TITLE# DRONE MAVProxy module MyPiModule to control RPI2i/NAVIO+ or RPI3/NAVIO2 
+#TITLE# DRONE MAVProxy module MyPiModule to control RPI2/NAVIO+ or RPI3/NAVIO2
 ''' ----------------------------------------------------------------------------------- '''
 ''' MyPiDrone Project Kev&Phil : Copter QUAD Project 1 and Project 2 :                  '''
 '''        Project 1 : TAROT 650 Copter QUAD with Raspberry PI2 & Navio+ controler      '''
-'''        Project 2 : TAROT 280 Copter QUAD with Raspberry PI3 & Navio2 controler      '''
+'''        Project 2 : TAROT 650 Copter QUAD with Raspberry PI3 & Navio2 controler      '''
 '''                    raspian Kernel 4.4.y                                             '''
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
-''' Version 2.4 : Octobre 23 2016                                                      '''
+''' Version 2.4 : Octobre 23 2016 update Rpi3/PiCameraV2/Navio2 Septembre 2017          '''
 ''' MyPiModule new version : Overlaying telemetry text on video before Wifibroadcasting '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
