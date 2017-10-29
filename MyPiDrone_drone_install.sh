@@ -63,6 +63,8 @@
 # cp /etc/network/interfaces /etc/network/interfaces.old
 # cp interfaces /etc/network/interfaces
 # reboot
+#--------------------------------------------------------
+# pip install psutil picamera
 ###########################################################
 date=`date +'%Y-%m-%d'`
 MY_DIR_MYPIMODULE="/root/MyPiDrone/MyPiModule"
@@ -97,6 +99,8 @@ systemctl enable mavproxy
 #
 cd ${MY_DIR_MYPIMODULE}
 ln -sf MyPiModule_build_and_git_update.sh build.sh
+pip install psutil
+pip install picamera
 echo "/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"
 ### load only MyPiModule and mode
 /usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors
