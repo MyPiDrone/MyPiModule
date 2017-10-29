@@ -83,7 +83,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('myvideopath', str, "/root/fpv/videos", 'output video directory'))
         self.settings.append(MPSetting('mypipeout', str, "/tmp/MyPiCamera.pipeout", 'Named pipe for tx'))
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
-        self.myversion = "2.4"
+        self.myversion = "2.5"
         self.myinit = False
         self.mylogverbose = self.settings.mylogverbose
         self.mydebug = self.settings.mydebug
