@@ -7,7 +7,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
-''' Version 2.4 : Octobre 23 2016 update Rpi3/PiCameraV2/Navio2 Septembre 2017          '''
+''' Version 2.5 : update Rpi3/PiCameraV2/Navio2 29/10/2017 with emlid image raspian 9.x '''
 ''' MyPiModule new version : Overlaying telemetry text on video before Wifibroadcasting '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
