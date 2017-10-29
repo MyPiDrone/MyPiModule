@@ -94,7 +94,7 @@ cp ${MY_DIR_MYPIMODULE}/show_modules.sh                                    /usr/
 #NOT_USED#cp ${MY_DIR_MYPIMODULE}/start_wlan1_mode_monitor.sh                        /usr/local/bin/
 #NOT_USED#cp ${MY_DIR_MYPIMODULE}/start_wlan1_mode_managed.sh                        /usr/local/bin/
 #
-systemctl deamon-reload
+systemctl daemon-reload
 systemctl enable mavproxy
 #
 cd ${MY_DIR_MYPIMODULE}
