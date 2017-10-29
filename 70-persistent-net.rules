@@ -6,6 +6,10 @@
 # line, and change only the value of the NAME= key.
 
 # Unknown net device (/devices/platform/soc/3f300000.mmc/mmc_host/mmc1/mmc1:0001/mmc1:0001:1/net/intwifi0) (brcmfmac_sdio)
+
+# Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="b8:27:eb:fe:0b:62", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="eth0"
+
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="b8:27:eb:ab:5e:37", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="intwifi*", NAME="intwifi0"
 
 # USB device 0x:0x (rt2800usb)
