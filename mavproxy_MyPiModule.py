@@ -582,7 +582,7 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
-        print("self.settings.source_system=%s" % self.settings.source_system)
+        print("self.settings.source_system=%s text=%s" % (self.settings.source_system,text))
 #        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
 #        #---------------------------------------------------
 #        #date2 = datetime.now().strftime(self.FORMAT2)
