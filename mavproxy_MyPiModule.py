@@ -596,7 +596,7 @@ class MyPiModule(mp_module.MPModule):
 #        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
 #        self.master2.close()
 #        #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-        p = subprocess.Popen(["nohup","/usr/local/bin/MyPiStatusTextSendCall.sh"," %02d %s" % (self.mycountermessage,text)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(["/usr/local/bin/MyPiStatusTextSend.py"," %02d %s" % (self.mycountermessage,text)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (stdoutData, stderrData) = p.communicate()
         rc = p.returncode
         if rc == 0:
