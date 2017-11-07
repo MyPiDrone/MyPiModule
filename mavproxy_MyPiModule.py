@@ -610,7 +610,7 @@ class MyPiModule(mp_module.MPModule):
 #        else:
 #           print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
         try:
-           self.MyPiStatusTextSendPipeIn.write(" %02d %s" % (self.mycountermessage,text))
+           self.MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
            print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
         except OSError:
            print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
