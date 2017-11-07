@@ -175,12 +175,11 @@ class MyPiModule(mp_module.MPModule):
         # convert to mp4 sample :
         # avconv -stats -y -r 49 -i Video-Tarot-2016-09-08_21:15.h264 -vcodec copy  Video-Tarot-2016-09-08_21:15.mp4
         ##########################################################################################################
-        MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSendPipeIn"
+        self.MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSendPipeIn"
         try:
-            os.mkfifo(MyPiStatusTextSendPipeIn)
+            os.mkfifo(self.MyPiStatusTextSendPipeIn)
         except OSError:
             pass
-        self.MyPiStatusTextSendPipeIn = open(MyPiStatusTextSendPipeIn, 'a')
         try:
             os.mkfifo(self.settings.mypipeout)
         except OSError:
@@ -610,7 +609,9 @@ class MyPiModule(mp_module.MPModule):
 #        else:
 #           print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
         try:
-           self.MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
+           MyPiStatusTextSendPipeIn = open(self.MyPiStatusTextSendPipeIn, 'a')
+           MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
+           close(MyPiStatusTextSendPipeIn)
            print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
         except OSError:
            print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
