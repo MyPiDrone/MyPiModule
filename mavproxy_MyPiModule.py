@@ -175,6 +175,12 @@ class MyPiModule(mp_module.MPModule):
         # convert to mp4 sample :
         # avconv -stats -y -r 49 -i Video-Tarot-2016-09-08_21:15.h264 -vcodec copy  Video-Tarot-2016-09-08_21:15.mp4
         ##########################################################################################################
+        MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSendPipeIn"
+        try:
+            os.mkfifo(MyPiStatusTextSendPipeIn)
+        except OSError:
+            pass
+        self.MyPiStatusTextSendPipeIn = open(MyPiStatusTextSendPipeIn, 'a')
         try:
             os.mkfifo(self.settings.mypipeout)
         except OSError:
@@ -596,12 +602,17 @@ class MyPiModule(mp_module.MPModule):
 #        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
 #        self.master2.close()
 #        #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-        p = subprocess.Popen(["/usr/local/bin/MyPiStatusTextSendCall.sh"," %02d %s" % (self.mycountermessage,text)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        (stdoutData, stderrData) = p.communicate()
-        rc = p.returncode
-        if rc == 0:
+#        p = subprocess.Popen(["/usr/local/bin/MyPiStatusTextSendCall.sh"," %02d %s" % (self.mycountermessage,text)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#        (stdoutData, stderrData) = p.communicate()
+#        rc = p.returncode
+#        if rc == 0:
+#           print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
+#        else:
+#           print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
+        try:
+           self.MyPiStatusTextSendPipeIn.write(" %02d %s" % (self.mycountermessage,text))
            print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
-        else:
+        except OSError:
            print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
         self.say(text)
         self.my_write_log("INFO",text)
