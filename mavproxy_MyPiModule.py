@@ -169,6 +169,18 @@ class MyPiModule(mp_module.MPModule):
         self.myseverity = 0
         self.mytext = "nulltext"
         ##########################################################################################################
+        # pipe StatusText
+        ##########################################################################################################
+        self.MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSendPipeIn"
+        try:
+            os.mkfifo(self.MyPiStatusTextSendPipeIn)
+        except OSError:
+            pass
+        try:
+            os.mkfifo(self.settings.mypipeout)
+        except OSError:
+            pass
+        ##########################################################################################################
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vb
         # log hare : /var/log/start_tx.log
