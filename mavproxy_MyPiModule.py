@@ -175,11 +175,6 @@ class MyPiModule(mp_module.MPModule):
         # convert to mp4 sample :
         # avconv -stats -y -r 49 -i Video-Tarot-2016-09-08_21:15.h264 -vcodec copy  Video-Tarot-2016-09-08_21:15.mp4
         ##########################################################################################################
-        self.MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSendPipeIn"
-        try:
-            os.mkfifo(self.MyPiStatusTextSendPipeIn)
-        except OSError:
-            pass
         try:
             os.mkfifo(self.settings.mypipeout)
         except OSError:
@@ -587,34 +582,20 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
-        print("self.settings.source_system=%s text=%s" % (self.settings.source_system,text))
-#        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
-#        #---------------------------------------------------
-#        #date2 = datetime.now().strftime(self.FORMAT2)
-#        #strutf8 = unicode("%s %s" % (date2,text))
-#        #strutf8 = unicode(" %02d %s" % (date2,text))
-#        #self.master2.mav.statustext_send(1, str(strutf8))
-#        #---------------------------------------------------
-#        #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
-#        #self.master2.mav.statustext_send(1, str(strutf8))
-#        # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
-#        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-#        self.master2.close()
-#        #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-#        p = subprocess.Popen(["/usr/local/bin/MyPiStatusTextSendCall.sh"," %02d %s" % (self.mycountermessage,text)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-#        (stdoutData, stderrData) = p.communicate()
-#        rc = p.returncode
-#        if rc == 0:
-#           print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
-#        else:
-#           print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
-        try:
-           MyPiStatusTextSendPipeIn = open(self.MyPiStatusTextSendPipeIn, 'a')
-           MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
-           close(MyPiStatusTextSendPipeIn)
-           print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
-        except OSError:
-           print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
+        print("self.settings.source_system=%s" % self.settings.source_system)
+        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+        #---------------------------------------------------
+        #date2 = datetime.now().strftime(self.FORMAT2)
+        #strutf8 = unicode("%s %s" % (date2,text))
+        #strutf8 = unicode(" %02d %s" % (date2,text))
+        #self.master2.mav.statustext_send(1, str(strutf8))
+        #---------------------------------------------------
+        #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
+        #self.master2.mav.statustext_send(1, str(strutf8))
+        # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
+        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+        self.master2.close()
+        #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         self.say(text)
         self.my_write_log("INFO",text)
         print ("INFO %02d %s" % (self.mycountermessage,text))
