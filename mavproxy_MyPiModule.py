@@ -594,8 +594,8 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
-        print("self.settings.source_system=%s" % self.settings.source_system)
-        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+        print("self.settings.source_system=%s text=%s" % (self.settings.source_system,text))
+#        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
         #strutf8 = unicode("%s %s" % (date2,text))
@@ -605,9 +605,16 @@ class MyPiModule(mp_module.MPModule):
         #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
         # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
-        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-        self.master2.close()
+#        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+#        self.master2.close()
         #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+        try:
+           MyPiStatusTextSendPipeIn = open(self.MyPiStatusTextSendPipeIn, 'a')
+           MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
+           close(MyPiStatusTextSendPipeIn)
+           print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
+        except OSError:
+           print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
         self.say(text)
         self.my_write_log("INFO",text)
         print ("INFO %02d %s" % (self.mycountermessage,text))
