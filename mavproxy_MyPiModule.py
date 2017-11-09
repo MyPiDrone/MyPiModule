@@ -176,6 +176,10 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(self.settings.mypipein)
         except OSError:
             pass
+        #------------------------------------------------------------------ 
+        # started by /usr/local/bin/start_MAVProxy_MyPiModule.sh
+        # because satustext_send dont work f stated by python mavproxy.py
+        #------------------------------------------------------------------ 
         #with open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as out, open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as err:
         #   subprocess.Popen(["/usr/bin/python","/usr/local/bin/MyPiStatusTextSendWithPipeIn.py",self.settings.mypipein],stdout=out,stderr=err)
         ##########################################################################################################
@@ -593,7 +597,7 @@ class MyPiModule(mp_module.MPModule):
     def my_statustext_send(self,text):
         self.mycountermessage += 1
         print("self.settings.source_system=%s text=%s" % (self.settings.source_system,text))
-#        self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+        ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
         #strutf8 = unicode("%s %s" % (date2,text))
@@ -603,9 +607,11 @@ class MyPiModule(mp_module.MPModule):
         #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
         #self.master2.mav.statustext_send(1, str(strutf8))
         # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
-#        self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-#        self.master2.close()
-        #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+        ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+        ###DONT WORK HERE### self.master2.close()
+        #-------------------------------------------------------------
+        # statustext_send work only outside mavproxy.py process
+        #-------------------------------------------------------------
         try:
            MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
            MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
