@@ -30,7 +30,7 @@ MSG="Log here /var/log/mavproxy_MyPiModule.log"
 echo $MSG ; echo $MSG >> /var/log/mavproxy_MyPiModule.log
 C=`ps -ef|grep -v grep|grep -c MyPiStatusTextSendWithPipeIn.py`
 if [ $C -eq 0 ]; then
-	nohup /usr/bin/python /usr/local/bin/MyPiStatusTextSendWithPipeIn.py /tmp/MyPiStatusTextSend.pipein /var/log/MyPiStatusTextSendWithPipeIn.log 2>&1 &
+	nohup /usr/bin/python /usr/local/bin/MyPiStatusTextSendWithPipeIn.py /tmp/MyPiStatusTextSend.pipein > /var/log/MyPiStatusTextSendWithPipeIn.log 2>&1 &
 	sleep 1
 fi
 date >> /var/log/mavproxy_MyPiModule.log
