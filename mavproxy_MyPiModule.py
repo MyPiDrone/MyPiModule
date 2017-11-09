@@ -172,12 +172,11 @@ class MyPiModule(mp_module.MPModule):
         ##########################################################################################################
         # pipe StatusText
         ##########################################################################################################
-        MyPiStatusTextSend="/tmp/MyPiStatusTextSend.pipein"
+        self.MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSend.pipein"
         try:
-            os.mkfifo(MyPiStatusTextSend)
+            os.mkfifo(self.MyPiStatusTextSendPipeIn)
         except OSError:
             pass
-        self.MyPiStatusTextSendPipeIn = open(MyPiStatusTextSend, 'a')
         ##########################################################################################################
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vb
@@ -608,9 +607,9 @@ class MyPiModule(mp_module.MPModule):
 #        self.master2.close()
         #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         try:
-           #self.MyPiStatusTextSendPipeIn = open("/tmp/MyPiStatusTextSend.pipein", 'a')
-           self.MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
-           #close(self.MyPiStatusTextSendPipeIn)
+           MyPiStatusTextSendPipeIn = open(self.MyPiStatusTextSendPipeIn, 'a')
+           MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
+           MyPiStatusTextSendPipeIn.close()
            print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
         except OSError:
            print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
