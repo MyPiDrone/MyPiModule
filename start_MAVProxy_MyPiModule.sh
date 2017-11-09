@@ -28,6 +28,11 @@ MSG="MAVProxy is started and MyPiModule,mode modules loaded."
 echo $MSG ; echo $MSG >> /var/log/mavproxy_MyPiModule.log
 MSG="Log here /var/log/mavproxy_MyPiModule.log"
 echo $MSG ; echo $MSG >> /var/log/mavproxy_MyPiModule.log
+C=`ps -ef|grep -v grep|grep -c MyPiStatusTextSendWithPipeIn.py`
+if [ $C -eq 0 ]; then
+	nohup /usr/bin/python /usr/local/bin/MyPiStatusTextSendWithPipeIn.py /tmp/MyPiStatusTextSend.pipein /var/log/MyPiStatusTextSendWithPipeIn.log 2>&1 &
+	sleep 1
+fi
 date >> /var/log/mavproxy_MyPiModule.log
 nohup /usr/bin/python /usr/local/bin/mavproxy.py --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600 --daemon --show-errors --default-modules='MyPiModule,mode' 1>>/var/log/mavproxy_MyPiModule.log 2>&1 &
 MSG="MAVProxy started PID $!"
