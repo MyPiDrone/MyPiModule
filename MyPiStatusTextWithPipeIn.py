@@ -5,7 +5,7 @@ import sys
 import time
 import os
 from pymavlink import mavutil
-MyPipeIn="/tmp/MyPiStatusTextSendPipeIn"
+MyPipeIn="/tmp/MyPiStatusTextSend.pipein"
 try:
    os.mkfifo(MyPipeIn)
 except OSError:
