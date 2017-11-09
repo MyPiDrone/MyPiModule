@@ -607,9 +607,9 @@ class MyPiModule(mp_module.MPModule):
 #        self.master2.close()
         #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         try:
-           MyPiStatusTextSendPipeIn = open("/tmp/MyPiStatusTextSend.pipein", 'a')
-           #MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
-           close(MyPiStatusTextSendPipeIn)
+           self.MyPiStatusTextSendPipeIn = open("/tmp/MyPiStatusTextSend.pipein", 'a')
+           self.MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
+           close(self.MyPiStatusTextSendPipeIn)
            print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
         except OSError:
            print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
