@@ -82,6 +82,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
         self.settings.append(MPSetting('myvideopath', str, "/root/fpv/videos", 'output video directory'))
         self.settings.append(MPSetting('mypipeout', str, "/tmp/MyPiCamera.pipeout", 'Named pipe for tx'))
+        self.settings.append(MPSetting('mypipein', str, "/tmp/MyPiStatusTextSend.pipein", 'Named pipe for StatusTextSend'))
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.5"
         self.myinit = False
@@ -171,9 +172,8 @@ class MyPiModule(mp_module.MPModule):
         ##########################################################################################################
         # pipe StatusText
         ##########################################################################################################
-        self.MyPiStatusTextSend="/tmp/MyPiStatusTextSend.pipein"
         try:
-            os.mkfifo(self.MyPiStatusTextSend)
+            os.mkfifo(self.settings.mypipein)
         except OSError:
             pass
         ##########################################################################################################
@@ -605,13 +605,13 @@ class MyPiModule(mp_module.MPModule):
 #        self.master2.close()
         #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         try:
-           MyPiStatusTextSendPipeIn = open(self.MyPiStatusTextSend, 'a')
+           MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
            MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
            MyPiStatusTextSendPipeIn.close()
            print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
         except OSError:
            print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
-        self.say(text)
+        #self.say(text)
         self.my_write_log("INFO",text)
         print ("INFO %02d %s" % (self.mycountermessage,text))
 
@@ -875,7 +875,7 @@ class MyPiModule(mp_module.MPModule):
                        msg = "MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                        self.my_write_log("INFO",msg)
                else:
-                   if self.net_up_prev != self.net_up: self.my_statustext_send("%s upX %s" % (self.settings.myinterfaceadmin,self.net_ip_current))
+                   if self.net_up_prev != self.net_up: self.my_statustext_send("%s up %s" % (self.settings.myinterfaceadmin,self.net_ip_current))
                    self.net_up_prev = self.net_up
                msg = "MyRC%sRaw %s LOW : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
