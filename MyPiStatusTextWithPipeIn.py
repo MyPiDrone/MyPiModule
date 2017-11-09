@@ -20,7 +20,9 @@ with open(MyPipeIn, "r") as p:
       if text != "":
          print("Input %s" % text)
          master2.mav.statustext_send(1, "%s" % text)
-      time.sleep(2)
+         time.sleep(4)
+      else:
+         time.sleep(2)
 f.close()
 master2.close()
 
