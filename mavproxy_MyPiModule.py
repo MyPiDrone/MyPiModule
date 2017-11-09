@@ -171,7 +171,7 @@ class MyPiModule(mp_module.MPModule):
         ##########################################################################################################
         # pipe StatusText
         ##########################################################################################################
-        MyPiStatusTextSend="/tmp/MyPiStatusTextSendPipeIn"
+        MyPiStatusTextSend="/tmp/MyPiStatusTextSend.pipein"
         try:
             os.mkfifo(MyPiStatusTextSend)
             self.MyPiStatusTextSendPipeIn = open(MyPiStatusTextSend, 'a')
