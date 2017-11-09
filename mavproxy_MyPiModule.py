@@ -532,7 +532,6 @@ class MyPiModule(mp_module.MPModule):
             if rc == 0:
                 self.net_ip_current = stdoutData.rstrip()
                 self.net_up = True
-                print("net rc=%s %s" % (rc,self.net_ip_current))
             else:
                 self.net_ip_current = "null" 
                 self.net_up = False 
