@@ -176,8 +176,8 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(self.settings.mypipein)
         except OSError:
             pass
-        #with open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as out, open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as err:
-        #   subprocess.Popen(["/usr/bin/python","/usr/local/bin/MyPiStatusTextSendWithPipeIn.py",self.settings.mypipein],stdout=out,stderr=err)
+        with open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as out, open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as err:
+           subprocess.Popen(["/usr/bin/python","/usr/local/bin/MyPiStatusTextSendWithPipeIn.py",self.settings.mypipein],stdout=out,stderr=err)
         ##########################################################################################################
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vb
