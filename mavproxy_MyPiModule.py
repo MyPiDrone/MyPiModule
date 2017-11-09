@@ -529,6 +529,7 @@ class MyPiModule(mp_module.MPModule):
             p = subprocess.Popen(["/usr/local/bin/manage_network.sh","status",self.settings.myinterfaceadmin], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (stdoutData, stderrData) = p.communicate()
             rc = p.returncode
+            print("net rc=%s" % rc)
             if rc == 0:
                 self.net_ip_current = stdoutData.rstrip()
                 self.net_up = True
