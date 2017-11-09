@@ -82,7 +82,8 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
         self.settings.append(MPSetting('myvideopath', str, "/root/fpv/videos", 'output video directory'))
         self.settings.append(MPSetting('mypipeout', str, "/tmp/MyPiCamera.pipeout", 'Named pipe for tx'))
-        self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
+        #self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
+        self.settings.append(MPSetting('mylogverbose', bool, True, 'Verbose log'))
         self.myversion = "2.5"
         self.myinit = False
         self.mylogverbose = self.settings.mylogverbose
