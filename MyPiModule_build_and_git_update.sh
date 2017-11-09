@@ -57,7 +57,7 @@ cd ${MY_DIR_MYPIMODULE}
 systemctl stop mavproxy
 C=`ps -ef|grep -v grep|grep -c MyPiStatusTextSendWithPipeIn.py`
 if [ $C -eq 0 ]; then
-        nohup /usr/bin/python /usr/local/bin/MyPiStatusTextSendWithPipeIn.py /tmp/MyPiStatusTextSend.pipein /var/log/MyPiStatusTextSendWithPipeIn.log 2>&1 &
+        nohup /usr/bin/python /usr/local/bin/MyPiStatusTextSendWithPipeIn.py /tmp/MyPiStatusTextSend.pipein > /var/log/MyPiStatusTextSendWithPipeIn.log 2>&1 &
 	sleep 1
 fi
 #nohup /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vbr 1>>/var/log/start_tx_with_video_recording.log 2>&1 &
