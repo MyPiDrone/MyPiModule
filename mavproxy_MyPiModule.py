@@ -82,8 +82,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mylog', str, "/var/log/mavproxy_MyPiModule.log", 'output filename log'))
         self.settings.append(MPSetting('myvideopath', str, "/root/fpv/videos", 'output video directory'))
         self.settings.append(MPSetting('mypipeout', str, "/tmp/MyPiCamera.pipeout", 'Named pipe for tx'))
-        #self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
-        self.settings.append(MPSetting('mylogverbose', bool, True, 'Verbose log'))
+        self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
         self.myversion = "2.5"
         self.myinit = False
         self.mylogverbose = self.settings.mylogverbose
@@ -877,10 +876,8 @@ class MyPiModule(mp_module.MPModule):
                        msg = "MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                        self.my_write_log("INFO",msg)
                else:
-                   print("<<<< net_up_prev %s net_up %s" % (self.net_up_prev,self.net_up))
-                   if self.net_up_prev != self.net_up: self.my_statustext_send("%s upX %s %s %s" % (self.settings.myinterfaceadmin,self.net_ip_current,self.net_up_prev,self.net_up))
+                   if self.net_up_prev != self.net_up: self.my_statustext_send("%s upX %s" % (self.settings.myinterfaceadmin,self.net_ip_current))
                    self.net_up_prev = self.net_up
-                   print(">>>> net_up_prev %s net_up %s" % (self.net_up_prev,self.net_up))
                msg = "MyRC%sRaw %s LOW : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
            else:
