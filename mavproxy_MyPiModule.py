@@ -876,9 +876,10 @@ class MyPiModule(mp_module.MPModule):
                        msg = "MyRC%sRaw %s HIGH : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                        self.my_write_log("INFO",msg)
                else:
+                   print("<<<< net_up_prev %s net_up %s" % (self.net_up_prev,self.net_up))
                    if self.net_up_prev != self.net_up: self.my_statustext_send("%s upX %s %s %s" % (self.settings.myinterfaceadmin,self.net_ip_current,self.net_up_prev,self.net_up))
                    self.net_up_prev = self.net_up
-                   print("net_up_prev %s net_up %s" % (self.net_up_prev,self.net_up))
+                   print(">>>> net_up_prev %s net_up %s" % (self.net_up_prev,self.net_up))
                msg = "MyRC%sRaw %s LOW : interface %s : request up %s : current up %s" % (self.settings.myrcnet,self.myrcraw[self.settings.myrcnet],self.settings.myinterfaceadmin,self.net_up_request,self.net_up)
                self.my_write_log("INFO",msg)
            else:
