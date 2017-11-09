@@ -172,9 +172,9 @@ class MyPiModule(mp_module.MPModule):
         ##########################################################################################################
         # pipe StatusText
         ##########################################################################################################
-        self.MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSend.pipein"
+        self.MyPiStatusTextSend="/tmp/MyPiStatusTextSend.pipein"
         try:
-            os.mkfifo(self.MyPiStatusTextSendPipeIn)
+            os.mkfifo(self.MyPiStatusTextSend)
         except OSError:
             pass
         ##########################################################################################################
@@ -607,7 +607,7 @@ class MyPiModule(mp_module.MPModule):
 #        self.master2.close()
         #####ReTEST#####self.master.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         try:
-           MyPiStatusTextSendPipeIn = open(self.MyPiStatusTextSendPipeIn, 'a')
+           MyPiStatusTextSendPipeIn = open(self.MyPiStatusTextSend, 'a')
            MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
            MyPiStatusTextSendPipeIn.close()
            print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
