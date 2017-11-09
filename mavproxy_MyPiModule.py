@@ -171,14 +171,10 @@ class MyPiModule(mp_module.MPModule):
         ##########################################################################################################
         # pipe StatusText
         ##########################################################################################################
-        MyPiStatusTextSendPipeIn="/tmp/MyPiStatusTextSendPipeIn"
+        MyPiStatusTextSend="/tmp/MyPiStatusTextSendPipeIn"
         try:
-            os.mkfifo(MyPiStatusTextSendPipeIn)
-            self.MyPiStatusTextSendPipeIn = open(MyPiStatusTextSendPipeIn, 'a')
-        except OSError:
-            pass
-        try:
-            os.mkfifo(self.settings.mypipeout)
+            os.mkfifo(MyPiStatusTextSend)
+            self.MyPiStatusTextSendPipeIn = open(MyPiStatusTextSend, 'a')
         except OSError:
             pass
         ##########################################################################################################
