@@ -85,6 +85,7 @@ cp ${MY_DIR_MYPIMODULE}/start_MAVProxy_MyPiModule.sh                       /usr/
 #--------------------------------------------
 cp ${MY_DIR_MYPIMODULE}/start_tx_and_recording_with_picamera_video_input.sh                /usr/local/bin/
 cp ${MY_DIR_MYPIMODULE}/manage_network.sh                                  /usr/local/bin/
+cp ${MY_DIR_MYPIMODULE}/MyPiStatusTextSendWithPipeIn.py                            /usr/local/bin/
 #
 #NOT_USED#cp ${MY_DIR_MYPIMODULE}/start_tx_and_recording_with_raspivid_video_input_on_wifiap.sh      /usr/local/bin/
 #NOT_USED#cp ${MY_DIR_MYPIMODULE}/start_tx_and_recording_with_raspivid_video_input.sh                /usr/local/bin/
