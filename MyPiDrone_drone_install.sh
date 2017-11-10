@@ -18,6 +18,11 @@
 # set langage 
 # set picamera enable
 # reboot
+#----------------------------------------------------------------------------------------------------
+# country BO: DFS-UNSET (2302 - 2742 @ 40), (N/A, 30), (N/A) (4910 - 6110 @ 160), (N/A, 30), (N/A)
+# to use 2302 wifi broadcast
+# change country=BO in file /boot/wpa_supplicant.conf
+# reboot
 #-------------------------------------------------------
 # change  /etc/ssh/sshd_config
 # PermitRootLogin yes
@@ -102,6 +107,12 @@ cd ${MY_DIR_MYPIMODULE}
 ln -sf MyPiModule_build_and_git_update.sh build.sh
 pip install psutil
 pip install picamera
+C=`ps -ef|grep -v grep|grep -c MyPiStatusTextSendWithPipeIn.py`
+if [ $C -eq 0 ]; then
+        nohup /usr/bin/python /usr/local/bin/MyPiStatusTextSendWithPipeIn.py /tmp/MyPiStatusTextSend.pipein > /var/log/MyPiStatusTextSendWithPipeIn.log 2>&1 &
+	sleep 1
+fi
 echo "/usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors"
 ### load only MyPiModule and mode
 /usr/bin/python $MAVPROXY --master=udp:127.0.0.1:14550 --quadcopter --out=/dev/ttyUSB0,57600  --default-modules='MyPiModule,mode' --show-errors
+##THE END##
