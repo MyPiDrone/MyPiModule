@@ -16,7 +16,8 @@ try:
 except OSError:
    pass
 source_system=255
-master = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=source_system)
+# prefer reopen mavlink connection for each statustext_send
+#master = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=source_system)
 print("Waiting input test here %s (pipe)" % MyPipeIn)
 with open(MyPipeIn, "r") as p:
    while True:
@@ -24,10 +25,12 @@ with open(MyPipeIn, "r") as p:
       if text != "":
          print("Input %s" % text)
          # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
+         master = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=source_system)
          master.mav.statustext_send(1, "%s" % text)
+         master.close()
          time.sleep(4)
       else:
          time.sleep(2)
 p.close()
-master.close()
+#master.close()
 
