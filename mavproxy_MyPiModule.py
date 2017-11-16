@@ -1168,10 +1168,10 @@ class MyPiModule(mp_module.MPModule):
 #           self.battery_period_trigger += 1
 #           self.my_battery_check()
 #
-#    def idle_task(self):
-#        '''handle missing parameters'''
-#        myvehicle_name = self.vehicle_name
-#        #print ("self.vehicle_name=%s" % self.vehicle_name)
+    def idle_task(self):
+        '''handle missing parameters'''
+        myvehicle_name = self.vehicle_name
+        print ("self.vehicle_name=%s" % self.vehicle_name)
 
 def init(mpstate):
     '''initialise module'''
