@@ -1177,8 +1177,10 @@ class MyPiModule(mp_module.MPModule):
           self.last_statustext_send = time.time()
           '''handle missing parameters'''
           myvehicle_name = self.vehicle_name
-          print ("self.vehicle_name=%s self.last_statustext_send=%s" % (self.vehicle_name,self.last_statustext_send))
-          self.master.mav.statustext_send(1, " %s" % self.last_statustext_send)
+          print ("self.vehicle_name=%s self.last_statustext_send=%04d" % (self.vehicle_name,self.last_statustext_send))
+          master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+          master2.mav.statustext_send(1, " %04d" % self.last_statustext_send)
+          master2.close()
 
 def init(mpstate):
     '''initialise module'''
