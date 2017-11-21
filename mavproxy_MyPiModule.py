@@ -157,7 +157,7 @@ class MyPiModule(mp_module.MPModule):
         self.last_init_time = time.time()
         #
         self.last_statustext_send = time.time()
-        self.int_statustext_send = 10
+        self.int_statustext_send = 20
         #
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -1177,7 +1177,7 @@ class MyPiModule(mp_module.MPModule):
           self.last_statustext_send = time.time()
           '''handle missing parameters'''
           myvehicle_name = self.vehicle_name
-          print ("self.vehicle_name=%s" % self.vehicle_name)
+          print ("self.vehicle_name=%s self.last_statustext_send=%s" % (self.vehicle_name,self.last_statustext_send))
           self.master.mav.statustext_send(1, " %s" % self.last_statustext_send)
 
 def init(mpstate):
