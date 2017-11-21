@@ -155,6 +155,10 @@ class MyPiModule(mp_module.MPModule):
         self.last_rc_check_time = time.time()
         self.last_seq_time = time.time()
         self.last_init_time = time.time()
+        #
+        self.last_statustext_send = time.time()
+        self.int_statustext_send = 10
+        #
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
         #self.FORMAT2 = '%Hh%Mm%Ss'
@@ -1167,11 +1171,14 @@ class MyPiModule(mp_module.MPModule):
 #      if self.battery_period.trigger():
 #           self.battery_period_trigger += 1
 #           self.my_battery_check()
-#
-#    def idle_task(self):
-#        '''handle missing parameters'''
-#        myvehicle_name = self.vehicle_name
-#        print ("self.vehicle_name=%s" % self.vehicle_name)
+
+    def idle_task(self):
+       if (time.time() > self.last_statustext_send + self.int_statustext_send):
+          self.last_statustext_send = time.time()
+          '''handle missing parameters'''
+          myvehicle_name = self.vehicle_name
+          print ("self.vehicle_name=%s" % self.vehicle_name)
+          self.master.mav.statustext_send(1, " %s" % self.last_statustext_send)
 
 def init(mpstate):
     '''initialise module'''
