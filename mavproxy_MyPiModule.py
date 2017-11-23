@@ -1200,6 +1200,8 @@ class MyPiModule(mp_module.MPModule):
              for i in range(2,self.statustext_send_slot_free):
                 self.vehicle_name,self.statustext_send_slot_text[i-1]=self.vehicle_name,self.statustext_send_slot_text[i]
              self.statustext_send_slot_free -= 1
+          else:
+             print ("self.vehicle_name=%s statustext_send_slot_text[1]=%s statustext_send_slot_text=%s" % (self.vehicle_name,text,self.statustext_send_slot_free))
                 
                 
 
