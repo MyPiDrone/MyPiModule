@@ -1191,7 +1191,7 @@ class MyPiModule(mp_module.MPModule):
                 MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
                 MyPiStatusTextSendPipeIn.write("%s" % text)
                 MyPiStatusTextSendPipeIn.close()
-                print("Info StatusTextSend text)
+                print("Info StatusTextSend %s" % text)
              except OSError:
                 print("Error StatusTextSend %s" % text))
              #self.say(text)
