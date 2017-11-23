@@ -158,6 +158,8 @@ class MyPiModule(mp_module.MPModule):
         #
         self.last_statustext_send = time.time()
         self.int_statustext_send = 20
+        self.statustext_send_slot_free = 0
+        self.statustext_send_slot_text[self.statustext_send_slot_free] = ""
         #
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -613,19 +615,21 @@ class MyPiModule(mp_module.MPModule):
         # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
         ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         ###DONT WORK HERE### self.master2.close()
+        self.statustext_send_slot_free += 1
+        self.statustext_send_slot_text[self.statustext_send_slot_free] = " %02d %s\n" % (self.mycountermessage,text)
         #-------------------------------------------------------------
         # statustext_send work only outside mavproxy.py process
         #-------------------------------------------------------------
-        try:
-           MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
-           MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
-           MyPiStatusTextSendPipeIn.close()
-           print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
-        except OSError:
-           print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
+        #try:
+        #   MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
+        #   MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
+        #   MyPiStatusTextSendPipeIn.close()
+        #   print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
+        #except OSError:
+        #   print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
         #self.say(text)
-        self.my_write_log("INFO",text)
-        print ("INFO %02d %s" % (self.mycountermessage,text))
+        #self.my_write_log("INFO",text)
+        #print ("INFO %02d %s" % (self.mycountermessage,text))
 
     def my_subprocess(self,cmd):
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -1177,10 +1181,27 @@ class MyPiModule(mp_module.MPModule):
           self.last_statustext_send = time.time()
           '''handle missing parameters'''
           myvehicle_name = self.vehicle_name
-          print ("self.vehicle_name=%s self.last_statustext_send=%04d" % (self.vehicle_name,self.last_statustext_send))
-          master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
-          master2.mav.statustext_send(1, " %04d" % self.last_statustext_send)
-          master2.close()
+          if self.statustext_send_slot_free >= 1:
+             text = self.statustext_send_slot_text[1]
+             print ("self.vehicle_name=%s statustext_send_slot_text[1]=%s statustext_send_slot_text=%s" % (self.vehicle_name,text,self.statustext_send_slot_free))
+             #-------------------------------------------------------------
+             # statustext_send work only outside mavproxy.py process
+             #-------------------------------------------------------------
+             try:
+                MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
+                MyPiStatusTextSendPipeIn.write("%s % text)
+                MyPiStatusTextSendPipeIn.close()
+                print("Info StatusTextSend text)
+             except OSError:
+                print("Error StatusTextSend %s" % text))
+             #self.say(text)
+             self.my_write_log("INFO",text)
+             print ("INFO %02d %s" % (self.mycountermessage,text))
+             for i in range(2,self.statustext_send_slot_free):
+                self.vehicle_name,self.statustext_send_slot_text[i-1]=self.vehicle_name,self.statustext_send_slot_text[i]
+             self.statustext_send_slot_free -= 1
+                
+                
 
 def init(mpstate):
     '''initialise module'''
