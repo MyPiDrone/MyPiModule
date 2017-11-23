@@ -1177,6 +1177,7 @@ class MyPiModule(mp_module.MPModule):
 #           self.my_battery_check()
 
     def idle_task(self):
+       print ("statustext_send_slot_text[1]=%s statustext_send_slot_text=%s" % (self.statustext_send_slot_text[1],self.statustext_send_slot_free))
        if (time.time() > self.last_statustext_send + self.int_statustext_send):
           self.last_statustext_send = time.time()
           '''handle missing parameters'''
