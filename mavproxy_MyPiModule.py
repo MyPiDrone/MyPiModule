@@ -1193,7 +1193,7 @@ class MyPiModule(mp_module.MPModule):
                 MyPiStatusTextSendPipeIn.close()
                 print("Info StatusTextSend %s" % text)
              except OSError:
-                print("Error StatusTextSend %s" % text))
+                print("Error StatusTextSend %s" % text)
              #self.say(text)
              self.my_write_log("INFO",text)
              print ("INFO %02d %s" % (self.mycountermessage,text))
