@@ -615,7 +615,7 @@ class MyPiModule(mp_module.MPModule):
         # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
         ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         ###DONT WORK HERE### self.master2.close()
-        #self.statustext_send_slot_free += 1
+        self.statustext_send_slot_free += 1
         #self.statustext_send_slot_text[self.statustext_send_slot_free] = " %02d %s\n" % (self.mycountermessage,text)
         #-------------------------------------------------------------
         # statustext_send work only outside mavproxy.py process
