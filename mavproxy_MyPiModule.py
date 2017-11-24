@@ -159,7 +159,7 @@ class MyPiModule(mp_module.MPModule):
         self.last_statustext_send = time.time()
         self.int_statustext_send = 2
         self.statustext_send_slot_free = 0
-        self.statustext_send_slot_text = [''] * 30
+        self.statustext_send_slot_text = []
         #
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -1186,7 +1186,7 @@ class MyPiModule(mp_module.MPModule):
           myvehicle_name = self.vehicle_name
           if self.statustext_send_slot_free >= 1:
              text = self.statustext_send_slot_text[1]
-             print ("self.vehicle_name=%s statustext_send_slot_text[1]=%s statustext_send_slot_text=%s" % (self.vehicle_name,text,self.statustext_send_slot_free))
+             print ("self.vehicle_name=%s WRITE pipe statustext_send_slot_free=%s statustext_send_slot_text[1]=%s" % (self.vehicle_name,self.statustext_send_slot_free,text))
              #-------------------------------------------------------------
              # statustext_send work only outside mavproxy.py process
              #-------------------------------------------------------------
