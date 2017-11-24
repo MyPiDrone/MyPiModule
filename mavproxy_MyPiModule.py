@@ -604,11 +604,10 @@ class MyPiModule(mp_module.MPModule):
         self.mycountermessage += 1
         self.statustext_send_slot_free += 1
         print("self.settings.source_system=%s mycountermessage=%s text=%s statustext_send_slot_free=%s" % (self.settings.source_system,self.mycountermessage,text,self.statustext_send_slot_free))
-        self.statustext_send_slot_text.append[self.statustext_send_slot_free] = " %02d %s\n" % (self.mycountermessage,text)
-        #try:
-        #   self.statustext_send_slot_text.append[self.statustext_send_slot_free] = " %02d %s\n" % (self.mycountermessage,text)
-        #except NameError:
-        #   self.statustext_send_slot_text.append(" %02d %s\n" % (self.mycountermessage,text))
+        try:
+           self.statustext_send_slot_text[self.statustext_send_slot_free] = " %02d %s\n" % (self.mycountermessage,text)
+        except NameError:
+           self.statustext_send_slot_text.append(" %02d %s\n" % (self.mycountermessage,text))
         ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
