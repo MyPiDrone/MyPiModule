@@ -159,7 +159,7 @@ class MyPiModule(mp_module.MPModule):
         self.last_statustext_send = time.time()
         self.int_statustext_send = 2
         self.statustext_send_slot_free = 0
-        self.statustext_send_slot_text = []
+        self.statustext_send_slot_text = [''] * 30
         #
         self.battery_period = mavutil.periodic_event(5)
         self.FORMAT = '%Y-%m-%d %H:%M:%S'
