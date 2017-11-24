@@ -602,7 +602,9 @@ class MyPiModule(mp_module.MPModule):
 
     def my_statustext_send(self,text):
         self.mycountermessage += 1
-        print("self.settings.source_system=%s mycountermessage=%s text=%s" % (self.settings.source_system,self.mycountermessage,text))
+        self.statustext_send_slot_free += 1
+        print("self.settings.source_system=%s mycountermessage=%s text=%s statustext_send_slot_free=%s" % (self.settings.source_system,self.mycountermessage,text,self.statustext_send_slot_free))
+        #self.statustext_send_slot_text[self.statustext_send_slot_free] = " %02d %s\n" % (self.mycountermessage,text)
         ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
@@ -615,8 +617,6 @@ class MyPiModule(mp_module.MPModule):
         # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
         ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
         ###DONT WORK HERE### self.master2.close()
-        self.statustext_send_slot_free += 1
-        #self.statustext_send_slot_text[self.statustext_send_slot_free] = " %02d %s\n" % (self.mycountermessage,text)
         #-------------------------------------------------------------
         # statustext_send work only outside mavproxy.py process
         #-------------------------------------------------------------
