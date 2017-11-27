@@ -1183,8 +1183,8 @@ class MyPiModule(mp_module.MPModule):
           myvehicle_name = self.vehicle_name
           if self.statustext_send_slot_free >= 1:
              text = self.statustext_send_slot_text.pop()
-             self.statustext_send_slot_free -= 1
              print ("self.vehicle_name=%s WRITE pipe statustext_send_slot_free=%s text=%s" % (self.vehicle_name,self.statustext_send_slot_free,text))
+             self.statustext_send_slot_free -= 1
              #-------------------------------------------------------------
              # statustext_send work only outside mavproxy.py process
              #-------------------------------------------------------------
@@ -1199,7 +1199,7 @@ class MyPiModule(mp_module.MPModule):
              self.my_write_log("INFO",text)
              print ("INFO %02d %s" % (self.mycountermessage,text))
           else:
-             print ("self.vehicle_name=%s statustext_send_slot_free=%s" % (self.vehicle_name,text,self.statustext_send_slot_free))
+             print ("self.vehicle_name=%s statustext_send_slot_free=%s" % (self.vehicle_name,self.statustext_send_slot_free))
                 
 
 def init(mpstate):
