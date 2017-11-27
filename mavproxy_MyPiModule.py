@@ -604,7 +604,8 @@ class MyPiModule(mp_module.MPModule):
         self.mycountermessage += 1
         self.statustext_send_slot_free += 1
         self.statustext_send_slot_text.append(" %02d %s\n" % (self.mycountermessage,text))
-        print("INFO mycountermessage=%s text='%s' statustext_send_slot_free=%s" % (self.mycountermessage,text,self.statustext_send_slot_free))
+        if self.mydebug:
+           print("INFO mycountermessage=%s text='%s' statustext_send_slot_free=%s" % (self.mycountermessage,text,self.statustext_send_slot_free))
         ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
         #---------------------------------------------------
         #date2 = datetime.now().strftime(self.FORMAT2)
@@ -1183,7 +1184,8 @@ class MyPiModule(mp_module.MPModule):
           #myvehicle_name = self.vehicle_name
           if self.statustext_send_slot_free >= 1:
              text = self.statustext_send_slot_text.pop(0)
-             print ("INFO WRITE pipe statustext_send_slot_free=%s text='%s'" % (self.statustext_send_slot_free,text))
+             if self.mydebug:
+                print ("INFO WRITE pipe statustext_send_slot_free=%s text='%s'" % (self.statustext_send_slot_free,text))
              self.statustext_send_slot_free -= 1
              #-------------------------------------------------------------
              # statustext_send work only outside mavproxy.py process
@@ -1196,7 +1198,7 @@ class MyPiModule(mp_module.MPModule):
              except OSError:
                 print("Error StatusTextSend %s" % text)
              #self.say(text)
-             #self.my_write_log("INFO",text)
+             self.my_write_log("INFO",text)
              #print ("INFO %s" % text)
 
 def init(mpstate):
