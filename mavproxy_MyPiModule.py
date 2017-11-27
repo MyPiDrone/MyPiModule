@@ -1182,8 +1182,7 @@ class MyPiModule(mp_module.MPModule):
           '''handle missing parameters'''
           #myvehicle_name = self.vehicle_name
           if self.statustext_send_slot_free >= 1:
-             text = self.statustext_send_slot_text[0]
-             del self.statustext_send_slot_text[0]
+             text = self.statustext_send_slot_text.pop(0)
              print ("INFO WRITE pipe statustext_send_slot_free=%s text='%s'" % (self.statustext_send_slot_free,text))
              self.statustext_send_slot_free -= 1
              #-------------------------------------------------------------
