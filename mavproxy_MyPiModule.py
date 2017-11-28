@@ -606,31 +606,6 @@ class MyPiModule(mp_module.MPModule):
         self.statustext_send_slot_text.append(" %02d %s\n" % (self.mycountermessage,text))
         if self.mydebug:
            print("INFO mycountermessage=%s text='%s' statustext_send_slot_free=%s" % (self.mycountermessage,text,self.statustext_send_slot_free))
-        ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
-        #---------------------------------------------------
-        #date2 = datetime.now().strftime(self.FORMAT2)
-        #strutf8 = unicode("%s %s" % (date2,text))
-        #strutf8 = unicode(" %02d %s" % (date2,text))
-        #self.master2.mav.statustext_send(1, str(strutf8))
-        #---------------------------------------------------
-        #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
-        #self.master2.mav.statustext_send(1, str(strutf8))
-        # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
-        ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-        ###DONT WORK HERE### self.master2.close()
-        #-------------------------------------------------------------
-        # statustext_send work only outside mavproxy.py process
-        #-------------------------------------------------------------
-        #try:
-        #   MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
-        #   MyPiStatusTextSendPipeIn.write(" %02d %s\n" % (self.mycountermessage,text))
-        #   MyPiStatusTextSendPipeIn.close()
-        #   print("Info StatusTextSend %02d %s" % (self.mycountermessage,text))
-        #except OSError:
-        #   print("Error StatusTextSend %02d %s" % (self.mycountermessage,text))
-        #self.say(text)
-        #self.my_write_log("INFO",text)
-        #print ("INFO %02d %s" % (self.mycountermessage,text))
 
     def my_subprocess(self,cmd):
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -1197,9 +1172,26 @@ class MyPiModule(mp_module.MPModule):
                 print("Info StatusTextSend %s" % text)
              except OSError:
                 print("Error StatusTextSend %s" % text)
+             # 
+             ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+             # 
+             #---------------------------------------------------
+             #date2 = datetime.now().strftime(self.FORMAT2)
+             #strutf8 = unicode("%s %s" % (date2,text))
+             #strutf8 = unicode(" %02d %s" % (date2,text))
+             #self.master2.mav.statustext_send(1, str(strutf8))
+             #---------------------------------------------------
+             #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
+             #self.master2.mav.statustext_send(1, str(strutf8))
+             #
+             # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
+             ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+             ###DONT WORK HERE### self.master2.close()
+             #
              #self.say(text)
-             self.my_write_log("INFO",text)
              #print ("INFO %s" % text)
+             #
+             self.my_write_log("INFO",text)
 
 def init(mpstate):
     '''initialise module'''
