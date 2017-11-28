@@ -1164,7 +1164,7 @@ class MyPiModule(mp_module.MPModule):
                 MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
                 MyPiStatusTextSendPipeIn.write("%s" % text)
                 MyPiStatusTextSendPipeIn.close()
-                print("Info StatusTextSend (stack fifo=%s) text='%s'" % (text,self.statustext_send_slot_free,text))
+                print("Info StatusTextSend (stack fifo=%s) text='%s'" % (self.statustext_send_slot_free,text))
              except OSError:
                 print("Error StatusTextSend (stack fifo=%s) pipe open failed text='%s'" % (self.statustext_send_slot_free,text))
              self.statustext_send_slot_free -= 1
