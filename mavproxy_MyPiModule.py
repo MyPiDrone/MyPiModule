@@ -1162,9 +1162,10 @@ class MyPiModule(mp_module.MPModule):
              if self.mydebug:
                 print ("INFO WRITE pipe statustext_send_slot_free=%s text='%s'" % (self.statustext_send_slot_free,text))
              self.statustext_send_slot_free -= 1
-             #-------------------------------------------------------------
+             #---------------------------------------------------------------------------------------------------------
              # statustext_send work only outside mavproxy.py process
-             #-------------------------------------------------------------
+             # managed by daemon /usr/local/bin/MyPiStatusTextSendWithPipeIn.py started outside mavproxy.py process
+             #---------------------------------------------------------------------------------------------------------
              try:
                 MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
                 MyPiStatusTextSendPipeIn.write("%s" % text)
