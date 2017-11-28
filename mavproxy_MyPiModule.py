@@ -393,6 +393,7 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             # myTText_Attitude_Roll draw Roll and Pitch
             ##################################################################################
+            print (">>>> %u" % self.myRoll)
             if self.myRoll > 5 and self.myRoll < 15:
                 myTText_Attitude_Roll="%u ^___---+---``````v" % self.myRoll
             elif self.myRoll > 15:
@@ -1164,9 +1165,9 @@ class MyPiModule(mp_module.MPModule):
                 MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
                 MyPiStatusTextSendPipeIn.write("%s" % text)
                 MyPiStatusTextSendPipeIn.close()
-                print("Info StatusTextSend (stack fifo=%s) text='%s'" % (self.statustext_send_slot_free,text))
+                print("Info StatusTextSend (stack fifo=%s) text=%s" % (self.statustext_send_slot_free,text))
              except OSError:
-                print("Error StatusTextSend (stack fifo=%s) pipe open failed text='%s'" % (self.statustext_send_slot_free,text))
+                print("Error StatusTextSend (stack fifo=%s) pipe open failed text=%s" % (self.statustext_send_slot_free,text))
              self.statustext_send_slot_free -= 1
              # 
              #---------------------------------------------------
