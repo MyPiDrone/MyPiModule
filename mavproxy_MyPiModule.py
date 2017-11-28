@@ -182,12 +182,6 @@ class MyPiModule(mp_module.MPModule):
             os.mkfifo(self.settings.mypipein)
         except OSError:
             pass
-        #------------------------------------------------------------------ 
-        # started by /usr/local/bin/start_MAVProxy_MyPiModule.sh
-        # because satustext_send dont work f stated by python mavproxy.py
-        #------------------------------------------------------------------ 
-        #with open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as out, open("/var/log/MyPiStatusTextSendWithPipeIn.log","wb") as err:
-        #   subprocess.Popen(["/usr/bin/python","/usr/local/bin/MyPiStatusTextSendWithPipeIn.py",self.settings.mypipein],stdout=out,stderr=err)
         ##########################################################################################################
         # pipe with tx start with this script :
         # /usr/local/bin/start_tx_and_recording_with_picamera_video_input.sh wlan1 -19 --vb
@@ -1159,20 +1153,19 @@ class MyPiModule(mp_module.MPModule):
           #myvehicle_name = self.vehicle_name
           if self.statustext_send_slot_free >= 1:
              text = self.statustext_send_slot_text.pop(0)
-             if self.mydebug:
-                print ("INFO WRITE pipe statustext_send_slot_free=%s text='%s'" % (self.statustext_send_slot_free,text))
-             self.statustext_send_slot_free -= 1
              #---------------------------------------------------------------------------------------------------------
              # statustext_send work only outside mavproxy.py process
              # managed by daemon /usr/local/bin/MyPiStatusTextSendWithPipeIn.py started outside mavproxy.py process
+             # started by /usr/local/bin/start_MAVProxy_MyPiModule.sh
              #---------------------------------------------------------------------------------------------------------
              try:
                 MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
                 MyPiStatusTextSendPipeIn.write("%s" % text)
                 MyPiStatusTextSendPipeIn.close()
-                print("Info StatusTextSend %s" % text)
+                print("Info StatusTextSend %s (stack fifo=%s)" % (text,self.statustext_send_slot_free)
              except OSError:
-                print("Error StatusTextSend %s" % text)
+                print("Error StatusTextSend %s (stack fifo=%s) pipe open failed !" % (text,self.statustext_send_slot_free)
+             self.statustext_send_slot_free -= 1
              # 
              #---------------------------------------------------
              # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
