@@ -7,7 +7,7 @@
 ''' www.MyPiDrone.com MyPiDrone kev&phil Project                                        '''
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
-''' Version 2.5 : update Rpi3/PiCameraV2/Navio2 29/10/2017 with emlid image raspian 9.x '''
+''' Version 2.6 : update Rpi3/PiCameraV2/Navio2 29/10/2017 with emlid image raspian 9.x '''
 ''' MyPiModule new version : Overlaying telemetry text on video before Wifibroadcasting '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
@@ -84,7 +84,7 @@ class MyPiModule(mp_module.MPModule):
         self.settings.append(MPSetting('mypipeout', str, "/tmp/MyPiCamera.pipeout", 'Named pipe for tx'))
         self.settings.append(MPSetting('mypipein', str, "/tmp/MyPiStatusTextSend.pipein", 'Named pipe for StatusTextSend'))
         self.settings.append(MPSetting('mylogverbose', bool, False, 'Verbose log'))
-        self.myversion = "2.5"
+        self.myversion = "2.6"
         self.myinit = False
         self.mylogverbose = self.settings.mylogverbose
         self.mydebug = self.settings.mydebug
