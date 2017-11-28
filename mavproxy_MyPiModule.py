@@ -1177,14 +1177,12 @@ class MyPiModule(mp_module.MPModule):
              ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
              ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
              ###DONT WORK HERE### self.master2.close()
-             # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
-             self.master.mav.statustext_send(1, "%s" % text)
              # 
              #---------------------------------------------------
-             #date2 = datetime.now().strftime(self.FORMAT2)
-             #strutf8 = unicode("%s %s" % (date2,text))
-             #strutf8 = unicode(" %02d %s" % (date2,text))
-             #self.master2.mav.statustext_send(1, str(strutf8))
+             date2 = datetime.now().strftime(self.FORMAT2)
+             strutf8 = unicode("%s %s" % (date2,text))
+             strutf8 = unicode(" %02d %s" % (date2,text))
+             self.master2.mav.statustext_send(1, str(strutf8))
              #---------------------------------------------------
              #strutf8 = unicode("%s" % text)
              #self.master2.mav.statustext_send(1, str(strutf8))
