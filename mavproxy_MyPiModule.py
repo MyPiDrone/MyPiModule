@@ -393,7 +393,7 @@ class MyPiModule(mp_module.MPModule):
             ##################################################################################
             # myTText_Attitude_Roll draw Roll and Pitch
             ##################################################################################
-            print (">>>> %u" % self.myRoll)
+#           print (">>>> %u" % self.myRoll)
             if self.myRoll > 5 and self.myRoll < 15:
                 myTText_Attitude_Roll="%u ^___---+---``````v" % self.myRoll
             elif self.myRoll > 15:
