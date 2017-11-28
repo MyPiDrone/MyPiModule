@@ -157,7 +157,7 @@ class MyPiModule(mp_module.MPModule):
         self.last_init_time = time.time()
         #
         self.last_statustext_send = time.time()
-        self.int_statustext_send = 2
+        self.int_statustext_send = 10
         self.statustext_send_slot_free = 0
         self.statustext_send_slot_text = []
         #
