@@ -1165,15 +1165,22 @@ class MyPiModule(mp_module.MPModule):
              #-------------------------------------------------------------
              # statustext_send work only outside mavproxy.py process
              #-------------------------------------------------------------
-             try:
-                MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
-                MyPiStatusTextSendPipeIn.write("%s" % text)
-                MyPiStatusTextSendPipeIn.close()
-                print("Info StatusTextSend %s" % text)
-             except OSError:
-                print("Error StatusTextSend %s" % text)
+#             try:
+#                MyPiStatusTextSendPipeIn = open(self.settings.mypipein, 'a')
+#                MyPiStatusTextSendPipeIn.write("%s" % text)
+#                MyPiStatusTextSendPipeIn.close()
+#                print("Info StatusTextSend %s" % text)
+#             except OSError:
+#                print("Error StatusTextSend %s" % text)
              # 
+             # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
              ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+             ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+             ###DONT WORK HERE### self.master2.close()
+             # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
+             self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+             self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
+             self.master2.close()
              # 
              #---------------------------------------------------
              #date2 = datetime.now().strftime(self.FORMAT2)
@@ -1183,10 +1190,6 @@ class MyPiModule(mp_module.MPModule):
              #---------------------------------------------------
              #strutf8 = unicode("%s %s" % (self.mycountermessage,text))
              #self.master2.mav.statustext_send(1, str(strutf8))
-             #
-             # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
-             ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
-             ###DONT WORK HERE### self.master2.close()
              #
              #self.say(text)
              #print ("INFO %s" % text)
