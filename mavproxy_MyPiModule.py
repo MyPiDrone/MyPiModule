@@ -8,6 +8,8 @@
 ''' https://github.com/MyPiDrone/MyPiModule                                             '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' Version 2.6 : update Rpi3/PiCameraV2/Navio2 29/10/2017 with emlid image raspian 9.x '''
+'''               statustext_send managed by daemon MyPiStatusTextSendWithPipeIn.py     ''' 
+'''               started outside mavproxy.py process                                   '''
 ''' MyPiModule new version : Overlaying telemetry text on video before Wifibroadcasting '''
 ''' ----------------------------------------------------------------------------------- '''
 ''' README here: https://github.com/MyPiDrone/MyPiModule/blob/master/README.md          '''
