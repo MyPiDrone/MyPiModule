@@ -1173,15 +1173,17 @@ class MyPiModule(mp_module.MPModule):
 #             except OSError:
 #                print("Error StatusTextSend %s" % text)
              # 
+             #---------------------------------------------------
              # 1=ALERT 2=CRITICAL 3=ERROR, 4=WARNING, 5=NOTICE, 6=INFO, 7=DEBUG, 8=ENUM_END
+             #---------------------------------------------------
              ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
              ###DONT WORK HERE### self.master2.mav.statustext_send(1, " %02d %s" % (self.mycountermessage,text))
              ###DONT WORK HERE### self.master2.close()
-             # 
              #---------------------------------------------------
-             strutf8 = unicode("%s" % text)
-             self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
-             self.master2.mav.statustext_send(1, str(strutf8))
+             ###DONT WORK HERE### strutf8 = unicode("%s" % text)
+             ###DONT WORK HERE### self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
+             ###DONT WORK HERE### self.master2.mav.statustext_send(1, str(strutf8))
+             ###DONT WORK HERE### self.master2.close()
              #---------------------------------------------------
              #
              #self.say(text)
