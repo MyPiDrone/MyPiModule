@@ -1179,13 +1179,9 @@ class MyPiModule(mp_module.MPModule):
              ###DONT WORK HERE### self.master2.close()
              # 
              #---------------------------------------------------
-             date2 = datetime.now().strftime(self.FORMAT2)
-             strutf8 = unicode("%s %s" % (date2,text))
-             strutf8 = unicode(" %02d %s" % (date2,text))
+             strutf8 = unicode("%s" % text)
+             self.master2 = mavutil.mavlink_connection("udp:127.0.0.1:14550", input=False, dialect="common", source_system=self.settings.source_system)
              self.master2.mav.statustext_send(1, str(strutf8))
-             #---------------------------------------------------
-             #strutf8 = unicode("%s" % text)
-             #self.master2.mav.statustext_send(1, str(strutf8))
              #---------------------------------------------------
              #
              #self.say(text)
